@@ -1,4 +1,4 @@
-Introducción
+# Introducción
 El Juego del Ahorcado es un clásico desafío de adivinar palabras letra por letra. Al comenzar, se muestran espacios en blanco correspondientes a cada carácter de la palabra secreta. Con cada letra ingresada:
 
 Si aciertas, la letra aparece en su posición correcta.
