@@ -1,7 +1,7 @@
 # trabajoEntornosDesarolloAhorcado
 Este es un juego creado por nustro tutor de DAW (Desarollo de Aplicaciones Web) El juego del Ahorcado hecho en Java con la interfaz de Java (Swing)
 
-Sumario
+(h1) **Sumario** (h1)
 1. Introducción......................................................................................................................................2
 Idiomas disponibles.....................................................................................................................2
 Registro e identificación de usuarios..........................................................................................2
