@@ -9,12 +9,12 @@ Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ 
 - [Introducción](#introducción)
 
 
-🚀 ## Instalación 
-1. Clona el repositorio:
+# Instalación
+1. Clona el repositorio a si es Linux / Ubuntu /home/tu-user/repositorio-creado y en Windows C:\Users\Pc\Desktop\repositorio-creado
    ```bash
    git clone https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado.git
    
-🚀 # Verificación
+# Verificación
 ## Pasos para asegurarte de que funcione:
 1. **Crea el repositorio en GitHub**: Si aún no lo has hecho, ve a GitHub, crea un repositorio con el nombre que quieras (ej. `juego-ahorcado`) bajo tu usuario.
 2. **Copia la URL del repositorio**: Haz clic en el botón verde "Code" en GitHub y copia el enlace HTTPS (será algo como `https://github.com/tu-nombre-de-usuario/tu-repositorio.git`).
