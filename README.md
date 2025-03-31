@@ -1,9 +1,9 @@
 # Introducción
 ## El Juego del Ahorcado es un clásico desafío de adivinar palabras letra por letra. Al comenzar, se muestran espacios en blanco correspondientes a cada carácter de la palabra secreta. Con cada letra ingresada:
 
-Si aciertas, la letra aparece en su posición correcta.
-Si fallas, se dibuja una parte del ahorcado (cabeza, tronco, etc.).
-Si el dibujo se completa antes de adivinar la palabra, pierdes. Al final de cada partida, se revela la palabra junto con su significado.
+### Si aciertas, la letra aparece en su posición correcta.
+### Si fallas, se dibuja una parte del ahorcado (cabeza, tronco, etc.).
+### Si el dibujo se completa antes de adivinar la palabra, pierdes. Al final de cada partida, se revela la palabra junto con su significado.
 
 ## El juego soporta múltiples usuarios, permite varias partidas por sesión y registra puntuaciones para determinar un ganador al final. Antes de empezar, se define el número de jugadores y partidas, y al concluir, se genera un informe con resultados y clasificaciones.
 
