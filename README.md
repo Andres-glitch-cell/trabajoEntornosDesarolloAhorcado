@@ -25,12 +25,12 @@ El Juego del Ahorcado es un clásico desafío de adivinar palabras letra por let
 El juego soporta múltiples usuarios, permite varias partidas por sesión y registra puntuaciones para determinar un ganador al final. Antes de empezar, se define el número de jugadores y partidas, y al concluir, se genera un informe con resultados y clasificaciones.
 
 # Idiomas Disponibles 🇻🇪 🇪🇸 🇬🇧 🇫🇷
-## El juego está disponible en cuatro idiomas:
-## 🇪🇸 Español
-## 🇫🇷 Francés
-## 🇬🇧 Inglés
-## 🇻🇪 Valenciano
-## Las palabras a adivinar corresponden exclusivamente al idioma seleccionado.
+### El juego está disponible en cuatro idiomas:
+### 🇪🇸 Español
+### 🇫🇷 Francés
+### 🇬🇧 Inglés
+### 🇻🇪 Valenciano
+### Las palabras a adivinar corresponden exclusivamente al idioma seleccionado.
 
 # Registro e Identificación de Usuarios
 ### Jugadores: Deben registrarse con número de usuario, nombre y apellidos para participar.
