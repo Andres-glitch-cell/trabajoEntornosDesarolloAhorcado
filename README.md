@@ -6,13 +6,13 @@
 - [Verificación](#verificación)
 - [Introducción Al Programa](#introducción)
 
-Un juego entrenetenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
+Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
 
 # Instalación 🚀 
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado.git
-
+   
 # Verificación ✅ 
 ## Pasos para asegurarte de que funcione:
 1. **Crea el repositorio en GitHub**: Si aún no lo has hecho, ve a GitHub, crea un repositorio con el nombre que quieras (ej. `juego-ahorcado`) bajo tu usuario.
