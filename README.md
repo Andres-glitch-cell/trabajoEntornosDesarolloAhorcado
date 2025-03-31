@@ -78,7 +78,7 @@ El juego soporta múltiples usuarios, permite varias partidas por sesión y regi
 ### Hilos Automáticos
 ### Copias de seguridad cada 5 minutos.
 ### Reloj digital con hora, minutos y segundos.
-### Mejoras en la Jugabilidad
+# Mejoras en la Jugabilidad
 ### Modo Cooperativo 🤝
 ### Equipos para adivinar juntos.
 ### Modo Torneo 🏆
