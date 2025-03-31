@@ -1,14 +1,14 @@
 # Mi Proyecto Genial
 ![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
 
+Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
+
 ## Tabla de Contenidos
 - [Instalación](#instalación)
 - [Verificación](#verificación)
-- [Introducción Al Programa](#introducción)
+- [Introducción](#introducción)
 
-Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
-
-# Instalación 🚀 
+## Instalación 🚀
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado.git
