@@ -2,9 +2,9 @@
 ![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
 
 ## Tabla de Contenidos
-- [Instalación](#Instalación)
-- [Verificación de funcionamiento](#Verificación)
-- [Introducción Al Programa](#Introducción)
+- [Instalación](#instalación)
+- [Verificación de funcionamiento](#verificación-de-funcionamiento)
+- [Introducción Al Programa](#introducción)
 
 Un juego entrenetenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
 
