@@ -1,7 +1,7 @@
 # Mi Proyecto Genial
-![GitHub stars](https://img.shields.io/github/stars/tu-usuario/tu-repositorio?style=social)
+![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
 
-Una herramienta para [describe qué hace]. Construida con ❤️ por [tu nombre].
+Un juego entrenetenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
 
 ## 🚀 Instalación
 1. Clona el repositorio:
