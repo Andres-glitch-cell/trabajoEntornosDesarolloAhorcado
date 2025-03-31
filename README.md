@@ -1,3 +1,13 @@
+# Mi Proyecto Genial
+![GitHub stars](https://img.shields.io/github/stars/tu-usuario/tu-repositorio?style=social)
+
+Una herramienta para [describe qué hace]. Construida con ❤️ por [tu nombre].
+
+## 🚀 Instalación
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tu-usuario/tu-repositorio.git
+   
 # Introducción
 ## El Juego del Ahorcado es un clásico desafío de adivinar palabras letra por letra. Al comenzar, se muestran espacios en blanco correspondientes a cada carácter de la palabra secreta. Con cada letra ingresada:
 
