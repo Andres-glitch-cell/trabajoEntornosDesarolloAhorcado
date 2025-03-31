@@ -2,27 +2,22 @@
 ![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
 
 ## Tabla de Contenidos
-- [Instalación](#instalación)
+- [Instalación](#Instalación)
 - [Uso](#verificación)
-- [Contribución](#contribución)
+- [Contribución](#Introducción)
 
 Un juego entrenetenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
 
-## 🚀 Instalación
+# 🚀 Instalación
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado.git
 
-## ✅ Verificación 
+# ✅ Verificación 
 ## Pasos para asegurarte de que funcione:
 1. **Crea el repositorio en GitHub**: Si aún no lo has hecho, ve a GitHub, crea un repositorio con el nombre que quieras (ej. `juego-ahorcado`) bajo tu usuario.
 2. **Copia la URL del repositorio**: Haz clic en el botón verde "Code" en GitHub y copia el enlace HTTPS (será algo como `https://github.com/tu-nombre-de-usuario/tu-repositorio.git`).
-
-### Resultado visual:
-El badge mostrará algo como esto una vez que tu repositorio tenga estrellas:
-![GitHub stars](https://img.shields.io/github/stars/xai-org/grok?style=social) (esto es un ejemplo real de otro proyecto).
-
-Si me das tu usuario y el nombre que planeas usar para el repositorio, puedo darte la línea exacta. ¿Cuál es tu usuario de GitHub y cómo se llamará tu repositorio?
+   
    
 # Introducción
 ## El Juego del Ahorcado es un clásico desafío de adivinar palabras letra por letra. Al comenzar, se muestran espacios en blanco correspondientes a cada carácter de la palabra secreta. Con cada letra ingresada:
