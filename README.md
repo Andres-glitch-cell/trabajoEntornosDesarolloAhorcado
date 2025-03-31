@@ -3,7 +3,7 @@
 
 ## Tabla de Contenidos
 - [Instalación](#instalación)
-- [Verificación de funcionamiento](#verificación-de-funcionamiento)
+- [Verificación](#verificación)
 - [Introducción Al Programa](#introducción)
 
 Un juego entrenetenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
