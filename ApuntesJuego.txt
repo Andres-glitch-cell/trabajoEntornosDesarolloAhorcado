@@ -1,7 +1,12 @@
 # Mi texto con formato
 
-<p style="font-size: 20px;">Este texto es más grande</p>
-<p style="color: red;">Este texto es rojo</p>
-<p style="font-size: 18px; color: blue;">Texto grande y azul</p>
+Este es un título grande con Markdown
+=====================================
 
-**Nota:** No puedo usar JavaScript ni CSS aquí, pero esto se ve en GitHub.
+**Texto en negrita**  
+_Texto en cursiva_  
+
+<p>Este texto debería verse normal en GitHub.</p>
+<p style="color: red;">Este texto *podría* ser rojo, pero depende del renderizado de GitHub.</p>
+
+> **Nota:** GitHub no siempre respeta `font-size` o `color` en etiquetas HTML. Usa Markdown para formato básico.
