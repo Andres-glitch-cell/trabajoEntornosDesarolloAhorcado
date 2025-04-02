@@ -1,0 +1,7 @@
+# Mi texto con formato
+
+<p style="font-size: 20px;">Este texto es más grande</p>
+<p style="color: red;">Este texto es rojo</p>
+<p style="font-size: 18px; color: blue;">Texto grande y azul</p>
+
+**Nota:** No puedo usar JavaScript ni CSS aquí, pero esto se ve en GitHub.
