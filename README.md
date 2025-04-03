@@ -37,10 +37,6 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 # Tablas
 
-# Estructura de Base de Datos para Proyecto
-
-A continuación se presenta el esquema de tablas en SQL para el proyecto, con comentarios de estilo para visualización en GitHub.
-
 ## Tabla Usuario
 <div style="background-color: #ADD8E6; padding: 10px;">
 <h3 style="color: #00008B;">Tabla principal para Usuarios (padre de Administrador y Jugador)</h3>
