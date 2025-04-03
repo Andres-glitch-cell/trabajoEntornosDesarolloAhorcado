@@ -37,6 +37,54 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 # Tablas
 
+### Resumen de Claves Primarias y Foráneas
+<div style="background-color: #F0F8FF; padding: 10px; border: 2px solid #00008B;">
+<table style="width: 100%; border-collapse: collapse;">
+  <tr style="background-color: #ADD8E6; color: #00008B;">
+    <th>Tabla</th>
+    <th>Clave Primaria (PK)</th>
+    <th>Clave Foránea (FK)</th>
+    <th>Referencia</th>
+  </tr>
+  <tr style="background-color: #90EE90; color: #006400;">
+    <td>Administrador</td>
+    <td>idAdministrador</td>
+    <td>-</td>
+    <td>Usuario(idUsuario)</td>
+  </tr>
+  <tr style="background-color: #FFFFE0; color: #8B8000;">
+    <td>Jugador</td>
+    <td>idJugador</td>
+    <td>-</td>
+    <td>Usuario(idUsuario)</td>
+  </tr>
+  <tr style="background-color: #FFB6C1; color: #8B0000;">
+    <td>Juego</td>
+    <td>idJuego</td>
+    <td>idUsuario, idIdioma</td>
+    <td>Usuario(idUsuario), Idioma(idIdioma)</td>
+  </tr>
+  <tr style="background-color: #87CEEB; color: #000080;">
+    <td>Idioma</td>
+    <td>idIdioma</td>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+  <tr style="background-color: #E6E6FA; color: #4B0082;">
+    <td>PalabrasFrases</td>
+    <td>idPalabraFrase</td>
+    <td>idIdioma</td>
+    <td>Idioma(idIdioma)</td>
+  </tr>
+  <tr style="background-color: #40E0D0; color: #008B8B;">
+    <td>Cita</td>
+    <td>idCita</td>
+    <td>idJugador</td>
+    <td>Jugador(idJugador)</td>
+  </tr>
+</table>
+</div>
+
 # Instalación
 1. Clona el repositorio a si es Linux / Ubuntu /home/tu-user/repositorio-creado y en Windows C:\Users\Pc\Desktop\repositorio-creado
    ```bash
