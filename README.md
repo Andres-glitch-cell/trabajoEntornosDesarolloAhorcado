@@ -55,7 +55,7 @@ El juego soporta múltiples usuarios, permite varias partidas por sesión y regi
 ### Las palabras a adivinar corresponden exclusivamente al idioma seleccionado.
 
 # Registro e Identificación de Usuarios
-### Jugadores: Deben registrarse con número de usuario, nombre y apellidos para participar.
+Jugadores: Deben registrarse con número de usuario, nombre y apellidos para participar.
 ### Administradores: Tienen niveles de acceso:
 ### Nivel 1: Máxima autoridad.
 ### Nivel 2: Copias de seguridad y restauraciones.
