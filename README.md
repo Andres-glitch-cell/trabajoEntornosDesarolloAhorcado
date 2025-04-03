@@ -37,7 +37,79 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 # Tablas
 
-### Resumen de Claves Primarias y Foráneas
+-- Tabla principal para Usuarios (padre de Administrador y Jugador)
+CREATE TABLE Usuario (
+    idUsuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombreCompleto VARCHAR(100) NOT NULL,
+    -- Estilo: Fondo azul claro para destacar la tabla principal
+    -- <div style="background-color: #ADD8E6; padding: 10px;">
+    -- <h3 style="color: #00008B;">Tabla Usuario</h3>
+);
+
+-- Tabla para Administrador (hereda de Usuario)
+CREATE TABLE Administrador (
+    idAdministrador INT PRIMARY KEY,
+    FOREIGN KEY (idAdministrador) REFERENCES Usuario(idUsuario),
+    -- Estilo: Fondo verde claro
+    -- <div style="background-color: #90EE90; padding: 10px;">
+    -- <h3 style="color: #006400;">Tabla Administrador</h3>
+);
+
+-- Tabla para Jugador (hereda de Usuario)
+CREATE TABLE Jugador (
+    idJugador INT PRIMARY KEY,
+    puntos INT DEFAULT 0,
+    FOREIGN KEY (idJugador) REFERENCES Usuario(idUsuario),
+    -- Estilo: Fondo amarillo claro
+    -- <div style="background-color: #FFFFE0; padding: 10px;">
+    -- <h3 style="color: #8B8000;">Tabla Jugador</h3>
+);
+
+-- Tabla para Juego
+CREATE TABLE Juego (
+    idJuego INT PRIMARY KEY AUTO_INCREMENT,
+    idUsuario INT,
+    resultado VARCHAR(50),
+    idIdioma INT,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (idIdioma) REFERENCES Idioma(idIdioma),
+    -- Estilo: Fondo rosa claro
+    -- <div style="background-color: #FFB6C1; padding: 10px;">
+    -- <h3 style="color: #8B0000;">Tabla Juego</h3>
+);
+
+-- Tabla para Idioma
+CREATE TABLE Idioma (
+    idIdioma INT PRIMARY KEY AUTO_INCREMENT,
+    idioma VARCHAR(50) NOT NULL,
+    -- Estilo: Fondo celeste claro
+    -- <div style="background-color: #87CEEB; padding: 10px;">
+    -- <h3 style="color: #000080;">Tabla Idioma</h3>
+);
+
+-- Tabla para PalabrasFrases (relación N:N con Idioma)
+CREATE TABLE PalabrasFrases (
+    idPalabraFrase INT PRIMARY KEY AUTO_INCREMENT,
+    idIdioma INT,
+    sinonimos TEXT,
+    FOREIGN KEY (idIdioma) REFERENCES Idioma(idIdioma),
+    -- Estilo: Fondo lavanda
+    -- <div style="background-color: #E6E6FA; padding: 10px;">
+    -- <h3 style="color: #4B0082;">Tabla PalabrasFrases</h3>
+);
+
+-- Tabla para Cita
+CREATE TABLE Cita (
+    idCita INT PRIMARY KEY AUTO_INCREMENT,
+    idJugador INT,
+    tipoCita VARCHAR(50),
+    FOREIGN KEY (idJugador) REFERENCES Jugador(idJugador),
+    -- Estilo: Fondo turquesa claro
+    -- <div style="background-color: #40E0D0; padding: 10px;">
+    -- <h3 style="color: #008B8B;">Tabla Cita</h3>
+);
+
+## Resumen de Claves Primarias y Foráneas
 <div style="background-color: #F0F8FF; padding: 10px; border: 2px solid #00008B;">
 <table style="width: 100%; border-collapse: collapse;">
   <tr style="background-color: #ADD8E6; color: #00008B;">
