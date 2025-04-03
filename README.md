@@ -74,13 +74,6 @@ CREATE TABLE PalabrasFrases (
     sinonimos TEXT,
     FOREIGN KEY (idIdioma) REFERENCES Idioma(idIdioma)
 );
-
-CREATE TABLE Cita (
-    idCita INT PRIMARY KEY AUTO_INCREMENT,
-    idJugador INT,
-    tipoCita VARCHAR(50),
-    FOREIGN KEY (idJugador) REFERENCES Jugador(idJugador)
-);
 ```
 
 ## Resumen de Claves Primarias y Foráneas
