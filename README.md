@@ -20,7 +20,7 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 ---
 
    ## 📸 Vista Previa Modelo E.R  
-![E R-EntornosOficial](https://github.com/user-attachments/assets/3b0acec2-47e7-464c-b4dc-397b60626242)
+<img src="https://github.com/user-attachments/assets/3b0acec2-47e7-464c-b4dc-397b60626242" alt="E R-EntornosOficial" width="2000px">
 
 *Captura temporal mientras se implementa el resto del código.*
 
