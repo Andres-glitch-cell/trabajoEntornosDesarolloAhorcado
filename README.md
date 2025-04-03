@@ -3,6 +3,29 @@
 
 Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
 
+# 🎮 Juego del Ahorcado en Java  
+**Un clásico reinventado con tecnología moderna**  
+![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-orange) ![Java](https://img.shields.io/badge/Java-17-blue) ![DB](https://img.shields.io/badge/Base%20de%20Datos-Pendiente-lightgrey)
+
+---
+
+## 🚀 Descripción  
+Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con una base de datos para almacenar palabras y puntuaciones. Este repositorio es parte de un trabajo para Entornos de Desarrollo, combinando lógica de programación con un diseño futurista y funcional.
+
+### Características  
+- 🖥️ Interfaz de usuario en desarrollo (próximamente con GUI).  
+- 📊 Base de datos para palabras y estadísticas.  
+- 🎨 Estilo visual inspirado en ciencia ficción.  
+
+---
+
+## 📸 Vista Previa  
+![Captura del juego](https://via.placeholder.com/600x300.png?text=Próximamente)  
+*Captura temporal mientras se implementa la interfaz gráfica.*
+
+---
+
+
 ## Tabla de Contenidos
 - [Instalación](#instalación)
 - [Verificación](#verificación)
