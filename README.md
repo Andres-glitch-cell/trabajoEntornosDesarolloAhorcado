@@ -15,7 +15,7 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 ### Características  
 - 🖥️ Interfaz de usuario en desarrollo (próximamente con GUI).  
 - 📊 Base de datos para palabras y estadísticas.  
-- 🎨 Estilo visual inspirado en ciencia ficción.  
+- 🎨 Estilo visual creado por la librería Swing (Java)
 
 ---
 
