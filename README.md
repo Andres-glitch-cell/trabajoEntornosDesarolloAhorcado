@@ -33,9 +33,8 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 # Tablas
 
-## Tabla Usuario
 <div style="background-color: #ADD8E6; padding: 10px;">
-<h3 style="color: #00008B;">Tabla Principal que es Usuarios</h3>
+<h3 style="color: #00008B;">Tabla Principal Usuario</h3>
 </div>
 
 ```sql
@@ -82,7 +81,6 @@ CREATE TABLE Cita (
     tipoCita VARCHAR(50),
     FOREIGN KEY (idJugador) REFERENCES Jugador(idJugador)
 );
-
 ```
 
 ## Resumen de Claves Primarias y Foráneas
