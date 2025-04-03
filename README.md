@@ -48,6 +48,46 @@ CREATE TABLE Usuario (
     nombreCompleto VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE Administrador (
+    idAdministrador INT PRIMARY KEY,
+    FOREIGN KEY (idAdministrador) REFERENCES Usuario(idUsuario)
+);
+
+CREATE TABLE Jugador (
+    idJugador INT PRIMARY KEY,
+    puntos INT DEFAULT 0,
+    FOREIGN KEY (idJugador) REFERENCES Usuario(idUsuario)
+);
+
+CREATE TABLE Juego (
+    idJuego INT PRIMARY KEY AUTO_INCREMENT,
+    idUsuario INT,
+    resultado VARCHAR(50),
+    idIdioma INT,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (idIdioma) REFERENCES Idioma(idIdioma)
+);
+
+CREATE TABLE Idioma (
+    idIdioma INT PRIMARY KEY AUTO_INCREMENT,
+    idioma VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE PalabrasFrases (
+    idPalabraFrase INT PRIMARY KEY AUTO_INCREMENT,
+    idIdioma INT,
+    sinonimos TEXT,
+    FOREIGN KEY (idIdioma) REFERENCES Idioma(idIdioma)
+);
+
+CREATE TABLE Cita (
+    idCita INT PRIMARY KEY AUTO_INCREMENT,
+    idJugador INT,
+    tipoCita VARCHAR(50),
+    FOREIGN KEY (idJugador) REFERENCES Jugador(idJugador)
+);
+
+```
 
 ## Resumen de Claves Primarias y Foráneas
 <div style="background-color: #F0F8FF; padding: 10px; border: 2px solid #00008B;">
