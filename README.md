@@ -22,7 +22,7 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
    ## 📸 Vista Previa Modelo E.R  
 # Mi Proyecto
 Aquí está la imagen más grande:  
-<img src="C:\Users\Pc\Downloads" alt="E R-EntornosOficial" width="6000">
+![Education Whiteboard in Pastel Orange Teal Rose Pink Style (1)](https://github.com/user-attachments/assets/70e8b77d-bca3-4cbb-9a60-ba35881afff8)
 
 *Captura temporal mientras se implementa el resto del código.*
 
