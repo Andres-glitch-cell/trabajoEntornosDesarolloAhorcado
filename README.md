@@ -28,14 +28,14 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 
 ## Tabla de Contenidos
-- [Paso a tablas](#PasoATablas)
+- [Paso a tablas](#Tablas)
 - [Instalación](#instalación)
 - [Verificación](#verificación)
 - [Introducción](#introducción)
 
 
 
-# PasoATablas
+# Tablas
 
 # Instalación
 1. Clona el repositorio a si es Linux / Ubuntu /home/tu-user/repositorio-creado y en Windows C:\Users\Pc\Desktop\repositorio-creado
