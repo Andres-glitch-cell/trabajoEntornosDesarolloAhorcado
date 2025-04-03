@@ -5,7 +5,7 @@ Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ 
 
 ## 🎮 Juego del Ahorcado en Java
 **Un clásico reinventado con tecnología moderna**  
-![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-orange) ![Java](https://img.shields.io/badge/Java-17-blue) ![DB](https://img.shields.io/badge/Base%20de%20Datos-Pendiente-lightgrey)
+![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-orange) ![Java](https://img.shields.io/badge/Java-17-blue) ![Java](https://img.shields.io/badge/Java-21-red) ![DB](https://img.shields.io/badge/Base%20de%20Datos-Pendiente-lightgrey)
 
 ---
 
