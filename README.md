@@ -1,7 +1,9 @@
-## Mi Proyecto Genial
+## Mi Proyecto De Fin De Curso de Entornos De Desarollo
 ![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
 
-Un juego entretenido para [entretenerse con el ahorcado]. Construido con ❤️ por [Andrés].
+Un juego entretenido para 
+*entretenerse con el ahorcado.*
+Construido con ❤️ por [Andrés].
 
 ## 🎮 Juego del Ahorcado en Java
 **Un clásico reinventado con tecnología moderna**  
