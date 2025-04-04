@@ -17,47 +17,47 @@ Clave Primaria
 ### Tablas del Modelo
 
 #### **Usuario**
-```mysql
+```sql
 idUsuario(PK), nombreCompleto, nombreUsuario, correoElectronico, contraseña, fechaRegistro
 ```
 
 #### **Administrador**
-```mysql
+```sql
 nivelAdministrador, idUsuario (FK), fechaAsignacion, ultimoAcceso
 ```
 
 #### **Jugador**
-```mysql
+```sql
 idUsuario (FK), puntosTotales, primeraPartida, ultimaPartida
 ```
 
 #### **Cuota**
-```mysql
+```sql
 TipoDeCuota, idCuota(PK)
 ```
 
 #### **Juego**
-```mysql
+```sql
 idJuego(PK), resultado, modoJuego, maxIntentos, dificultadBase
 ```
 
 #### **Partida** (Ternaria)
-```mysql
+```sql
 idPartida(PK), idPalabra (FK), resultado, idJuego (FK), nivelDificultad, fechaInicio, fechaFin, puntosObtenidos, partesAhorcado, tiempoTotal, modoEspecial
 ```
 
 #### **Historial**
-```mysql
+```sql
 idHistorial(PK), idPalabra (FK), idFrase (FK), idAdministrador (FK), significadoFrase, significadoPalabra
 ```
 
 #### **Idioma**
-```mysql
+```sql
 idIdioma(PK), nombreIdioma, codigoISO
 ```
 
 #### **Palabras || Frases**
-```mysql
+```sql
 idPalabra(PK), idFrase, categoria, fechaCreacion, contenido, significadoFrase, significadoPalabra
 ```
 
