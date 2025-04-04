@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS PalabrasFrases (
 -- Tabla: Partida --
 CREATE TABLE IF NOT EXISTS Partida (
     idPartida INT PRIMARY KEY AUTO_INCREMENT,
+    idJugador INT,
     idPalabra INT,
     resultado VARCHAR(50),
     idJuego INT,
