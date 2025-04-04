@@ -117,12 +117,6 @@ CREATE TABLE PalabrasFrases (
     <td>idIdioma</td>
     <td>Idioma(idIdioma)</td>
   </tr>
-  <tr style="background-color: #40E0D0; color: #008B8B;">
-    <td>Cita</td>
-    <td>idCita</td>
-    <td>idJugador</td>
-    <td>Jugador(idJugador)</td>
-  </tr>
 </table>
 </div>
 
