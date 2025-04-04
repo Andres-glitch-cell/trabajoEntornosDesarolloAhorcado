@@ -17,48 +17,48 @@ Clave Primaria
 ### Tablas del Modelo
 
 #### **Usuario**
-```plaintext
-idUsuario, nombreCompleto, nombreUsuario, correoElectronico, contraseña, fechaRegistro
+```mysql
+idUsuario(PK), nombreCompleto, nombreUsuario, correoElectronico, contraseña, fechaRegistro
 ```
 
 #### **Administrador**
-```plaintext
+```mysql
 nivelAdministrador, idUsuario (FK), fechaAsignacion, ultimoAcceso
 ```
 
 #### **Jugador**
-```plaintext
+```mysql
 idUsuario (FK), puntosTotales, primeraPartida, ultimaPartida
 ```
 
 #### **Cuota**
-```plaintext
-TipoDeCuota, idCuota
+```mysql
+TipoDeCuota, idCuota(PK)
 ```
 
 #### **Juego**
-```plaintext
-idJuego, resultado, modoJuego, maxIntentos, dificultadBase
+```mysql
+idJuego(PK), resultado, modoJuego, maxIntentos, dificultadBase
 ```
 
 #### **Partida** (Ternaria)
-```plaintext
-idPartida, idPalabra (FK), resultado, idJuego (FK), nivelDificultad, fechaInicio, fechaFin, puntosObtenidos, partesAhorcado, tiempoTotal, modoEspecial
+```mysql
+idPartida(PK), idPalabra (FK), resultado, idJuego (FK), nivelDificultad, fechaInicio, fechaFin, puntosObtenidos, partesAhorcado, tiempoTotal, modoEspecial
 ```
 
 #### **Historial**
-```plaintext
-idHistorial, idPalabra (FK), idFrase (FK), idAdministrador (FK), significadoFrase, significadoPalabra
+```mysql
+idHistorial(PK), idPalabra (FK), idFrase (FK), idAdministrador (FK), significadoFrase, significadoPalabra
 ```
 
 #### **Idioma**
-```plaintext
-idIdioma, nombreIdioma, codigoISO
+```mysql
+idIdioma(PK), nombreIdioma, codigoISO
 ```
 
 #### **Palabras || Frases**
-```plaintext
-idPalabra, idFrase, categoria, fechaCreacion, contenido, significadoFrase, significadoPalabra
+```mysql
+idPalabra(PK), idFrase, categoria, fechaCreacion, contenido, significadoFrase, significadoPalabra
 ```
 
 ---
@@ -67,30 +67,4 @@ idPalabra, idFrase, categoria, fechaCreacion, contenido, significadoFrase, signi
 - **(FK):** Indica que el atributo es una clave foránea.
 - **Ternaria:** La tabla `Partida` representa una relación ternaria entre varias entidades.
 - **Palabras || Frases:** Esta tabla puede representar dos tipos de datos dependiendo del contexto.
-
-Usuario
-( idUsuario, nombreCompleto, nombreUsuario, correoElectronico, contraseña, fechaRegistro )
-
-Administrador
-( nivelAdministrador, idUsuario, fechaAsignacion, ultimoAcceso )
-
-Jugador
-( idUsuario, puntosTotales, primeraPartida, ultimaPartida )
-
-Cuota
-( TipoDeCuota, idCuota )
-
-Juego
-( idJuego, resultado, modoJuego, maxIntentos, dificultadBase )
-
-Partida {Ternaria}
-( idPartida, idPalabra, resultado, idJuego, nivelDificultad, fechaInicio, fechaFin, puntosObtenidos, partesAhorcado, tiempoTotal, modoEspecial )
-
-Historial
-( idHistorial, idPalabra, idFrase, idAdministrador, significadoFrase, significadoPalabra )
-
-Idioma
-( idIdioma, nombreIdioma, codigoISO )
-
-Palabras || Frases
-( idPalabra, idFrase, categoria, fechaCreacion, contenido, significadoFrase, significadoPalabra )
+- **(PK):** Indica la clave primaria (Primary Key)
