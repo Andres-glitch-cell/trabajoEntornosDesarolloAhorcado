@@ -21,10 +21,10 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 ---
 
-# 📸 Vista Previa Modelo E.R  
+# 📸 Vista General Modelo E.R  
 ![Education Whiteboard in Pastel Orange Teal Rose Pink Style (1)](https://github.com/user-attachments/assets/70e8b77d-bca3-4cbb-9a60-ba35881afff8)
 
-*Captura temporal mientras se implementa el resto del código...*
+*Esta captura muestra lo principal de la base de datos. del ahorcado, no muestra todos los valores reales en la implementación del código!*
 
 ## Tabla de Contenidos
 - [Paso a tablas](#Tablas)
