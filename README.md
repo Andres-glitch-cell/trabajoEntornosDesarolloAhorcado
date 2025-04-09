@@ -120,6 +120,9 @@ CREATE TABLE PalabrasFrases (
 </table>
 </div>
 
+## Casos de Uso del Juego del Ahorcado ![image](https://github.com/user-attachments/assets/2f0df8c2-2a22-4329-b408-d600b4cb209c)
+
+
 # Instalación
 1. Clona el repositorio a si es Linux / Ubuntu /home/tu-user/repositorio-creado y en Windows C:\Users\Pc\Desktop\repositorio-creado
    ```bash
