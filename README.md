@@ -21,7 +21,7 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 ---
 
-# 📸 Vista General Modelo E.R  
+# 📸 01_Vista General 00_Modelo E.R  
 ![Education Whiteboard in Pastel Orange Teal Rose Pink Style (1)](https://github.com/user-attachments/assets/70e8b77d-bca3-4cbb-9a60-ba35881afff8)
 
 *Esta captura muestra lo principal de la base de datos. del ahorcado, no muestra todos los valores reales en la implementación del código!*
@@ -120,7 +120,7 @@ CREATE TABLE PalabrasFrases (
 </table>
 </div>
 
-## Casos de Uso del Juego del Ahorcado ![image](https://github.com/user-attachments/assets/2f0df8c2-2a22-4329-b408-d600b4cb209c)
+## Casos de Uso del Juego del Ahorcado
 
 
 # Instalación
@@ -243,9 +243,9 @@ Jugadores: Deben registrarse con número de usuario, nombre y apellidos para par
 ## 7. Valoración
 ### 1. Análisis correcto:  Diagrama de casos de uso, Diagrama de clases (0,75 pt.)
 ### 2. Diagrama Entidad /Relación, paso a tablas, implementación de la base de datos (0,75 pts.)
-### 3. Vista: Interfaz gráfica (2 pts.)
+### 3. 01_Vista: Interfaz gráfica (2 pts.)
 ### 4. Controlador: (2 pts.)
-### 5. Modelo (3 pts.)
+### 5. 00_Modelo (3 pts.)
 ### 6. Pruebas (JUnit) y gestión de errores(try...catch) (0,75 pts.)
 ### 7. Documentación con JavaDoc y creación del instalable (0,75 pt.) 
 ### Realización de al menos cuatro mejoras propuestas en los apartados: 2, 3, 4, 5 (2 pts).
@@ -256,11 +256,11 @@ Jugadores: Deben registrarse con número de usuario, nombre y apellidos para par
 ### • Análisis correcto:  Diagrama de casos de uso, Diagrama de clases.
 ### • Diagrama Entidad /Relación, paso a tablas, implementación de la base de datos.
 ### 4 de Abril del 2025: Apartado 3:
-### ▪ Vista: Interfaz gráfica
+### ▪ 01_Vista: Interfaz gráfica
 ### 16 de Abril del 2025: Apartado 4:
 ### ▪ Controlador: Gestión de eventos
 ### 23 de Mayo del 2025: Apartado 5:
-### ▪ Modelo
+### ▪ 00_Modelo
 ### 2 de Junio del 2025; Apartados 6, 7:
 ### ▪ Pruebas (JUnit) y gestión de errores (try...catch)
 ### ▪ Documentación con JavaDoc y creación del instalable

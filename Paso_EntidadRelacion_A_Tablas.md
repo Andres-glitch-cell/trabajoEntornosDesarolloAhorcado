@@ -1,7 +1,7 @@
 Clave Compuesta
 Clave Foránea
 Clave Primaria
-### Modelo Entidad-Relación a Tablas
+### 00_Modelo Entidad-Relación a Tablas
 
 #### Clave Compuesta
 - **Definición:** Una clave compuesta es una clave primaria que consiste en dos o más atributos que juntos identifican de manera única una fila en una tabla.
@@ -14,7 +14,7 @@ Clave Primaria
 
 ---
 
-### Tablas del Modelo
+### Tablas del 00_Modelo
 
 #### **Usuario**
 ```sql
