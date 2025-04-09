@@ -21,6 +21,8 @@ Bienvenido al **Juego del Ahorcado**, un proyecto desarrollado en **Java** con u
 
 M V C : modelo guardaaremos la base de datos // vista --> formularios puestos con .java guardados en vista // controlador --> todos los asociados a codigos java que ejecutan codigo
 - Hacer paquetes sobre cada parte que es M V C.
+
+- M V C : modelo guardaaremos la base de datos // vista --> formularios puestos con .java guardados en vista // controlador --> todos los asociados a codigos java que ejecutan codigo
 ---
 
 # 📸 Vista General Modelo E.R  
