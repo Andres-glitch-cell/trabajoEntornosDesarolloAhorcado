@@ -9,7 +9,6 @@ public class Tres_VentanaEmergente extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 200);
         setLocationRelativeTo(null);
-
         JLabel mensaje = new JLabel("¡Registro exitoso!", SwingConstants.CENTER);
         mensaje.setForeground(Color.WHITE);
         mensaje.setFont(new Font("SansSerif", Font.BOLD, 16));

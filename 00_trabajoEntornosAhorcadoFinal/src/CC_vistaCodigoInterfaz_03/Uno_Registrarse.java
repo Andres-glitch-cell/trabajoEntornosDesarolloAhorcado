@@ -1,103 +1,138 @@
 package CC_vistaCodigoInterfaz_03;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-/**
- * Clase que representa la ventana de inicio de sesión del Juego del Ahorcado.
- * Permite al usuario ingresar su nombre y contraseña, con opciones para recuperar credenciales olvidadas.
- *
- * @author Andres
- * @version Ahorcado_v.0.0.2
- */
-
+@SuppressWarnings("NonAsciiCharacters")
 public class Uno_Registrarse extends JFrame {
-    /**
-     * Constructor de la clase Uno_IniciarSesion.
-     * Inicializa la ventana con campos de texto para usuario y contraseña,
-     * un botón de registro y casillas de verificación.
-     */
     public Uno_Registrarse() {
-        super("Registrate para Iniciar Sesión en el Juego Del Ahorcado!");
+        super("Registrarse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450, 280);
+        setSize(550, 300);
         setResizable(true);
         setLocationRelativeTo(null);
 
-        // Configurar el panel principal con un fondo oscuro.
         JPanel fondoPersonalizado = new JPanel();
         fondoPersonalizado.setLayout(new GridBagLayout());
         fondoPersonalizado.setBackground(new Color(34, 40, 49));
         add(fondoPersonalizado);
 
-        // Configurar las restricciones para el layout.
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Crear y configurar la etiqueta y campo de usuario.
-        JLabel introducirUsuario = new JLabel("Introduce tu nuevo Usuario: ");
+        JLabel introducirUsuario = new JLabel("Nombre del Usuario:");
         introducirUsuario.setForeground(new Color(240, 248, 255));
         introducirUsuario.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 0.3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.EAST;
         fondoPersonalizado.add(introducirUsuario, gbc);
 
-        JTextField nombreUsuario = new JTextField(15);
-        nombreUsuario.setBackground(new Color(50, 60, 70));
-        nombreUsuario.setForeground(Color.WHITE);
-        nombreUsuario.setBorder(BorderFactory.createLineBorder(new Color(100, 149, 237), 1));
+        JTextField campoUsuario = new JTextField(15);
+        campoUsuario.setBackground(new Color(50, 60, 70));
+        campoUsuario.setForeground(Color.WHITE);
+        campoUsuario.setBorder(BorderFactory.createLineBorder(new Color(100, 149, 237), 1));
         gbc.gridx = 1;
         gbc.gridy = 0;
-        fondoPersonalizado.add(nombreUsuario, gbc);
+        gbc.weightx = 0.7;
+        gbc.anchor = GridBagConstraints.WEST;
+        fondoPersonalizado.add(campoUsuario, gbc);
 
-        // Crear y configurar la etiqueta y campo de contraseña.
-        JLabel introducirContraseña = new JLabel("Introduce tu nueva contraseña: ");
+        JLabel introducirContraseña = new JLabel("Nueva Contraseña:");
         introducirContraseña.setForeground(new Color(240, 248, 255));
         introducirContraseña.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        gbc.anchor = GridBagConstraints.EAST;
         fondoPersonalizado.add(introducirContraseña, gbc);
 
-        JPasswordField valor2 = new JPasswordField(15);
-        valor2.setBackground(new Color(50, 60, 70));
-        valor2.setForeground(Color.WHITE);
-        valor2.setBorder(BorderFactory.createLineBorder(new Color(58, 92, 164), 1));
+        JPasswordField campoContraseña = new JPasswordField(15);
+        campoContraseña.setBackground(new Color(50, 60, 70));
+        campoContraseña.setForeground(Color.WHITE);
+        campoContraseña.setBorder(BorderFactory.createLineBorder(new Color(58, 92, 164), 1));
         gbc.gridx = 1;
         gbc.gridy = 1;
-        fondoPersonalizado.add(valor2, gbc);
+        gbc.weightx = 0.7;
+        gbc.anchor = GridBagConstraints.WEST;
+        fondoPersonalizado.add(campoContraseña, gbc);
 
-        // --- Crear y configurar el botón de registro. ---
-        JButton boton = new JButton("Registrarse");
-        boton.setBackground(new Color(100, 149, 237));
-        boton.setForeground(Color.WHITE);
-        boton.setFont(new Font("SansSerif", Font.BOLD, 14));
-        boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        JLabel confirmarContraseña = new JLabel("Confirmar Contraseña:");
+        confirmarContraseña.setForeground(new Color(240, 248, 255));
+        confirmarContraseña.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        fondoPersonalizado.add(boton, gbc);
+        gbc.weightx = 0.3;
+        gbc.anchor = GridBagConstraints.EAST;
+        fondoPersonalizado.add(confirmarContraseña, gbc);
 
-        // --- Crear y configurar la casilla para olvidar contraseña. ---
+        JPasswordField campoConfirmarContraseña = new JPasswordField(15);
+        campoConfirmarContraseña.setBackground(new Color(50, 60, 70));
+        campoConfirmarContraseña.setForeground(Color.WHITE);
+        campoConfirmarContraseña.setBorder(BorderFactory.createLineBorder(new Color(58, 92, 164), 1));
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 0.7;
+        gbc.anchor = GridBagConstraints.WEST;
+        fondoPersonalizado.add(campoConfirmarContraseña, gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.setBackground(new Color(34, 40, 49));
+
+        JButton botonRegistrarse = new JButton("Registrarse Gratuitamente");
+        botonRegistrarse.setBackground(new Color(100, 149, 237));
+        botonRegistrarse.setForeground(Color.WHITE);
+        botonRegistrarse.setFont(new Font("SansSerif", Font.BOLD, 14));
+        botonRegistrarse.setFocusPainted(false);
+        botonRegistrarse.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        panelBotones.add(botonRegistrarse);
+
+        JButton botonVolver = new JButton("Volver");
+        botonVolver.setBackground(new Color(100, 149, 237));
+        botonVolver.setForeground(Color.WHITE);
+        botonVolver.setFont(new Font("SansSerif", Font.BOLD, 14));
+        botonVolver.setFocusPainted(false);
+        botonVolver.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        botonVolver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cinco_IniciarSesion ventanaIniciarSesion = new Cinco_IniciarSesion();
+                ventanaIniciarSesion.setVisible(true);
+                dispose();
+            }
+        });
+        panelBotones.add(botonVolver);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        fondoPersonalizado.add(panelBotones, gbc);
+
         JCheckBox opcionOlvidarContraseña = new JCheckBox("¿Olvidaste la contraseña?");
         opcionOlvidarContraseña.setBackground(new Color(34, 40, 49));
         opcionOlvidarContraseña.setForeground(new Color(240, 248, 255));
         opcionOlvidarContraseña.setFont(new Font("SansSerif", Font.PLAIN, 12));
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
         fondoPersonalizado.add(opcionOlvidarContraseña, gbc);
 
-        // Crear y configurar la casilla para olvidar correo.
         JCheckBox opcionOlvidarCorreo = new JCheckBox("¿Olvidaste el correo?");
         opcionOlvidarCorreo.setBackground(new Color(34, 40, 49));
         opcionOlvidarCorreo.setForeground(new Color(240, 248, 255));
         opcionOlvidarCorreo.setFont(new Font("SansSerif", Font.PLAIN, 12));
         gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
         fondoPersonalizado.add(opcionOlvidarCorreo, gbc);
-
-        setVisible(true);
     }
 }
