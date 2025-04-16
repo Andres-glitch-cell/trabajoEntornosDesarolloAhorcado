@@ -5,8 +5,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Clase que representa la ventana de inicio de sesión para el juego del ahorcado.
+ * Permite introducir un nombre de usuario y contraseña para acceder al sistema.
+ *
+ * @author Andrés Fernández Salaud
+ * @version Ahorcado_v.0.0.4
+ */
 @SuppressWarnings("NonAsciiCharacters")
 public class BB_IniciarSesion extends JFrame {
+
+    /**
+     * Constructor que inicializa la ventana de inicio de sesión.
+     * Configura un formulario con campos para nombre de usuario y contraseña,
+     * además de botones para iniciar sesión o ir al registro.
+     */
     public BB_IniciarSesion() {
         super("Iniciar Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

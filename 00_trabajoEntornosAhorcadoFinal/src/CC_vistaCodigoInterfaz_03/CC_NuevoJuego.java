@@ -3,8 +3,21 @@ package CC_vistaCodigoInterfaz_03;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Clase que representa la ventana para configurar un nuevo juego en el juego del ahorcado.
+ * Permite seleccionar el tipo de juego, número de jugadores, nivel de dificultad y otros parámetros.
+ *
+ * @author Andrés Fernández Salaud
+ * @version Ahorcado_v.0.0.4
+ */
 @SuppressWarnings("NonAsciiCharacters")
 public class CC_NuevoJuego extends JFrame {
+
+    /**
+     * Constructor que inicializa la ventana de configuración de un nuevo juego.
+     * Configura un formulario con opciones para tipo de juego, número de jugadores,
+     * nivel de dificultad y botones para aceptar o cancelar.
+     */
     public CC_NuevoJuego() {
         super("Juego Nuevo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

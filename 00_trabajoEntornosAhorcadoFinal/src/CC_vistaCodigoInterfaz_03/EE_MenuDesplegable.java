@@ -3,7 +3,22 @@ package CC_vistaCodigoInterfaz_03;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Clase que representa la ventana principal con un menú desplegable para el juego del ahorcado.
+ * Proporciona opciones para jugadores y administradores, y muestra una etiqueta de bienvenida.
+ *
+ * @author Andrés Fernández Salaud
+ * @version Ahorcado_v.0.0.4
+ */
+@SuppressWarnings("NonAsciiCharacters")
 public class EE_MenuDesplegable extends JFrame {
+
+    /**
+     * Constructor que inicializa la ventana del menú desplegable.
+     * Configura una barra de menús con opciones para jugadores y administradores,
+     * y añade una etiqueta de bienvenida en el panel central.
+     * Los elementos del menú no son funcionales en esta versión.
+     */
     public EE_MenuDesplegable() {
         super("Juego del Ahorcado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

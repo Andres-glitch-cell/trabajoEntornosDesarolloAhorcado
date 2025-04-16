@@ -6,9 +6,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Clase que representa la ventana principal del juego del ahorcado.
+ * Muestra el área de la horca, letras usadas, puntos de los jugadores y botones para interactuar.
+ *
+ * @author Andrés Fernández Salaud
+ * @version Ahorcado_v.0.0.4
+ */
 public class DD_PantallaAhorcado extends JFrame {
+
+    /**
+     * Constructor que inicializa la ventana del juego del ahorcado.
+     * Configura paneles para mostrar la horca, letras usadas, puntos, botones de letras A-Z
+     * y opciones de navegación. Los botones de letras y algunas opciones no son funcionales.
+     */
     public DD_PantallaAhorcado() {
-        // Configuración básica de la ventana
+        // Configulación básica de la ventana
         super("Juego del Ahorcado - Andrés Fernández Salaud");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);

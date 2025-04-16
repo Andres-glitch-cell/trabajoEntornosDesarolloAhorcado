@@ -5,8 +5,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Clase que representa la ventana de registro de usuarios para el juego del ahorcado.
+ * Permite introducir un nombre de usuario, una contraseña y confirmar la contraseña.
+ *
+ * @author Andrés Fernández Salaud
+ * @version Ahorcado_v.0.0.4
+ */
 @SuppressWarnings("NonAsciiCharacters")
 public class AA_Registrarse extends JFrame {
+
+    /**
+     * Constructor que inicializa la ventana de registro.
+     * Configura un formulario con campos para nombre de usuario, contraseña y confirmación,
+     * además de botones para registrarse o volver al inicio de sesión.
+     */
     public AA_Registrarse() {
         super("Registrarse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
