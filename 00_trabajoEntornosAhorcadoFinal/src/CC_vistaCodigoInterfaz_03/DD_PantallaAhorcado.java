@@ -6,8 +6,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Dos_PantallaAhorcado extends JFrame {
-    public Dos_PantallaAhorcado() {
+public class DD_PantallaAhorcado extends JFrame {
+    public DD_PantallaAhorcado() {
         // Configuración básica de la ventana
         super("Juego del Ahorcado - Andrés Fernández Salaud");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +43,7 @@ public class Dos_PantallaAhorcado extends JFrame {
                 boton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Cuatro_MenuDesplegable ventanaMenu = new Cuatro_MenuDesplegable();
+                        EE_MenuDesplegable ventanaMenu = new EE_MenuDesplegable();
                         ventanaMenu.setVisible(true);
                         dispose();
                     }

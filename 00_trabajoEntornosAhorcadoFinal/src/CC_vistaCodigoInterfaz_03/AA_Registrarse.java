@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class Cinco_IniciarSesion extends JFrame {
-    public Cinco_IniciarSesion() {
-        super("Iniciar Sesión");
+public class AA_Registrarse extends JFrame {
+    public AA_Registrarse() {
+        super("Registrarse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(550, 300);
         setResizable(true);
@@ -42,7 +42,7 @@ public class Cinco_IniciarSesion extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         fondoPersonalizado.add(campoUsuario, gbc);
 
-        JLabel introducirContraseña = new JLabel("Contraseña:");
+        JLabel introducirContraseña = new JLabel("Nueva Contraseña:");
         introducirContraseña.setForeground(new Color(240, 248, 255));
         introducirContraseña.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
@@ -61,35 +61,54 @@ public class Cinco_IniciarSesion extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         fondoPersonalizado.add(campoContraseña, gbc);
 
+        JLabel confirmarContraseña = new JLabel("Confirmar Contraseña:");
+        confirmarContraseña.setForeground(new Color(240, 248, 255));
+        confirmarContraseña.setFont(new Font("SansSerif", Font.BOLD, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.3;
+        gbc.anchor = GridBagConstraints.EAST;
+        fondoPersonalizado.add(confirmarContraseña, gbc);
+
+        JPasswordField campoConfirmarContraseña = new JPasswordField(15);
+        campoConfirmarContraseña.setBackground(new Color(50, 60, 70));
+        campoConfirmarContraseña.setForeground(Color.WHITE);
+        campoConfirmarContraseña.setBorder(BorderFactory.createLineBorder(new Color(58, 92, 164), 1));
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 0.7;
+        gbc.anchor = GridBagConstraints.WEST;
+        fondoPersonalizado.add(campoConfirmarContraseña, gbc);
+
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.setBackground(new Color(34, 40, 49));
 
-        JButton botonIniciarSesion = new JButton("Iniciar Sesión");
-        botonIniciarSesion.setBackground(new Color(100, 149, 237));
-        botonIniciarSesion.setForeground(Color.WHITE);
-        botonIniciarSesion.setFont(new Font("SansSerif", Font.BOLD, 14));
-        botonIniciarSesion.setFocusPainted(false);
-        botonIniciarSesion.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        panelBotones.add(botonIniciarSesion);
-
-        JButton botonRegistrarse = new JButton("Registrarse");
+        JButton botonRegistrarse = new JButton("Registrarse Gratuitamente");
         botonRegistrarse.setBackground(new Color(100, 149, 237));
         botonRegistrarse.setForeground(Color.WHITE);
         botonRegistrarse.setFont(new Font("SansSerif", Font.BOLD, 14));
         botonRegistrarse.setFocusPainted(false);
         botonRegistrarse.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        botonRegistrarse.addActionListener(new ActionListener() {
+        panelBotones.add(botonRegistrarse);
+
+        JButton botonVolver = new JButton("Volver");
+        botonVolver.setBackground(new Color(100, 149, 237));
+        botonVolver.setForeground(Color.WHITE);
+        botonVolver.setFont(new Font("SansSerif", Font.BOLD, 14));
+        botonVolver.setFocusPainted(false);
+        botonVolver.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        botonVolver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Uno_Registrarse ventanaRegistrarse = new Uno_Registrarse();
-                ventanaRegistrarse.setVisible(true);
+                BB_IniciarSesion ventanaIniciarSesion = new BB_IniciarSesion();
+                ventanaIniciarSesion.setVisible(true);
                 dispose();
             }
         });
-        panelBotones.add(botonRegistrarse);
+        panelBotones.add(botonVolver);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -100,7 +119,7 @@ public class Cinco_IniciarSesion extends JFrame {
         opcionOlvidarContraseña.setForeground(new Color(240, 248, 255));
         opcionOlvidarContraseña.setFont(new Font("SansSerif", Font.PLAIN, 12));
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
@@ -112,7 +131,7 @@ public class Cinco_IniciarSesion extends JFrame {
         opcionOlvidarCorreo.setForeground(new Color(240, 248, 255));
         opcionOlvidarCorreo.setFont(new Font("SansSerif", Font.PLAIN, 12));
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.WEST;
         fondoPersonalizado.add(opcionOlvidarCorreo, gbc);
     }

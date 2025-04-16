@@ -3,8 +3,8 @@ package CC_vistaCodigoInterfaz_03;
 import javax.swing.*;
 import java.awt.*;
 
-public class Cuatro_MenuDesplegable extends JFrame {
-    public Cuatro_MenuDesplegable() {
+public class EE_MenuDesplegable extends JFrame {
+    public EE_MenuDesplegable() {
         super("Juego del Ahorcado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 400);

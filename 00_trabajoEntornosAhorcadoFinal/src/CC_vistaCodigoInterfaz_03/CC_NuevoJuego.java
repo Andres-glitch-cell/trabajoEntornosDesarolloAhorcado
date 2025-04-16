@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class Seis_NuevoJuego extends JFrame {
-    public Seis_NuevoJuego() {
+public class CC_NuevoJuego extends JFrame {
+    public CC_NuevoJuego() {
         super("Juego Nuevo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(550, 350);
