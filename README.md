@@ -28,6 +28,10 @@ M V C : modelo guardaaremos la base de datos // vista --> formularios puestos co
 # 📸 01_Vista General 00_Modelo E.R  
 ![Education Whiteboard in Pastel Orange Teal Rose Pink Style (1)](https://github.com/user-attachments/assets/70e8b77d-bca3-4cbb-9a60-ba35881afff8)
 
+# 📸 02_Vista General del Diagrama de Casos de Uso
+![CasosDeUsoAhorcado drawio (1)](https://github.com/user-attachments/assets/5a4b60f5-efa6-4518-a59d-309da490ae92)
+
+
 *Esta captura muestra lo principal de la base de datos. del ahorcado, no muestra todos los valores reales en la implementación del código!*
 
 ## Tabla de Contenidos
