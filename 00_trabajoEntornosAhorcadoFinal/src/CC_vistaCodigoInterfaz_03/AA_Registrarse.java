@@ -2,150 +2,167 @@ package CC_vistaCodigoInterfaz_03;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.*;
 
-/**
- * Clase que representa la ventana de registro de usuarios para el juego del ahorcado.
- * Permite introducir un nombre de usuario, una contraseña y confirmar la contraseña.
- *
- * @author Andrés Fernández Salaud
- * @version Ahorcado_v.0.0.4
- */
-@SuppressWarnings("NonAsciiCharacters")
 public class AA_Registrarse extends JFrame {
 
-    /**
-     * Constructor que inicializa la ventana de registro.
-     * Configura un formulario con campos para nombre de usuario, contraseña y confirmación,
-     * además de botones para registrarse o volver al inicio de sesión.
-     */
+    private static final String URL_BBDD = "jdbc:mysql://localhost/AhorcadoAndres?useSSL=false&serverTimezone=UTC";
+    private static final String USUARIO_BBDD = "root";
+    private static final String CLAVE_BBDD = "abcd1234";
+
     public AA_Registrarse() {
         super("Registrarse");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // CORREGIDO: Cierra solo esta ventana
         setSize(550, 300);
         setResizable(true);
         setLocationRelativeTo(null);
 
-        JPanel fondoPersonalizado = new JPanel();
-        fondoPersonalizado.setLayout(new GridBagLayout());
-        fondoPersonalizado.setBackground(new Color(34, 40, 49));
-        add(fondoPersonalizado);
+        initUI();
+    }
+
+    private void initUI() {
+        JPanel fondo = new JPanel(new GridBagLayout());
+        fondo.setBackground(new Color(34, 40, 49));
+        add(fondo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JLabel introducirUsuario = new JLabel("Nombre del Usuario:");
-        introducirUsuario.setForeground(new Color(240, 248, 255));
-        introducirUsuario.setFont(new Font("SansSerif", Font.BOLD, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0.3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.EAST;
-        fondoPersonalizado.add(introducirUsuario, gbc);
+        JLabel labelUsuario = crearLabel("Nombre del Usuario:");
+        JTextField campoUsuario = crearCampoTexto();
 
-        JTextField campoUsuario = new JTextField(15);
-        campoUsuario.setBackground(new Color(50, 60, 70));
-        campoUsuario.setForeground(Color.WHITE);
-        campoUsuario.setBorder(BorderFactory.createLineBorder(new Color(100, 149, 237), 1));
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 0.7;
-        gbc.anchor = GridBagConstraints.WEST;
-        fondoPersonalizado.add(campoUsuario, gbc);
+        JLabel labelPassword = crearLabel("Nueva Contraseña:");
+        JPasswordField campoPassword = crearCampoPassword();
 
-        JLabel introducirContraseña = new JLabel("Nueva Contraseña:");
-        introducirContraseña.setForeground(new Color(240, 248, 255));
-        introducirContraseña.setFont(new Font("SansSerif", Font.BOLD, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 0.3;
-        gbc.anchor = GridBagConstraints.EAST;
-        fondoPersonalizado.add(introducirContraseña, gbc);
+        JLabel labelConfirmar = crearLabel("Confirmar Contraseña:");
+        JPasswordField campoConfirmar = crearCampoPassword();
 
-        JPasswordField campoContraseña = new JPasswordField(15);
-        campoContraseña.setBackground(new Color(50, 60, 70));
-        campoContraseña.setForeground(Color.WHITE);
-        campoContraseña.setBorder(BorderFactory.createLineBorder(new Color(58, 92, 164), 1));
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.weightx = 0.7;
-        gbc.anchor = GridBagConstraints.WEST;
-        fondoPersonalizado.add(campoContraseña, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; fondo.add(labelUsuario, gbc);
+        gbc.gridx = 1; fondo.add(campoUsuario, gbc);
 
-        JLabel confirmarContraseña = new JLabel("Confirmar Contraseña:");
-        confirmarContraseña.setForeground(new Color(240, 248, 255));
-        confirmarContraseña.setFont(new Font("SansSerif", Font.BOLD, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 0.3;
-        gbc.anchor = GridBagConstraints.EAST;
-        fondoPersonalizado.add(confirmarContraseña, gbc);
+        gbc.gridx = 0; gbc.gridy = 1; fondo.add(labelPassword, gbc);
+        gbc.gridx = 1; fondo.add(campoPassword, gbc);
 
-        JPasswordField campoConfirmarContraseña = new JPasswordField(15);
-        campoConfirmarContraseña.setBackground(new Color(50, 60, 70));
-        campoConfirmarContraseña.setForeground(Color.WHITE);
-        campoConfirmarContraseña.setBorder(BorderFactory.createLineBorder(new Color(58, 92, 164), 1));
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.weightx = 0.7;
-        gbc.anchor = GridBagConstraints.WEST;
-        fondoPersonalizado.add(campoConfirmarContraseña, gbc);
+        gbc.gridx = 0; gbc.gridy = 2; fondo.add(labelConfirmar, gbc);
+        gbc.gridx = 1; fondo.add(campoConfirmar, gbc);
+
+        JButton btnRegistrarse = new JButton("Registrarse");
+        btnRegistrarse.addActionListener(e -> registrarUsuario(campoUsuario.getText(), campoPassword.getPassword(), campoConfirmar.getPassword()));
+
+        // Botón para volver a la pantalla de bienvenida
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.addActionListener(e -> {
+            // Al hacer clic en "Volver", se cierra esta ventana y se muestra la ventana de bienvenida
+            new AAA_PantallaBienvenida().setVisible(true);  // Muestra la ventana de bienvenida
+            dispose();  // Cierra la ventana actual (de registro)
+        });
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.setBackground(new Color(34, 40, 49));
+        panelBotones.add(btnRegistrarse);
+        panelBotones.add(btnVolver);
 
-        JButton botonRegistrarse = new JButton("Registrarse Gratuitamente");
-        botonRegistrarse.setBackground(new Color(100, 149, 237));
-        botonRegistrarse.setForeground(Color.WHITE);
-        botonRegistrarse.setFont(new Font("SansSerif", Font.BOLD, 14));
-        botonRegistrarse.setFocusPainted(false);
-        botonRegistrarse.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        panelBotones.add(botonRegistrarse);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        fondo.add(panelBotones, gbc);
+    }
 
-        JButton botonVolver = new JButton("Volver");
-        botonVolver.setBackground(new Color(100, 149, 237));
-        botonVolver.setForeground(Color.WHITE);
-        botonVolver.setFont(new Font("SansSerif", Font.BOLD, 14));
-        botonVolver.setFocusPainted(false);
-        botonVolver.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        botonVolver.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BB_IniciarSesion ventanaIniciarSesion = new BB_IniciarSesion();
-                ventanaIniciarSesion.setVisible(true);
-                dispose();
-            }
-        });
-        panelBotones.add(botonVolver);
+    private void registrarUsuario(String nombreUsuario, char[] contraseña, char[] confirmar) {
+        String pass = new String(contraseña);
+        String confirm = new String(confirmar);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
-        fondoPersonalizado.add(panelBotones, gbc);
+        if (nombreUsuario.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
+            mostrarError("⚠ Por favor, completa todos los campos.");
+            return;
+        }
 
-        JCheckBox opcionOlvidarContraseña = new JCheckBox("¿Olvidaste la contraseña?");
-        opcionOlvidarContraseña.setBackground(new Color(34, 40, 49));
-        opcionOlvidarContraseña.setForeground(new Color(240, 248, 255));
-        opcionOlvidarContraseña.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 1;
-        gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.WEST;
-        fondoPersonalizado.add(opcionOlvidarContraseña, gbc);
+        if (!pass.equals(confirm)) {
+            mostrarError("⚠ Las contraseñas no coinciden.");
+            return;
+        }
 
-        JCheckBox opcionOlvidarCorreo = new JCheckBox("¿Olvidaste el correo?");
-        opcionOlvidarCorreo.setBackground(new Color(34, 40, 49));
-        opcionOlvidarCorreo.setForeground(new Color(240, 248, 255));
-        opcionOlvidarCorreo.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.anchor = GridBagConstraints.WEST;
-        fondoPersonalizado.add(opcionOlvidarCorreo, gbc);
+        if (usuarioExistente(nombreUsuario)) {
+            mostrarError("⚠ El nombre de usuario ya existe.");
+            return;
+        }
+
+        if (registrarUsuarioEnBBDD(nombreUsuario, pass)) {
+            JOptionPane.showMessageDialog(this, "✅ Usuario registrado correctamente.", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+            dispose(); // Cierra la ventana tras registrar
+        }
+    }
+
+    private boolean registrarUsuarioEnBBDD(String usuario, String contraseña) {
+        String sql = "INSERT INTO Usuarios (nombre, contraseña) VALUES (?, ?)";
+        try (Connection conn = DriverManager.getConnection(URL_BBDD, USUARIO_BBDD, CLAVE_BBDD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+            stmt.setString(2, hashContraseña(contraseña));
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            mostrarError("❌ Error en BBDD: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean usuarioExistente(String usuario) {
+        String sql = "SELECT COUNT(*) FROM Usuarios WHERE nombre = ?";
+        try (Connection conn = DriverManager.getConnection(URL_BBDD, USUARIO_BBDD, CLAVE_BBDD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+
+        } catch (SQLException e) {
+            mostrarError("❌ Error al verificar usuario: " + e.getMessage());
+            return true;
+        }
+    }
+
+    private String hashContraseña(String contraseña) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = digest.digest(contraseña.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            mostrarError("❌ Error al hashear contraseña: " + e.getMessage());
+            return "";
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private JLabel crearLabel(String texto) {
+        JLabel label = new JLabel(texto);
+        label.setForeground(new Color(240, 248, 255));
+        label.setFont(new Font("SansSerif", Font.BOLD, 14));
+        return label;
+    }
+
+    private JTextField crearCampoTexto() {
+        JTextField campo = new JTextField(15);
+        campo.setBackground(new Color(50, 60, 70));
+        campo.setForeground(Color.WHITE);
+        return campo;
+    }
+
+    private JPasswordField crearCampoPassword() {
+        JPasswordField campo = new JPasswordField(15);
+        campo.setBackground(new Color(50, 60, 70));
+        campo.setForeground(Color.WHITE);
+        return campo;
+    }
+
+    // Método estático limpio para mostrar la ventana desde cualquier otra clase
+    public static void mostrarVentana() {
+        SwingUtilities.invokeLater(() -> new AA_Registrarse().setVisible(true));
     }
 }

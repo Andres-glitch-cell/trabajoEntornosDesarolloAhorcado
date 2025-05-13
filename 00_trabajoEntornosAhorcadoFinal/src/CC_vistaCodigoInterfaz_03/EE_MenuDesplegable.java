@@ -3,22 +3,8 @@ package CC_vistaCodigoInterfaz_03;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Clase que representa la ventana principal con un menú desplegable para el juego del ahorcado.
- * Proporciona opciones para jugadores y administradores, y muestra una etiqueta de bienvenida.
- *
- * @author Andrés Fernández Salaud
- * @version Ahorcado_v.0.0.4
- */
-@SuppressWarnings("NonAsciiCharacters")
 public class EE_MenuDesplegable extends JFrame {
 
-    /**
-     * Constructor que inicializa la ventana del menú desplegable.
-     * Configura una barra de menús con opciones para jugadores y administradores,
-     * y añade una etiqueta de bienvenida en el panel central.
-     * Los elementos del menú no son funcionales en esta versión.
-     */
     public EE_MenuDesplegable() {
         super("Juego del Ahorcado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,26 +18,25 @@ public class EE_MenuDesplegable extends JFrame {
         menuJugador.setFont(new Font("SansSerif", Font.BOLD, 14));
         barraMenu.add(menuJugador);
 
-        JMenuItem nuevoJuegoItem = new JMenuItem("Nuevo juego");
-        nuevoJuegoItem.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        menuJugador.add(nuevoJuegoItem);
-
-        menuJugador.add("Abrir Juego");
-        menuJugador.add("Ver Informe");
+        JMenuItem abrirJuegoItem = new JMenuItem("Abrir Juego");
+        abrirJuegoItem.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        abrirJuegoItem.addActionListener(e -> {
+            new DD_PantallaAhorcado().setVisible(true);
+            dispose(); // Cierra el menú para no tener ventanas duplicadas
+        });
+        menuJugador.add(abrirJuegoItem);
 
         JMenu menuAdministrador = new JMenu("Administrador");
         menuAdministrador.setFont(new Font("SansSerif", Font.BOLD, 14));
         barraMenu.add(menuAdministrador);
 
-        menuAdministrador.add("Añadir/Eliminar idioma");
-        menuAdministrador.add("Copia de seguridad");
-        menuAdministrador.add("Restauración");
-        menuAdministrador.add("Gestión palabra/Frase");
-        menuAdministrador.add("Gestión usuarios");
-
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
-        panelPrincipal.setBackground(Color.LIGHT_GRAY);
-        add(panelPrincipal);
+        JMenuItem adminItem = new JMenuItem("Modo Administrador");
+        adminItem.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        adminItem.addActionListener(e -> {
+            new FF_VentanaAdministrador().setVisible(true);
+            // Si quieres que el menú permanezca abierto, no uses dispose()
+        });
+        menuAdministrador.add(adminItem);
 
         JPanel panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelCentral.setBackground(Color.LIGHT_GRAY);
@@ -60,6 +45,10 @@ public class EE_MenuDesplegable extends JFrame {
         etiquetaBienvenida.setFont(new Font("SansSerif", Font.BOLD, 16));
         panelCentral.add(etiquetaBienvenida);
 
-        panelPrincipal.add(panelCentral, BorderLayout.CENTER);
+        add(panelCentral);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new EE_MenuDesplegable().setVisible(true));
     }
 }

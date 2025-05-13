@@ -17,25 +17,11 @@ public class Main {
      *
      * @param args argumentos de la línea de comandos (no utilizados)
      */
+
     public static void main(String[] args) {
-        // 1.- Objeto "objetoRegistrarse" de la clase Uno_Registrarse
-        AA_Registrarse objetoRegistrarse = new AA_Registrarse();
-        objetoRegistrarse.setVisible(true);
-
-        // 2.- Objeto "objetoLogin" de la clase Cinco_IniciarSesion (Cambiar número)
-        BB_IniciarSesion objetoLogin = new BB_IniciarSesion();
-        objetoLogin.setVisible(true);
-
-        // 3.- Objeto "objetoNuevoJuego" de la clase Seis_NuevoJuego
-        CC_NuevoJuego objetoNuevoJuego = new CC_NuevoJuego();
-        objetoNuevoJuego.setVisible(true);
-
-        // 4.- Objeto "PantallaDeJuego" de la clase Dos_PantallaAhorcado
-        DD_PantallaAhorcado PantallaDeJuego = new DD_PantallaAhorcado();
-        PantallaDeJuego.setVisible(true);
-
-        // 5.- Objeto "objetoMenuDesplegable" de la clase Cuatro_MenuDesplegable (Cambiar número)
-        EE_MenuDesplegable objetoMenuDesplegable = new EE_MenuDesplegable();
-        objetoMenuDesplegable.setVisible(true);
+        // 1.- Mostrar la ventana de bienvenida
+        // Solo mostramos la pantalla de bienvenida en el inicio.
+        AAA_PantallaBienvenida bienvenida = new AAA_PantallaBienvenida();
+        bienvenida.setVisible(true);
     }
 }
