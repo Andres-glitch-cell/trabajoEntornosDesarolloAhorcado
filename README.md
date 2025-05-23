@@ -1,6 +1,14 @@
 ## Mi Proyecto De Fin De Curso de Entornos De Desarollo
 ![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
-
+![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-orange)
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Java](https://img.shields.io/badge/Java-21-red)
+![DB](https://img.shields.io/badge/Base%20de%20Datos-Pendiente-lightgrey)
+![Plataforma](https://img.shields.io/badge/Plataforma-Windows%20%7C%20Linux-lightgrey)
+![Versión](https://img.shields.io/badge/Versión-1.0--alpha-informational)
+![Licencia](https://img.shields.io/badge/Licencia-MIT-green)
+![Idioma](https://img.shields.io/badge/Idiomas-ES%20%7C%20EN%20%7C%20FR%20%7C%20VAL-blueviolet)
+![Build](https://img.shields.io/badge/Build-Personalizada-success)
 Un juego entretenido para 
 *entretenerse con el ahorcado.*
 Construido con ❤️ por [Andrés].
@@ -84,6 +92,58 @@ CREATE TABLE PalabrasFrases (
     sinonimos TEXT,
     FOREIGN KEY (idIdioma) REFERENCES Idioma(idIdioma)
 );
+
+CREATE TABLE HistoricoPalabras (
+    idHistoricoPalabra INT PRIMARY KEY AUTO_INCREMENT,
+    idPalabraFrase INT,
+    contenidoAnterior TEXT,
+    tipoAnterior VARCHAR(50),
+    significadoAnterior TEXT,
+    dificultadAnterior VARCHAR(50),
+    fechaCambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idPalabraFrase) REFERENCES PalabrasFrases(idPalabraFrase)
+);
+
+CREATE TABLE HistoricoFrases (
+    idHistoricoFrase INT PRIMARY KEY AUTO_INCREMENT,
+    idPalabraFrase INT,
+    contenidoAnterior TEXT,
+    descripcionAnterior TEXT,
+    fechaCambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idPalabraFrase) REFERENCES PalabrasFrases(idPalabraFrase)
+);
+
+CREATE TABLE Partida (
+    idPartida INT PRIMARY KEY AUTO_INCREMENT,
+    idJuego INT,
+    fecha DATE,
+    hora TIME,
+    puntosObtenidos INT,
+    dificultad VARCHAR(20),
+    modoJuego VARCHAR(20), -- clásico, torneo, cooperativo, etc.
+    FOREIGN KEY (idJuego) REFERENCES Juego(idJuego)
+);
+
+CREATE TABLE PalabraUsada (
+    idPalabraUsada INT PRIMARY KEY AUTO_INCREMENT,
+    idPartida INT,
+    idPalabraFrase INT,
+    fueAdivinada BOOLEAN,
+    FOREIGN KEY (idPartida) REFERENCES Partida(idPartida),
+    FOREIGN KEY (idPalabraFrase) REFERENCES PalabrasFrases(idPalabraFrase)
+);
+
+CREATE TABLE CuotaJugador (
+    idCuota INT PRIMARY KEY AUTO_INCREMENT,
+    idJugador INT,
+    tipoCuota ENUM('Normal', 'Premium') NOT NULL,
+    importe DECIMAL(5,2),
+    fechaInicio DATE,
+    fechaFin DATE,
+    FOREIGN KEY (idJugador) REFERENCES Jugador(idJugador)
+);
+
+
 ```
 
 ## Resumen de Claves Primarias y Foráneas
