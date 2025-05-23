@@ -1,8 +1,6 @@
 ## Mi Proyecto De Fin De Curso de Entornos De Desarollo
 ![GitHub stars](https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=social)
 ![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-orange)
-![Java](https://img.shields.io/badge/Java-17-blue)
-![Java](https://img.shields.io/badge/Java-21-red)
 ![DB](https://img.shields.io/badge/Base%20de%20Datos-Pendiente-lightgrey)
 ![Plataforma](https://img.shields.io/badge/Plataforma-Windows%20%7C%20Linux-lightgrey)
 ![Versión](https://img.shields.io/badge/Versión-1.0--alpha-informational)
