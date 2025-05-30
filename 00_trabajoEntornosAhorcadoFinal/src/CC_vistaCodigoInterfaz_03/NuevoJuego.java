@@ -2,15 +2,47 @@ package CC_vistaCodigoInterfaz_03;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.*;
+import java.nio.file.*;
 
-public class CC_NuevoJuego extends JFrame {
+/**
+ * Ventana para configurar un nuevo juego del ahorcado. (Clase 5)
+ */
+public class NuevoJuego extends JFrame {
 
-    public CC_NuevoJuego() {
+    private static final Logger LOGGER = Logger.getLogger(NuevoJuego.class.getName());
+
+    static {
+        try {
+            // Crear carpeta LOGS si no existe
+            Path logDir = Paths.get("LOGS");
+            if (!Files.exists(logDir)) {
+                Files.createDirectory(logDir);
+            }
+
+            LogManager.getLogManager().reset();
+            LOGGER.setLevel(Level.ALL);
+
+            FileHandler fh = new FileHandler("LOGS/NuevoJuego.log", true);
+            fh.setEncoding("UTF-8");
+            fh.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(fh);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "No se pudo inicializar el archivo de logs de NuevoJuego: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public NuevoJuego() {
         super("Juego Nuevo");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(550, 350);
         setResizable(true);
         setLocationRelativeTo(null);
+
+        LOGGER.info("Iniciando ventana NuevoJuego");
 
         JPanel fondo = new JPanel(new GridBagLayout());
         fondo.setBackground(new Color(34, 40, 49));
@@ -130,6 +162,8 @@ public class CC_NuevoJuego extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         fondo.add(panelBotones, gbc);
+
+        LOGGER.info("Ventana NuevoJuego cargada completamente");
     }
 
     /**
@@ -137,8 +171,9 @@ public class CC_NuevoJuego extends JFrame {
      */
     public static void mostrarVentanaNuevoJuego() {
         SwingUtilities.invokeLater(() -> {
-            CC_NuevoJuego ventanaNuevoJuego = new CC_NuevoJuego();
+            NuevoJuego ventanaNuevoJuego = new NuevoJuego();
             ventanaNuevoJuego.setVisible(true);
+            LOGGER.info("Ventana NuevoJuego mostrada");
         });
     }
 }
