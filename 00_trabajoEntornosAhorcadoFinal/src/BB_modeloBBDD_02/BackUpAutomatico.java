@@ -58,7 +58,7 @@ public class BackUpAutomatico extends Thread {
         if (so.contains("win")) {
             pb = new ProcessBuilder("cmd.exe", "/c", "mysqldump", "--defaults-file=C:\\path\\to\\my.cnf", "AhorcadoAndres");
         } else {
-            pb = new ProcessBuilder("mysqldump", "--defaults-file=/home/andfersal/my.cnf", "AhorcadoAndres");
+            pb = new ProcessBuilder("mysqldump", "--defaults-file=../src/.my.cnf", NOMBRE_BBDD);
         }
 
         pb.redirectOutput(new File(rutaCompleta));
