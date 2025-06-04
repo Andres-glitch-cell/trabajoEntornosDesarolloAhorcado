@@ -1,218 +1,203 @@
 package CC_vistaCodigoInterfaz_03;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.logging.*;
+// Importa la clase para exportar la base de datos
+import BB_modeloBBDD_02.ExportadorBaseDeDatos;
 
+import javax.swing.*;                 // Importa componentes Swing para interfaz gráfica
+import java.awt.*;                    // Importa clases para manejo de colores, fuentes, layouts, etc.
+import java.awt.event.ActionListener; // Importa para manejar eventos de botones
+import java.io.IOException;           // Manejo de excepciones IO
+import java.util.logging.FileHandler; // Para manejo de logs en archivos
+import java.util.logging.Level;       // Niveles de logging (INFO, WARNING, etc.)
+import java.util.logging.Logger;      // Clase para logging
+import java.util.logging.SimpleFormatter; // Formato simple para logs
+
+// Clase principal que extiende JFrame para crear ventana
 public class PantallaBienvenida extends JFrame {
 
+    // Logger para registrar eventos e incidencias de la aplicación
     private static final Logger LOGGER = Logger.getLogger(PantallaBienvenida.class.getName());
 
+    // Bloque estático para configurar el logger antes de crear instancias
     static {
         try {
-            // Logger que escribe en archivo "ahorcado.log" con formato simple
-            FileHandler fh = new FileHandler("ahorcado.log", true); // append = true
+            // Crear un manejador para guardar logs en archivo "ahorcado.log" (modo append)
+            FileHandler fh = new FileHandler("ahorcado.log", true);
+            // Asignar formato simple para el archivo de log
             fh.setFormatter(new SimpleFormatter());
+            // Añadir el manejador al logger
             LOGGER.addHandler(fh);
-
-            // Evitar que también imprima en consola (solo archivo)
+            // Evitar que se dupliquen logs en consola
             LOGGER.setUseParentHandlers(false);
-
+            // Establecer nivel para capturar todos los mensajes (finos y generales)
             LOGGER.setLevel(Level.ALL);
         } catch (IOException e) {
-            System.err.println("No se pudo inicializar logger de archivo: " + e.getMessage());
+            // Si falla la inicialización, imprimir error en consola de errores
+            System.err.println("No se pudo inicializar el logger: " + e.getMessage());
         }
     }
 
+    // Constructor: configura la ventana y añade el panel principal
     public PantallaBienvenida() {
-        super("Bienvenida al Juego del Ahorcado");
-        LOGGER.info("Inicializando PantallaBienvenida...");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(550, 300);
-        setResizable(false);
-        setLocationRelativeTo(null);
+        super("Bienvenida al Juego del Ahorcado"); // Título ventana
+        LOGGER.info("Inicializando PantallaBienvenida..."); // Log info
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(34, 40, 49));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        add(panel);
+        configurarVentana();          // Configura tamaño, cierre, etc.
+        add(crearPanelPrincipal());  // Añade panel con contenido principal
 
-        JLabel title = new JLabel("¡Bienvenido al Juego del Ahorcado!", SwingConstants.CENTER);
-        title.setForeground(new Color(240, 248, 255));
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(title);
-        panel.add(Box.createVerticalStrut(20));
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        buttonPanel.setOpaque(false);
-        panel.add(buttonPanel);
-
-        JButton startButton = createButton("Iniciar Juego", new Color(100, 149, 237));
-        JButton loginButton = createButton("Iniciar Sesión", new Color(100, 149, 237));
-        JButton registerButton = createButton("Registrarse", new Color(100, 149, 237));
-
-        buttonPanel.add(startButton);
-        buttonPanel.add(loginButton);
-        buttonPanel.add(registerButton);
-
-        panel.add(Box.createVerticalStrut(15));
-
-        JButton exportarButton = createButton("Exportar Base de Datos", new Color(50, 168, 82));
-        exportarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(exportarButton);
-
-        panel.add(Box.createVerticalStrut(20));
-
-        JButton exitButton = createButton("Salir del Juego", new Color(255, 69, 0));
-        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(exitButton);
-
-        ActionListener buttonListener = e -> {
-            String command = e.getActionCommand();
-            LOGGER.info("Botón presionado: " + command);
-            switch (command) {
-                case "Salir del Juego" -> {
-                    LOGGER.info("Confirmando salida...");
-                    int respuesta = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres salir?", "Salir del Juego", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (respuesta == JOptionPane.YES_OPTION) {
-                        LOGGER.info("Salida confirmada. Cerrando aplicación.");
-                        System.exit(0);
-                    } else {
-                        LOGGER.info("Salida cancelada.");
-                    }
-                }
-                case "Iniciar Juego" -> {
-                    LOGGER.info("Iniciando juego...");
-                    PantallaAhorcado.mostrarVentana();
-                    dispose();
-                }
-                case "Iniciar Sesión" -> {
-                    LOGGER.info("Abriendo pantalla de inicio de sesión...");
-                    IniciarSesion.mostrarVentana();
-                    dispose();
-                }
-                case "Registrarse" -> {
-                    LOGGER.info("Abriendo pantalla de registro...");
-                    Registrarse.mostrarVentana();
-                    dispose();
-                }
-                case "Exportar Base de Datos" -> {
-                    LOGGER.info("Iniciando exportación de base de datos...");
-                    exportarBaseDatos();
-                }
-            }
-        };
-
-        startButton.addActionListener(buttonListener);
-        loginButton.addActionListener(buttonListener);
-        registerButton.addActionListener(buttonListener);
-        exitButton.addActionListener(buttonListener);
-        exportarButton.addActionListener(buttonListener);
-
-        LOGGER.info("PantallaBienvenida inicializada correctamente.");
+        LOGGER.info("PantallaBienvenida inicializada correctamente."); // Log info
     }
 
+    // Método para configurar propiedades básicas de la ventana
+    private void configurarVentana() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra app al cerrar ventana
+        setSize(550, 340);  // Tamaño ventana ajustado para botones y contenido
+        setResizable(false); // Ventana no redimensionable
+        setLocationRelativeTo(null); // Centra ventana en pantalla
+    }
+
+    // Crea y devuelve el panel principal con todos los componentes
+    private JPanel crearPanelPrincipal() {
+        JPanel panel = new JPanel(); // Nuevo panel
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Layout vertical
+        panel.setBackground(new Color(34, 40, 49)); // Color fondo oscuro
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Margenes internos
+
+        panel.add(crearTitulo());            // Añade título
+        panel.add(Box.createVerticalStrut(20));  // Espacio vertical
+        panel.add(crearPanelBotonesPrincipales()); // Botones: iniciar, sesión, registro
+        panel.add(Box.createVerticalStrut(15));  // Espacio vertical
+        panel.add(crearBotonExportar());     // Botón exportar base de datos
+        panel.add(Box.createVerticalStrut(20));  // Espacio vertical unificado
+        panel.add(crearBotonSalir());        // Botón salir
+
+        return panel; // Devuelve el panel completo
+    }
+
+    // Crea el JLabel con el título centrado y estilizado
+    private JLabel crearTitulo() {
+        JLabel titulo = new JLabel("¡Bienvenido al Juego del Ahorcado!", SwingConstants.CENTER);
+        titulo.setForeground(Color.WHITE); // Texto blanco
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 20)); // Fuente grande y negrita
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar horizontalmente
+        return titulo; // Devuelve el JLabel
+    }
+
+    // Crea un panel con los tres botones principales
+    private JPanel crearPanelBotonesPrincipales() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0)); // Layout horizontal con espacio entre botones
+        panel.setOpaque(false); // Fondo transparente
+
+        // Crear botones con texto, color y acción
+        JButton btnIniciar = crearBoton("Iniciar Juego", new Color(100, 149, 237), this::accionBoton);
+        JButton btnSesion = crearBoton("Iniciar Sesión", new Color(100, 149, 237), this::accionBoton);
+        JButton btnRegistro = crearBoton("Registrarse", new Color(100, 149, 237), this::accionBoton);
+
+        // Añadir botones al panel
+        panel.add(btnIniciar);
+        panel.add(btnSesion);
+        panel.add(btnRegistro);
+
+        return panel; // Devolver panel con botones
+    }
+
+    // Crea el botón para exportar la base de datos
+    private JButton crearBotonExportar() {
+        return crearBoton("Exportar Base de Datos", new Color(50, 168, 82), this::accionBoton);
+    }
+
+    // Crea el botón para salir del juego
+    private JButton crearBotonSalir() {
+        return crearBoton("Salir del Juego", new Color(255, 69, 0), this::accionBoton);
+    }
+
+    // Método genérico para crear botones con texto, color de fondo y acción
+    private JButton crearBoton(String texto, Color colorFondo, ActionListener listener) {
+        JButton boton = new JButton(texto);        // Crear botón con texto
+        boton.setBackground(colorFondo);            // Color de fondo personalizado
+        boton.setForeground(Color.WHITE);           // Texto blanco
+        boton.setFont(new Font("SansSerif", Font.BOLD, 14)); // Fuente negrita tamaño 14
+        boton.setActionCommand(texto);               // Comando para identificar acción
+        boton.addActionListener(listener);           // Añadir listener para evento click
+        return boton;                                // Devolver botón creado
+    }
+
+    // Maneja la acción según el botón presionado
+    private void accionBoton(java.awt.event.ActionEvent e) {
+        String comando = e.getActionCommand();     // Obtener texto del botón presionado
+        LOGGER.info("Botón presionado: " + comando); // Log info con el botón presionado
+
+        switch (comando) {                         // Según el comando, hacer acción correspondiente
+            case "Salir del Juego": {
+                confirmarSalida();                 // Confirmar si desea salir
+                break;
+            }
+            case "Iniciar Juego": {
+                abrirPantalla("PantallaAhorcado"); // Abrir ventana del juego
+                break;
+            }
+            case "Iniciar Sesión": {
+                abrirPantalla("IniciarSesion");  // Abrir ventana inicio sesión
+                break;
+            }
+            case "Registrarse": {
+                abrirPantalla("Registrarse");    // Abrir ventana registro
+                break;
+            }
+            case "Exportar Base de Datos": {
+                ExportadorBaseDeDatos.exportar(this); // Exportar base de datos
+                break;
+            }
+            case "Opciones del Juego": {
+                mostrarOpciones();               // Mostrar opciones del juego
+                break;
+            }
+            default: {
+                LOGGER.warning("Acción no reconocida: " + comando); // Log advertencia si no se reconoce acción
+                break;
+            }
+        }
+    }
+
+    // Muestra un mensaje con las opciones del juego (placeholder)
+    private void mostrarOpciones() {
+        JOptionPane.showMessageDialog(this,
+                "Aquí puedes implementar las opciones generales del juego (idioma, dificultad, etc.).",
+                "Opciones del Juego", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // Método que confirma si el usuario quiere salir, muestra diálogo y actúa según respuesta
+    private void confirmarSalida() {
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de que quieres salir?", "Salir del Juego",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            LOGGER.info("Cerrando aplicación..."); // Log cierre
+            System.exit(0);                         // Termina la aplicación
+        } else {
+            LOGGER.info("Cancelada salida.");      // Log cancelación de salida
+        }
+    }
+
+    // Abre una ventana específica por su nombre de clase y cierra la actual
+    private void abrirPantalla(String nombreClase) {
+        try {
+            // Busca la clase por nombre completo
+            Class<?> clase = Class.forName("CC_vistaCodigoInterfaz_03." + nombreClase);
+            // Invoca método estático "mostrarVentana" para mostrar esa ventana
+            clase.getMethod("mostrarVentana").invoke(null);
+            dispose(); // Cierra la ventana actual
+            LOGGER.info(nombreClase + " abierta correctamente."); // Log éxito
+        } catch (Exception e) {
+            LOGGER.warning("Error abriendo " + nombreClase + ": " + e.getMessage()); // Log error
+            JOptionPane.showMessageDialog(this,
+                    "❌ No se puede abrir " + nombreClase + ".",
+                    "Error", JOptionPane.ERROR_MESSAGE); // Mostrar diálogo de error
+        }
+    }
+
+    // Método estático para crear y mostrar la ventana en el hilo de eventos Swing
     public static void mostrarVentana() {
         SwingUtilities.invokeLater(() -> new PantallaBienvenida().setVisible(true));
     }
-
-    private JButton createButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("SansSerif", Font.BOLD, 14));
-        button.setActionCommand(text);
-        return button;
-    }
-
-    private void exportarBaseDatos() {
-        JTextField campoRuta = new JTextField("~/Escritorio/backup_AhorcadoAndres.sql", 20);
-        JPasswordField campoClave = new JPasswordField(20);
-        Object[] mensaje = {"Ruta de salida (ej. ~/Escritorio/backup.sql):", campoRuta, "Contraseña de MySQL:", campoClave};
-
-        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Exportar Base de Datos", JOptionPane.OK_CANCEL_OPTION);
-        if (opcion != JOptionPane.OK_OPTION) {
-            LOGGER.info("Exportación cancelada por el usuario.");
-            return;
-        }
-
-        String rutaSalida = campoRuta.getText().trim();
-        String contraseña = new String(campoClave.getPassword());
-
-        if (rutaSalida.startsWith("~")) {
-            String home = System.getProperty("user.home");
-            rutaSalida = rutaSalida.replace("~", home);
-            LOGGER.info("Ruta expandida a: " + rutaSalida);
-        } else {
-            LOGGER.info("Ruta de salida: " + rutaSalida);
-        }
-
-        String mysqldumpPath;
-        String os = System.getProperty("os.name").toLowerCase();
-
-        if (os.contains("win")) {
-            mysqldumpPath = "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe";
-            LOGGER.info("Sistema operativo detectado: Windows");
-        } else {
-            mysqldumpPath = "/usr/bin/mysqldump";
-            LOGGER.info("Sistema operativo detectado: Linux/Unix");
-        }
-
-        LOGGER.info("Verificando disponibilidad de mysqldump...");
-
-        try {
-            ProcessBuilder check;
-            if (os.contains("win")) {
-                check = new ProcessBuilder("where", "mysqldump");
-            } else {
-                check = new ProcessBuilder("which", "mysqldump");
-            }
-            Process checkProcess = check.start();
-            int checkResult = checkProcess.waitFor();
-
-            if (checkResult != 0) {
-                LOGGER.severe("mysqldump no está disponible en el sistema.");
-                JOptionPane.showMessageDialog(this, "❌ mysqldump no está disponible.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            } else {
-                LOGGER.info("mysqldump encontrado.");
-            }
-
-            LOGGER.info("Ejecutando backup...");
-
-            String[] comando = {mysqldumpPath, "-u", "root", "-p" + contraseña, "AhorcadoAndres"};
-            ProcessBuilder pb = new ProcessBuilder(comando);
-            pb.redirectOutput(new java.io.File(rutaSalida));
-            pb.redirectErrorStream(true);
-
-            Process proceso = pb.start();
-
-            java.io.BufferedReader errorReader = new java.io.BufferedReader(new java.io.InputStreamReader(proceso.getErrorStream()));
-            StringBuilder errores = new StringBuilder();
-            String linea;
-            while ((linea = errorReader.readLine()) != null) {
-                errores.append(linea).append("\n");
-            }
-
-            int exitCode = proceso.waitFor();
-
-            if (exitCode == 0 && errores.length() == 0) {
-                LOGGER.info("Backup realizado correctamente en: " + rutaSalida);
-                JOptionPane.showMessageDialog(this, "✅ Exportación exitosa a:\n" + rutaSalida, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                LOGGER.severe("Error durante el backup. Código de salida: " + exitCode);
-                LOGGER.severe("Mensajes de error:\n" + errores);
-                JOptionPane.showMessageDialog(this, "❌ Error al exportar:\n" + errores, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Excepción inesperada durante exportación", e);
-            JOptionPane.showMessageDialog(this, "❌ Error inesperado:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
 }

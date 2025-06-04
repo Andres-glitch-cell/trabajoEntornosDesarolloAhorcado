@@ -1,5 +1,6 @@
+/*
 // Se importan las librerías necesarias para la gestión de base de datos
-package BB_modeloBBDD_02;
+package AA_mainCodigo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,3 +33,5 @@ public class PruebaConexionSQL {
         }
     }
 }
+
+*/

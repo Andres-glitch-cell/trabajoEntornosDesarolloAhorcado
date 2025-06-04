@@ -1,4 +1,4 @@
-package BB_modeloBBDD_02;
+/* package AA_mainCodigo;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -37,3 +37,4 @@ public class PruebaConexionSQL2 {
         }
     }
 }
+ */

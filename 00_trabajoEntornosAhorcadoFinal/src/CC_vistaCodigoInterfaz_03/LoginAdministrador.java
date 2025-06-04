@@ -1,125 +1,85 @@
-package CC_vistaCodigoInterfaz_03;
+package CC_vistaCodigoInterfaz_03;  // Paquete donde está la clase
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-import java.util.logging.*;
+import javax.swing.*;  // Importar componentes Swing para la interfaz
+import java.awt.*;  // Importar componentes AWT para layouts y colores
 
-public class LoginAdministrador extends JFrame {
+public class LoginAdministrador extends JFrame {  // Clase que extiende JFrame (ventana)
+    private final JTextField campoUsuario = new JTextField(15);  // Campo de texto para usuario, ancho 15 columnas
+    private final JPasswordField campoContrasena = new JPasswordField(15);  // Campo para contraseña, ancho 15 columnas
 
-    private JTextField campoUsuario;
-    private JPasswordField campoContrasena;
+    public LoginAdministrador() {  // Constructor de la clase
+        super("Inicio de Sesión - Administrador");  // Llama al constructor JFrame con título
+        configurarVentana();  // Configura propiedades básicas de la ventana
+        inicializarInterfaz();  // Inicializa y añade componentes visuales
+        RegistroDeEventos.registrarInfo("Ventana LoginAdministrador creada.");  // Registra evento de creación
+    }
 
-    private static final Logger LOGGER = Logger.getLogger(LoginAdministrador.class.getName());
+    private void configurarVentana() {  // Método que configura la ventana JFrame
+        setDefaultCloseOperation(EXIT_ON_CLOSE);  // Cierra la aplicación al cerrar la ventana
+        setSize(350, 200);  // Define tamaño fijo de ventana (ancho 350, alto 200)
+        setLocationRelativeTo(null);  // Centra la ventana en la pantalla
+        setResizable(false);  // No permite redimensionar la ventana
+    }
 
-    static {
-        try {
-            LogManager.getLogManager().reset();
-            LOGGER.setLevel(Level.ALL);
-            FileHandler fh = new FileHandler("LoginAdministrador.log", true);
-            fh.setEncoding("UTF-8");
-            fh.setFormatter(new SimpleFormatter());
-            LOGGER.addHandler(fh);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "No se pudo inicializar el archivo de logs: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+    private void inicializarInterfaz() {  // Método para inicializar los componentes GUI
+        JPanel panel = new JPanel(new GridBagLayout());  // Crea un panel con layout GridBagLayout
+        panel.setBackground(new Color(34, 40, 49));  // Establece color de fondo oscuro al panel
+        add(panel);  // Añade el panel a la ventana JFrame
+
+        GridBagConstraints gbc = new GridBagConstraints();  // Crea constraints para GridBagLayout
+        gbc.insets = new Insets(10, 10, 10, 10);  // Define márgenes alrededor de cada componente
+
+        agregarCampo(panel, gbc, 0, "Usuario:", campoUsuario);  // Añade etiqueta y campo usuario fila 0
+        agregarCampo(panel, gbc, 1, "Contraseña:", campoContrasena);  // Añade etiqueta y campo contraseña fila 1
+
+        gbc.gridx = 0;  // Posición columna 0
+        gbc.gridy = 2;  // Posición fila 2
+        gbc.gridwidth = 2;  // El botón ocupa 2 columnas
+        gbc.anchor = GridBagConstraints.CENTER;  // Centra el componente en su celda
+        JButton botonIniciar = new JButton("Iniciar Sesión");  // Crea botón para iniciar sesión
+        panel.add(botonIniciar, gbc);  // Añade botón al panel con constraints definidos
+        botonIniciar.addActionListener(e -> validarLogin());  // Añade acción para validar login al pulsar botón
+    }
+
+    private void agregarCampo(JPanel panel, GridBagConstraints gbc, int fila, String etiqueta, JComponent campo) {
+        gbc.gridx = 0;  // Columna 0 para la etiqueta
+        gbc.gridy = fila;  // Fila pasada por parámetro
+        gbc.anchor = GridBagConstraints.EAST;  // Alinea etiqueta a la derecha
+        JLabel lbl = new JLabel(etiqueta);  // Crea etiqueta con texto dado
+        lbl.setForeground(Color.WHITE);  // Color blanco para la etiqueta (contraste con fondo oscuro)
+        panel.add(lbl, gbc);  // Añade etiqueta al panel con constraints
+
+        gbc.gridx = 1;  // Columna 1 para el campo (texto o contraseña)
+        gbc.anchor = GridBagConstraints.WEST;  // Alinea campo a la izquierda
+        panel.add(campo, gbc);  // Añade campo al panel con constraints
+    }
+
+    private void validarLogin() {  // Método que valida usuario y contraseña
+        String usuario = campoUsuario.getText().trim();  // Obtiene texto usuario y elimina espacios
+        String contrasena = new String(campoContrasena.getPassword());  // Obtiene contraseña como String
+        RegistroDeEventos.registrarInfo("Intento de inicio de sesión con usuario: " + usuario);  // Registra intento login
+
+        if (usuario.equals("administrador")) {  // Verifica que usuario sea "administrador"
+            switch (contrasena) {  // Evalúa contraseña
+                case "administrador1":  // Si contraseña es "administrador1"
+                    abrirVentanaAdministrador(1);  // Abre ventana con nivel 1
+                    return;  // Sale del método
+                case "administrador2":  // Si contraseña es "administrador2"
+                    abrirVentanaAdministrador(2);  // Abre ventana con nivel 2
+                    return;  // Sale del método
+                case "administrador3":  // Si contraseña es "administrador3"
+                    abrirVentanaAdministrador(3);  // Abre ventana con nivel 3
+                    return;  // Sale del método
+            }
         }
+
+        RegistroDeEventos.registrarError("Fallo de inicio de sesión para usuario: " + usuario);  // Registra error de login
+        JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);  // Muestra diálogo error
     }
 
-    public LoginAdministrador() {
-        super("Inicio de Sesión - Administrador");
-        configurarVentana();
-        inicializarUI();
-        LOGGER.info("Ventana LoginAdministrador creada.");
-    }
-
-    // Método para mostrar esta ventana (login)
-    public static void mostrarVentana() {
-        SwingUtilities.invokeLater(() -> {
-            new LoginAdministrador().setVisible(true);
-            LOGGER.info("Ventana LoginAdministrador mostrada.");
-        });
-    }
-
-    private void configurarVentana() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(350, 200);
-        setLocationRelativeTo(null);
-        setResizable(false);
-    }
-
-    private void inicializarUI() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(new Color(34, 40, 49));
-        add(panel);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-        // Etiqueta Usuario
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.EAST;
-        JLabel etiquetaUsuario = new JLabel("Usuario:");
-        etiquetaUsuario.setForeground(Color.WHITE);
-        panel.add(etiquetaUsuario, gbc);
-
-        // Campo Usuario
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        campoUsuario = new JTextField(15);
-        panel.add(campoUsuario, gbc);
-
-        // Etiqueta Contraseña
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.EAST;
-        JLabel etiquetaContrasena = new JLabel("Contraseña:");
-        etiquetaContrasena.setForeground(Color.WHITE);
-        panel.add(etiquetaContrasena, gbc);
-
-        // Campo Contraseña
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        campoContrasena = new JPasswordField(15);
-        panel.add(campoContrasena, gbc);
-
-        // Botón Iniciar Sesión
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        JButton btnIniciar = new JButton("Iniciar Sesión");
-        panel.add(btnIniciar, gbc);
-
-        btnIniciar.addActionListener(e -> validarLogin());
-    }
-
-    private void validarLogin() {
-        String usuario = campoUsuario.getText().trim();
-        String contrasena = new String(campoContrasena.getPassword());
-
-        LOGGER.info("Intento de login con usuario: " + usuario);
-
-        if (usuario.equals("administrador") && contrasena.equals("administrador1")) {
-            LOGGER.info("Login exitoso para usuario: " + usuario + " con nivel 1");
-            abrirVentanaAdmin(1);
-        } else if (usuario.equals("administrador") && contrasena.equals("administrador2")) {
-            LOGGER.info("Login exitoso para usuario: " + usuario + " con nivel 2");
-            abrirVentanaAdmin(2);
-        } else if (usuario.equals("administrador") && contrasena.equals("administrador3")) {
-            LOGGER.info("Login exitoso para usuario: " + usuario + " con nivel 3");
-            abrirVentanaAdmin(3);
-        } else {
-            LOGGER.warning("Login fallido para usuario: " + usuario);
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void abrirVentanaAdmin(int nivel) {
-        VentanaAdministrador ventanaAdmin = new VentanaAdministrador(nivel);
-        ventanaAdmin.setVisible(true);
-        this.dispose();
+    private void abrirVentanaAdministrador(int nivel) {  // Método para abrir ventana principal admin con nivel
+        RegistroDeEventos.registrarInfo("Inicio de sesión exitoso para usuario: administrador con nivel " + nivel);  // Registra login exitoso
+        new VentanaAdministrador(nivel).setVisible(true);  // Crea y muestra ventana administrador con nivel
+        dispose();  // Cierra la ventana de login actual
     }
 }
