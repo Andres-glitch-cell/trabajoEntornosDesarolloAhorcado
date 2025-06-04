@@ -3,7 +3,6 @@ package BB_modeloBBDD_02;
 
 // Importa las clases necesarias para interfaz gráfica (JOptionPane, JFrame), manejo de archivos (File, InputStream, BufferedReader),
 // manejo de fechas y formatos (SimpleDateFormat, Date) y logging (Logger, Level)
-
 import javax.swing.*;
 import java.io.*;
 import java.text.SimpleDateFormat;

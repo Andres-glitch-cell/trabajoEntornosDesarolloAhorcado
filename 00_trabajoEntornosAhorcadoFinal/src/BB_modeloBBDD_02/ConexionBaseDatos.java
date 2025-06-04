@@ -1,145 +1,99 @@
-// Declaración del paquete donde está esta clase
+// ======= Paquete e imports =======
 package BB_modeloBBDD_02;
 
-// Importa clases para manejo de archivos
+import java.io.File;                       // Importa para manejar archivos
+import java.io.IOException;                // Importa para manejo de excepciones IO
+import java.sql.Connection;                // Importa para conexiones a base de datos
+import java.sql.DriverManager;             // Importa para gestionar drivers JDBC
+import java.sql.SQLException;              // Importa para manejo de excepciones SQL
+import java.util.logging.*;                // Importa para logging de eventos y errores
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.logging.*;
+// ======= Declaración de la clase =======
+public class ConexionBaseDatos {          // Clase para gestionar la conexión a la BBDD
 
-// Declaración de la clase para manejar la conexión a base de datos
-public class ConexionBaseDatos {
+    // ======= Variables estáticas y Logger =======
+    private static final Logger LOGGER = Logger.getLogger(ConexionBaseDatos.class.getName());  // Logger para esta clase
 
-    // -----------------------------
-    // CONSTANTES Y LOGGER
-    // -----------------------------
+    private static final String URL_BASE_DATOS =                                         // URL para conexión JDBC a MySQL
+            "jdbc:mysql://localhost:3306/AhorcadoAndres?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
-    // Logger para registrar mensajes relacionados con esta clase
-    private static final Logger LOGGER = Logger.getLogger(ConexionBaseDatos.class.getName());
+    private static final String USUARIO_BASE_DATOS;        // Usuario base de datos (inicializado en bloque estático)
+    private static final String CLAVE_BASE_DATOS;          // Contraseña base de datos (inicializado en bloque estático)
 
-    // Cadena de conexión JDBC a MySQL con parámetros para configuración
-    private static final String URL_BASE_DATOS = "jdbc:mysql://localhost:3306/AhorcadoAndres?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    // ======= Bloque estático: Inicialización de variables y configuración del logging =======
+    static {                                               // Bloque estático para inicializar constantes y logging
 
-    // Variables para usuario y contraseña, serán inicializadas en bloque estático
-    private static final String USUARIO_BASE_DATOS;
-    private static final String CLAVE_BASE_DATOS;
+        String usuarioBD = System.getenv("DB_USUARIO");  // Intenta obtener usuario desde variable entorno
+        if (usuarioBD == null) usuarioBD = "root";       // Si no existe, usa "root" por defecto
+        USUARIO_BASE_DATOS = usuarioBD;                   // Asigna usuario obtenido o por defecto
 
-    // -----------------------------
-    // BLOQUE ESTÁTICO DE INICIALIZACIÓN
-    // -----------------------------
-
-    static {
-        // Intenta obtener usuario desde variable de entorno "DB_USUARIO"
-        String usuarioBD = System.getenv("DB_USUARIO");
-        // Si no está definida, usa "root" como valor por defecto
-        if (usuarioBD == null) usuarioBD = "root";
-        // Asigna el usuario obtenido o por defecto a la constante
-        USUARIO_BASE_DATOS = usuarioBD;
-
-        // Intenta obtener contraseña desde variable de entorno "DB_CLAVE"
-        String claveBD = System.getenv("DB_CLAVE");
-        // Si no está definida, usa "abcd1234" como valor por defecto
-        if (claveBD == null) claveBD = "abcd1234";
-        // Asigna la clave obtenida o por defecto a la constante
-        CLAVE_BASE_DATOS = claveBD;
+        String claveBD = System.getenv("DB_CLAVE");      // Intenta obtener clave desde variable entorno
+        if (claveBD == null) claveBD = "abcd1234";       // Si no existe, usa clave por defecto
+        CLAVE_BASE_DATOS = claveBD;                       // Asigna clave obtenida o por defecto
 
         try {
-            // Reinicia configuración del LogManager para limpiar handlers previos
-            LogManager.getLogManager().reset();
+            LogManager.getLogManager().reset();          // Limpia configuración previa de LogManager
 
-            // Configura el nivel del logger para capturar todos los mensajes
-            LOGGER.setLevel(Level.ALL);
+            LOGGER.setLevel(Level.ALL);                    // Configura logger para capturar todos los niveles
 
-            // Obtiene el nombre del sistema operativo actual en minúsculas
-            String os = System.getProperty("os.name").toLowerCase();
-            String rutaLog;
+            String os = System.getProperty("os.name").toLowerCase();   // Detecta sistema operativo
 
-            // Si el sistema operativo es Windows, define ruta para archivo log en D:
-            if (os.contains("win")) {
-                rutaLog = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\LOGS\\ConexionBaseDatos.log";
-            } else {
-                // Si no es Windows, define ruta alternativa (Linux/Unix) para archivo log
-                rutaLog = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/LOGS/ConexionBaseDatos.log";
+            String rutaLog;                                // Variable para ruta archivo log
+
+            if (os.contains("win")) {                      // Si sistema operativo es Windows
+                rutaLog = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\LOGS\\ConexionBaseDatos.log";   // Ruta Windows
+            } else {                                       // Si no es Windows
+                rutaLog = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/LOGS/ConexionBaseDatos.log"; // Ruta Linux/Unix
             }
 
-            // Crea un objeto File para el archivo log en la ruta especificada
-            File archivoLog = new File(rutaLog);
-            // Obtiene la carpeta padre del archivo log
-            File carpetaLogs = archivoLog.getParentFile();
+            File archivoLog = new File(rutaLog);           // Crea archivo log en la ruta asignada
+            File carpetaLogs = archivoLog.getParentFile(); // Obtiene carpeta padre (directorio)
 
-            // Si la carpeta de logs no existe
-            if (!carpetaLogs.exists()) {
-                // Intenta crear la carpeta y todas las carpetas padres necesarias
-                if (!carpetaLogs.mkdirs()) {
-                    // Si falla, imprime mensaje de error en consola de error
-                    System.err.println("No se pudo crear la carpeta LOGS.");
+            if (!carpetaLogs.exists()) {                    // Si carpeta no existe
+                if (!carpetaLogs.mkdirs()) {                 // Intenta crear carpeta y padres
+                    System.err.println("No se pudo crear la carpeta LOGS.");  // Muestra error si falla creación
                 }
             }
 
-            // Configura un FileHandler para logs con rotación: 1MB por archivo, 3 archivos guardados, modo append
-            FileHandler fh = new FileHandler(rutaLog, 1024 * 1024, 3, true);
-            // Define codificación UTF-8 para los logs
-            fh.setEncoding("UTF-8");
-            // Establece formato simple para la salida de logs
-            fh.setFormatter(new SimpleFormatter());
-            // Añade este handler para guardar logs en archivo al logger
-            LOGGER.addHandler(fh);
+            FileHandler fh = new FileHandler(rutaLog, 1024 * 1024, 3, true);  // FileHandler con rotación 1MB, 3 archivos, append
+            fh.setEncoding("UTF-8");                     // Define codificación UTF-8 para logs
+            fh.setFormatter(new SimpleFormatter());      // Formato simple para logs
+            LOGGER.addHandler(fh);                        // Añade handler para archivo al logger
 
-            // Crea un ConsoleHandler para mostrar logs en la consola
-            ConsoleHandler ch = new ConsoleHandler();
-            // Establece nivel INFO para que solo se muestren logs de nivel INFO o superior en consola
-            ch.setLevel(Level.INFO);
-            // Define formato simple para logs en consola
-            ch.setFormatter(new SimpleFormatter());
-            // Añade el handler de consola al logger
-            LOGGER.addHandler(ch);
+            ConsoleHandler ch = new ConsoleHandler();    // Crea handler para consola
+            ch.setLevel(Level.INFO);                      // Muestra solo logs nivel INFO o superior en consola
+            ch.setFormatter(new SimpleFormatter());      // Formato simple para consola
+            LOGGER.addHandler(ch);                        // Añade handler consola al logger
 
-        } catch (IOException e) {
-            // En caso de error al configurar logging en archivos, imprime mensaje en consola de error
-            System.err.println("No se pudo inicializar el archivo de logs de conexión: " + e.getMessage());
+        } catch (IOException e) {                         // Captura errores al configurar logging
+            System.err.println("No se pudo inicializar el archivo de logs de conexión: " + e.getMessage());  // Muestra error por consola
         }
     }
 
-    // -----------------------------
-    // MÉTODO PÚBLICO PARA OBTENER CONEXIÓN
-    // -----------------------------
-
+    // ======= Método público: Obtiene la conexión a la base de datos =======
     /**
-     * Método para obtener una conexión activa a la base de datos MySQL mediante JDBC.
-     *
-     * @return Objeto Connection para interactuar con la base de datos.
-     * @throws SQLException si ocurre algún error durante la conexión.
+     * Obtiene una conexión activa a la base de datos MySQL
+     * @return Connection activa a la base de datos
+     * @throws SQLException si ocurre error en conexión
      */
     public static Connection getConexion() throws SQLException {
+
         try {
-            // Intenta cargar el driver JDBC de MySQL (clase del driver)
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            // Si carga bien, registra información en log
-            LOGGER.info("Driver JDBC MySQL cargado correctamente.");
+            Class.forName("com.mysql.cj.jdbc.Driver");  // Carga driver JDBC MySQL
+            LOGGER.info("Driver JDBC MySQL cargado correctamente.");  // Log éxito carga driver
         } catch (ClassNotFoundException e) {
-            // Si no se encuentra el driver, registra error en log con nivel SEVERE
-            LOGGER.severe("Driver JDBC MySQL no encontrado: " + e.getMessage());
-            // Lanza excepción SQLException indicando que no se pudo cargar el driver
-            throw new SQLException("No se pudo cargar el driver JDBC de MySQL", e);
+            LOGGER.severe("Driver JDBC MySQL no encontrado: " + e.getMessage());  // Log error driver no encontrado
+            throw new SQLException("No se pudo cargar el driver JDBC de MySQL", e); // Lanza SQLException
         }
 
         try {
-            // Registra que se intenta conectar a la base de datos
-            LOGGER.info("Intentando conectar a la base de datos...");
-            // Establece la conexión usando URL, usuario y clave configurados
-            Connection conn = DriverManager.getConnection(URL_BASE_DATOS, USUARIO_BASE_DATOS, CLAVE_BASE_DATOS);
-            // Si la conexión es exitosa, registra el evento en el log
-            LOGGER.info("Conexión establecida con éxito.");
-            // Retorna la conexión creada para ser usada por el llamante
-            return conn;
+            LOGGER.info("Intentando conectar a la base de datos...");   // Log intento conexión
+            Connection conn = DriverManager.getConnection(URL_BASE_DATOS, USUARIO_BASE_DATOS, CLAVE_BASE_DATOS);  // Establece conexión
+            LOGGER.info("Conexión establecida con éxito.");              // Log éxito conexión
+            return conn;                                                 // Retorna conexión establecida
         } catch (SQLException e) {
-            // Si falla la conexión, registra el error en log con nivel SEVERE
-            LOGGER.severe("Error al conectar a la base de datos: " + e.getMessage());
-            // Propaga la excepción para que quien llame al método pueda manejarla
-            throw e;
+            LOGGER.severe("Error al conectar a la base de datos: " + e.getMessage());  // Log error conexión
+            throw e;                                                     // Propaga SQLException
         }
     }
 }

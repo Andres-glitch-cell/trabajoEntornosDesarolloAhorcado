@@ -1,144 +1,161 @@
-package BB_modeloBBDD_02; // === PAQUETE BASE DE DATOS ===
+package BB_modeloBBDD_02;
 
-import java.io.File; // Importa clase para manejar archivos y carpetas
-import java.io.IOException; // Importa excepción para errores de entrada/salida
-import java.text.SimpleDateFormat; // Importa clase para formatear fechas
-import java.util.Date; // Importa clase para manejar fechas actuales
-import java.util.logging.*; // Importa librería para logging (registro de eventos)
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.*;
 
-public class RespaldoAutomatico extends Thread { // Clase que extiende Thread para ejecutar respaldo en hilo separado
+public class RespaldoAutomatico extends Thread {
 
-    // === BLOQUE 1: CONSTANTES Y LOGGER ===
-    private static final Logger LOGGER = Logger.getLogger(RespaldoAutomatico.class.getName()); // Logger específico para esta clase
+    private static final Logger LOGGER = Logger.getLogger(RespaldoAutomatico.class.getName());
 
-    private static final String DB_NAME = "AhorcadoAndres"; // Nombre de la base de datos a respaldar
-    private static final long INTERVAL = 30 * 60 * 1000; // Intervalo de respaldo en milisegundos (30 minutos)
+    private static final String DB_NAME = "AhorcadoAndres";
+    private static final long INTERVAL = 30 * 60 * 1000;
 
-    private static final String MY_CNF_PATH; // Ruta al archivo de configuración MySQL
-    private static final String BACKUP_FOLDER; // Ruta a la carpeta de backups
-    private static final String LOG_FOLDER; // Ruta a la carpeta de logs
+    private static final String MY_CNF_PATH;
+    private static final String BACKUP_FOLDER;
+    private static final String LOG_FOLDER;
 
-    // === BLOQUE 2: CONFIGURACIÓN ESTÁTICA INICIAL ===
-    static { // Bloque estático para inicializar rutas y configurar logging al cargar la clase
-        String os = System.getProperty("os.name").toLowerCase(); // Obtener nombre del sistema operativo en minúsculas
+    static {
+        String os = System.getProperty("os.name").toLowerCase();
 
-        // Rutas dependiendo del sistema operativo
-        if (os.contains("win")) { // Si el SO es Windows
+        if (os.contains("win")) {
             MY_CNF_PATH = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\00_trabajoEntornosAhorcadoFinal\\src\\.my.cnf";
             BACKUP_FOLDER = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\Backups\\";
             LOG_FOLDER = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\LOGS\\";
-        } else { // Si es otro SO (Linux, Mac, etc.)
+        } else {
             MY_CNF_PATH = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/00_trabajoEntornosAhorcadoFinal/src/.my.cnf";
             BACKUP_FOLDER = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/Backups/";
             LOG_FOLDER = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/LOGS/";
         }
 
-        try { // Configurar sistema de logging
-            LogManager.getLogManager().reset(); // Resetear configuración previa del logging
-            LOGGER.setLevel(Level.ALL); // Registrar todos los niveles de logs
+        try {
+            LogManager.getLogManager().reset();
+            LOGGER.setLevel(Level.ALL);
 
-            File carpetaLogs = new File(LOG_FOLDER); // Objeto carpeta para logs
-            if (!carpetaLogs.exists() && !carpetaLogs.mkdirs()) { // Crear carpeta si no existe
+            File carpetaLogs = new File(LOG_FOLDER);
+            if (!carpetaLogs.exists() && !carpetaLogs.mkdirs()) {
                 System.err.println("No se pudo crear la carpeta LOGS en la ruta: " + LOG_FOLDER);
             }
 
-            File archivoLog = new File(carpetaLogs, "RespaldoAutomatico.log"); // Archivo de log dentro de carpeta
-            FileHandler fh = new FileHandler(archivoLog.getAbsolutePath(), 1024 * 1024, 3, true); // Handler de archivo con rotación
-            fh.setEncoding("UTF-8"); // Codificación UTF-8 para archivo
-            fh.setFormatter(new SimpleFormatter()); // Formateador simple para logs
-            LOGGER.addHandler(fh); // Añadir handler archivo al logger
+            File archivoLog = new File(carpetaLogs, "RespaldoAutomatico.log");
+            FileHandler fh = new FileHandler(archivoLog.getAbsolutePath(), 1024 * 1024, 3, true);
+            fh.setEncoding("UTF-8");
+            fh.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(fh);
 
-            ConsoleHandler ch = new ConsoleHandler(); // Handler para consola
-            ch.setLevel(Level.INFO); // Nivel INFO para consola
-            ch.setFormatter(new SimpleFormatter()); // Formateador simple para consola
-            LOGGER.addHandler(ch); // Añadir handler consola al logger
+            ConsoleHandler ch = new ConsoleHandler();
+            ch.setLevel(Level.INFO);
+            ch.setFormatter(new ColorFormatter());  // <-- Aquí el formatter coloreado
+            LOGGER.addHandler(ch);
 
-        } catch (IOException e) { // Si falla configuración de logs
+        } catch (IOException e) {
             System.err.println("No se pudo inicializar el archivo de log: " + e.getMessage());
         }
     }
 
-    // === BLOQUE 3: MÉTODO PÚBLICO PARA INICIAR RESPALDO ===
-    public static RespaldoAutomatico iniciarRespaldo() { // Método estático para crear e iniciar hilo respaldo
-        RespaldoAutomatico respaldo = new RespaldoAutomatico(); // Crear instancia del hilo
-        respaldo.start(); // Iniciar ejecución del hilo
-        LOGGER.info("Hilo de respaldo automático iniciado."); // Loggear inicio del hilo
-        return respaldo; // Retornar referencia al hilo
+    public static RespaldoAutomatico iniciarRespaldo() {
+        RespaldoAutomatico respaldo = new RespaldoAutomatico();
+        respaldo.start();
+        LOGGER.info("Hilo de respaldo automático iniciado.");
+        return respaldo;
     }
 
-    public void detener() { // Método para solicitar detención del hilo
-        LOGGER.info("Solicitud de detener el hilo de respaldo."); // Loggear solicitud
-        this.interrupt(); // Interrumpir hilo para detenerlo
+    public void detener() {
+        LOGGER.info("Solicitud de detener el hilo de respaldo.");
+        this.interrupt();
     }
 
-    // === BLOQUE 4: MÉTODO RUN DEL HILO ===
     @Override
-    public void run() { // Código que se ejecuta en el hilo
-        LOGGER.info("Hilo de respaldo automático iniciado."); // Loggear inicio de hilo
-        while (!isInterrupted()) { // Ejecutar mientras no se interrumpa hilo
-            realizarRespaldo(); // Ejecutar respaldo
+    public void run() {
+        LOGGER.info("Hilo de respaldo automático iniciado.");
+
+        while (!isInterrupted()) {
+            realizarRespaldo();
             try {
-                Thread.sleep(INTERVAL); // Esperar intervalo definido antes de siguiente respaldo
-            } catch (InterruptedException e) { // Si se interrumpe el sleep
-                LOGGER.warning("Hilo interrumpido: " + e.getMessage()); // Loggear advertencia
-                Thread.currentThread().interrupt(); // Volver a interrumpir hilo
+                Thread.sleep(INTERVAL);
+            } catch (InterruptedException e) {
+                LOGGER.warning("Hilo interrumpido: " + e.getMessage());
+                Thread.currentThread().interrupt();
             }
         }
-        LOGGER.info("Hilo de respaldo finalizado."); // Loggear fin de hilo
+        LOGGER.info("Hilo de respaldo finalizado.");
     }
 
-    // === BLOQUE 5: REALIZAR RESPALDO ===
-    private void realizarRespaldo() { // Método para hacer el respaldo de la base de datos
-        File folder = new File(BACKUP_FOLDER); // Carpeta destino de backup
-        if (!folder.exists() && !folder.mkdirs()) { // Crear carpeta si no existe
+    private void realizarRespaldo() {
+        File folder = new File(BACKUP_FOLDER);
+        if (!folder.exists() && !folder.mkdirs()) {
             LOGGER.severe("No se pudo crear la carpeta de respaldos: " + BACKUP_FOLDER);
-            return; // Salir si no se puede crear carpeta
+            return;
         }
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); // Formatear fecha para nombre archivo
-        String backupFile = BACKUP_FOLDER + "backup_" + timeStamp + ".sql"; // Ruta y nombre completo del archivo backup
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String backupFile = BACKUP_FOLDER + "backup_" + timeStamp + ".sql";
 
-        String mysqldump = System.getProperty("os.name").toLowerCase().contains("win") // Comando mysqldump según SO
+        String cmdComando = "mysqldump";
+
+        String mysqldump = System.getProperty("os.name").toLowerCase().contains("win")
                 ? "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe"
                 : "mysqldump";
 
         try {
-            if (!comandoDisponible(mysqldump)) { // Verificar que el comando mysqldump está disponible
+            if (!comandoDisponible(cmdComando)) {
                 LOGGER.severe("El comando mysqldump no está disponible en el sistema.");
-                return; // Salir si no está disponible
+                return;
             }
-        } catch (IOException | InterruptedException e) { // Captura error verificación comando
+        } catch (IOException | InterruptedException e) {
             LOGGER.severe("Error al verificar mysqldump: " + e.getMessage());
-            return; // Salir si ocurre error
+            return;
         }
 
-        String[] command = {mysqldump, "--defaults-extra-file=" + MY_CNF_PATH, DB_NAME}; // Comando para ejecutar mysqldump con archivo de configuración y DB
+        String[] command = {mysqldump, "--defaults-extra-file=" + MY_CNF_PATH, DB_NAME};
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(command); // Crear proceso con comando
-            pb.redirectOutput(new File(backupFile)); // Redirigir salida al archivo backup
-            pb.redirectError(ProcessBuilder.Redirect.INHERIT); // Redirigir errores a consola
-            Process process = pb.start(); // Iniciar proceso
-            int exitCode = process.waitFor(); // Esperar finalización y obtener código salida
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.redirectOutput(new File(backupFile));
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+            Process process = pb.start();
+            int exitCode = process.waitFor();
 
-            if (exitCode == 0) { // Si exitCode es 0, éxito
+            if (exitCode == 0) {
                 LOGGER.info("Respaldo exitoso: " + backupFile);
-            } else { // Si no, error en respaldo
+            } else {
                 LOGGER.severe("Error en respaldo (código " + exitCode + ").");
             }
 
-        } catch (IOException e) { // Captura error de entrada/salida
+        } catch (IOException e) {
             LOGGER.severe("IOException al ejecutar mysqldump: " + e.getMessage());
-        } catch (InterruptedException e) { // Captura interrupción del proceso
+        } catch (InterruptedException e) {
             LOGGER.warning("Respaldo interrumpido: " + e.getMessage());
-            Thread.currentThread().interrupt(); // Reinterrumpir hilo
+            Thread.currentThread().interrupt();
         }
     }
 
-    // === BLOQUE 6: VERIFICAR DISPONIBILIDAD DE COMANDO ===
-    private boolean comandoDisponible(String cmd) throws IOException, InterruptedException { // Método que verifica si un comando existe en el sistema
-        ProcessBuilder pb = new ProcessBuilder(System.getProperty("os.name").toLowerCase().contains("win") ? "where" : "which", cmd);
-        Process p = pb.start(); // Iniciar proceso para buscar comando
-        return p.waitFor() == 0; // Retorna true si comando existe (código 0)
+    private boolean comandoDisponible(String cmd) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder(
+                System.getProperty("os.name").toLowerCase().contains("win") ? "where" : "which",
+                cmd
+        );
+        Process p = pb.start();
+        return p.waitFor() == 0;
+    }
+
+    // Clase interna para dar color verde y ticks a mensajes INFO en consola
+    private static class ColorFormatter extends Formatter {
+        private static final String ANSI_RESET = "\u001B[0m";
+        private static final String ANSI_GREEN = "\u001B[32m";
+
+        @Override
+        public String format(LogRecord record) {
+            String msg = formatMessage(record);
+            if (record.getLevel() == Level.INFO) {
+                return ANSI_GREEN + "✔ " + msg + " ✔" + ANSI_RESET + "\n";
+            } else if (record.getLevel() == Level.SEVERE) {
+                // Opcional: rojo para errores
+                return "\u001B[31m" + msg + ANSI_RESET + "\n";
+            }
+            return msg + "\n";
+        }
     }
 }
