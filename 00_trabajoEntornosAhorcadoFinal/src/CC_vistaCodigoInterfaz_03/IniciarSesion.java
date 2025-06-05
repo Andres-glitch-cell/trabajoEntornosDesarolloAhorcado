@@ -112,8 +112,13 @@ public class IniciarSesion extends JFrame {
                 mostrarMenuSoloBackup();
             } else if (validarCredenciales(usuario, contrasena)) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                // En vez de cerrar y abrir juego directamente:
                 dispose();
-                PantallaAhorcado.mostrarVentana();
+
+                // Mostrar ventana modal de opciones de juego, pasándole esta ventana como parent (ya cerrada)
+                PantallaOpcionesJuego opciones = new PantallaOpcionesJuego(null);
+                opciones.setVisible(true);
+                // Cuando opciones se cierre, se lanza el juego (esto ya está en PantallaOpcionesJuego)
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -123,10 +128,6 @@ public class IniciarSesion extends JFrame {
         }
     }
 
-    // Aquí cambié tabla y columnas a las que tienes en la base:
-    // Tabla: usuario
-    // Campos para búsqueda: nombre (usuario) o correo (correo electrónico)
-    // Campo con hash: contraseñaHash
     private boolean validarCredenciales(String usuario, String contrasena) throws SQLException, NoSuchAlgorithmException {
         String sql = "SELECT contraseñaHash FROM usuario WHERE nombre = ? OR correo = ?";
         try (Connection conexion = ConexionBaseDatos.getConexion();

@@ -5,6 +5,7 @@ import java.io.File;                       // Importa para manejar archivos
 import java.io.IOException;                // Importa para manejo de excepciones IO
 import java.sql.Connection;                // Importa para conexiones a base de datos
 import java.sql.DriverManager;             // Importa para gestionar drivers JDBC
+import java.sql.PreparedStatement;         // Para consultas preparadas
 import java.sql.SQLException;              // Importa para manejo de excepciones SQL
 import java.util.logging.*;                // Importa para logging de eventos y errores
 
@@ -71,8 +72,10 @@ public class ConexionBaseDatos {          // Clase para gestionar la conexión a
     }
 
     // ======= Método público: Obtiene la conexión a la base de datos =======
+
     /**
      * Obtiene una conexión activa a la base de datos MySQL
+     *
      * @return Connection activa a la base de datos
      * @throws SQLException si ocurre error en conexión
      */
@@ -94,6 +97,74 @@ public class ConexionBaseDatos {          // Clase para gestionar la conexión a
         } catch (SQLException e) {
             LOGGER.severe("Error al conectar a la base de datos: " + e.getMessage());  // Log error conexión
             throw e;                                                     // Propaga SQLException
+        }
+    }
+
+    // ======= Métodos para manejar usuarios =======
+    public static boolean agregarUsuario(String nombreUsuario) {
+        String sql = "INSERT INTO Usuario (nombre) VALUES (?)";
+        try (Connection conn = getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nombreUsuario);
+            ps.executeUpdate();
+            LOGGER.info("Usuario agregado: " + nombreUsuario);
+            return true;
+        } catch (SQLException e) {
+            LOGGER.severe("Error al agregar usuario: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean eliminarUsuario(String nombreUsuario) {
+        String sql = "DELETE FROM Usuario WHERE nombre = ?";
+        try (Connection conn = getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nombreUsuario);
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                LOGGER.info("Usuario eliminado: " + nombreUsuario);
+                return true;
+            } else {
+                LOGGER.warning("No se encontró usuario para eliminar: " + nombreUsuario);
+                return false;
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error al eliminar usuario: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ======= Métodos para manejar palabrasFrases =======
+    public static boolean agregarPalabra(String palabra) {
+        String sql = "INSERT INTO palabrasFrases (palabra) VALUES (?)";
+        try (Connection conn = getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, palabra);
+            ps.executeUpdate();
+            LOGGER.info("Palabra agregada: " + palabra);
+            return true;
+        } catch (SQLException e) {
+            LOGGER.severe("Error al agregar palabra: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean eliminarPalabra(String palabra) {
+        String sql = "DELETE FROM palabrasFrases WHERE palabra = ?";
+        try (Connection conn = getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, palabra);
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                LOGGER.info("Palabra eliminada: " + palabra);
+                return true;
+            } else {
+                LOGGER.warning("No se encontró palabra para eliminar: " + palabra);
+                return false;
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error al eliminar palabra: " + e.getMessage());
+            return false;
         }
     }
 }

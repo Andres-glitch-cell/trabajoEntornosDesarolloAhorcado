@@ -2,6 +2,7 @@ package AA_mainCodigo;
 
 import BB_modeloBBDD_02.RespaldoAutomatico;
 import CC_vistaCodigoInterfaz_03.PantallaBienvenida;
+import CC_vistaCodigoInterfaz_03.LoginAdministrador;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -11,19 +12,45 @@ public class Principal {
     private static final Logger LOGGER = Logger.getLogger(Principal.class.getName());
 
     static {
+        configurarLogger();
+    }
+
+    public static void main(String[] args) {
+        try {
+            mostrarBannerInicio();
+
+            LOGGER.info("Iniciando juego...");
+            Thread.sleep(1000);
+
+            LOGGER.info("Cargando base de datos...");
+            Thread.sleep(1000);
+
+            LOGGER.info("Iniciando respaldo automático...");
+            RespaldoAutomatico.iniciarRespaldo();
+
+            iniciarModoSegunEleccion();
+
+            LOGGER.info("Aplicación iniciada correctamente.");
+
+        } catch (Exception e) {
+            manejarErrorFatal(e);
+        }
+    }
+
+    private static void configurarLogger() {
         try {
             LogManager.getLogManager().reset();
             LOGGER.setLevel(Level.ALL);
 
-            FileHandler fh = new FileHandler("Principal.log", true);
-            fh.setEncoding("UTF-8");
-            fh.setFormatter(new SimpleFormatter());
-            LOGGER.addHandler(fh);
+            FileHandler archivoLog = new FileHandler("Principal.log", true);
+            archivoLog.setEncoding("UTF-8");
+            archivoLog.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(archivoLog);
 
-            ConsoleHandler ch = new ConsoleHandler();
-            ch.setLevel(Level.INFO);
-            ch.setFormatter(new ColorFormatter());  // Usamos formatter con color y ticks aquí
-            LOGGER.addHandler(ch);
+            ConsoleHandler consola = new ConsoleHandler();
+            consola.setLevel(Level.INFO);
+            consola.setFormatter(new ColorFormatter());
+            LOGGER.addHandler(consola);
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
@@ -32,40 +59,9 @@ public class Principal {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            printAhorcadoAscii();  // Muestra el banner claro y espacioso
-
-            Thread.sleep(2000);
-
-            LOGGER.info("Iniciando juego...");
-            Thread.sleep(2000);
-
-            LOGGER.info("Cargando base de datos...");
-            Thread.sleep(2000);
-
-            LOGGER.info("Iniciando respaldo automático...");
-            RespaldoAutomatico.iniciarRespaldo();
-
-            LOGGER.info("Mostrando pantalla de bienvenida...");
-            PantallaBienvenida.mostrarVentana();
-
-            LOGGER.info("Aplicación iniciada correctamente.");
-
-        } catch (Exception error) {
-            LOGGER.log(Level.SEVERE, "Error al iniciar la aplicación", error);
-            error.printStackTrace();
-
-            JOptionPane.showMessageDialog(null,
-                    "Error al iniciar la aplicación: " + error.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-
-            System.exit(1);
-        }
-    }
-
-    private static void printAhorcadoAscii() {
-        String[] banner = new String[]{ "\n",
+    private static void mostrarBannerInicio() throws InterruptedException {
+        String[] banner = {
+                "\n",
                 "  AAA    H   H   OOO   RRRR    CCCC   AAA    DDDD    OOO  ",
                 " A   A   H   H  O   O  R   R  C      A   A   D   D  O   O ",
                 " AAAAA   HHHHH  O   O  RRRR   C      AAAAA   D   D  O   O ",
@@ -80,22 +76,63 @@ public class Principal {
         for (String line : banner) {
             System.out.println(ANSI_GREEN + line + ANSI_RESET);
         }
+
+        Thread.sleep(1000);
     }
 
-    // Formatter para mensajes INFO en verde con ticks en consola
+    private static void iniciarModoSegunEleccion() {
+        int opcion = JOptionPane.showConfirmDialog(null,
+                "¿Deseas iniciar en modo Administrador?",
+                "Modo Administrador",
+                JOptionPane.YES_NO_OPTION);
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            LOGGER.info("Abriendo ventana de login para administrador.");
+            SwingUtilities.invokeLater(() -> {
+                new LoginAdministrador().setVisible(true);
+            });
+        } else {
+            LOGGER.info("Iniciando en modo usuario.");
+            SwingUtilities.invokeLater(() -> {
+                PantallaBienvenida.mostrarVentana();
+            });
+        }
+    }
+
+    private static void manejarErrorFatal(Exception error) {
+        LOGGER.log(Level.SEVERE, "Error al iniciar la aplicación", error);
+        error.printStackTrace();
+        JOptionPane.showMessageDialog(null,
+                "Error al iniciar la aplicación: " + error.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        System.exit(1);
+    }
+
     private static class ColorFormatter extends Formatter {
         private static final String ANSI_RESET = "\u001B[0m";
         private static final String ANSI_GREEN = "\u001B[32m";
+        private static final String ANSI_RED = "\u001B[31m";
+        private static final String ANSI_YELLOW = "\u001B[33m";
 
         @Override
         public String format(LogRecord record) {
-            String msg = formatMessage(record);
+            String mensaje = formatMessage(record);
+            String color = "";
+            String prefijo = "";
+
             if (record.getLevel() == Level.INFO) {
-                return ANSI_GREEN + "✔ " + msg + " ✔" + ANSI_RESET + "\n";
+                color = ANSI_GREEN;
+                prefijo = "✔ ";
+                mensaje += " ✔";
             } else if (record.getLevel() == Level.SEVERE) {
-                return "\u001B[31m" + msg + ANSI_RESET + "\n";
+                color = ANSI_RED;
+                prefijo = "✖ ";
+            } else if (record.getLevel() == Level.WARNING) {
+                color = ANSI_YELLOW;
+                prefijo = "⚠ ";
             }
-            return msg + "\n";
+
+            return color + prefijo + mensaje + ANSI_RESET + "\n";
         }
     }
 }

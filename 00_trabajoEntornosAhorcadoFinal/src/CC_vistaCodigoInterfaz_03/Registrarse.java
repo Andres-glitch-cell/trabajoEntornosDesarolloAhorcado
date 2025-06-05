@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -43,7 +44,10 @@ public class Registrarse extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        String[] etiquetas = {"Nombre Completo:", "Nombre de Usuario:", "Correo Electrónico:", "Contraseña:", "Repite Contraseña:"};
+        String[] etiquetas = {
+                "Nombre Completo:", "Nombre de Usuario:", "Correo Electrónico:",
+                "Contraseña:", "Repite Contraseña:"
+        };
         JLabel[] labels = new JLabel[etiquetas.length];
 
         for (int i = 0; i < etiquetas.length; i++) {
@@ -58,8 +62,52 @@ public class Registrarse extends JFrame {
         campoContraseña = new JPasswordField(30);
         campoContraseñaRepetida = new JPasswordField(30);
 
+        // 🟢 FocusListeners con impresión profesional en consola
+        campoNombreCompleto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (!campoNombreCompleto.getText().trim().isEmpty()) {
+                    imprimirConsola("Campo Nombre Completo completado");
+                }
+            }
+        });
+
+        campoUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (!campoUsuario.getText().trim().isEmpty()) {
+                    imprimirConsola("Campo Usuario completado");
+                }
+            }
+        });
+
+        campoCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (!campoCorreo.getText().trim().isEmpty()) {
+                    imprimirConsola("Campo Correo completado");
+                }
+            }
+        });
+
+        campoContraseña.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (campoContraseña.getPassword().length > 0) {
+                    imprimirConsola("Campo Contraseña completado");
+                }
+            }
+        });
+
+        campoContraseñaRepetida.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (campoContraseñaRepetida.getPassword().length > 0) {
+                    imprimirConsola("Campo Repetir Contraseña completado");
+                }
+            }
+        });
+
         Dimension dimCampo = new Dimension(350, 30);
-        JTextField[] campos = {campoNombreCompleto, campoUsuario, campoCorreo, campoContraseña, campoContraseñaRepetida};
+        JTextField[] campos = {
+                campoNombreCompleto, campoUsuario, campoCorreo,
+                campoContraseña, campoContraseñaRepetida
+        };
         for (JTextField c : campos) c.setPreferredSize(dimCampo);
 
         gbc.gridx = 0;
@@ -142,16 +190,15 @@ public class Registrarse extends JFrame {
     }
 
     private boolean registrarUsuarioEnBBDD(String nombreCompleto, String usuario, String correo, String contraseñaHash) {
-        // Nota: Campos según base de datos
-        String sql = "INSERT INTO usuario (nombreCompleto, nombre, correo, contraseña, contraseñaHash, fechaCreacion, activo) " +
-                "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 1)";
+        String sql = "INSERT INTO usuario (nombreCompleto, nombre, correo, contraseñaHash, fechaCreacion, activo) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection c = ConexionBaseDatos.getConexion();
              PreparedStatement s = c.prepareStatement(sql)) {
             s.setString(1, nombreCompleto);
             s.setString(2, usuario);
             s.setString(3, correo);
             s.setString(4, contraseñaHash);
-
+            s.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            s.setInt(6, 1);
             return s.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error SQL: " + e.getMessage());
@@ -164,11 +211,8 @@ public class Registrarse extends JFrame {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] bytes = contraseña.getBytes(StandardCharsets.UTF_8);
             byte[] hash = md.digest(bytes);
-
             StringBuilder sb = new StringBuilder();
-            for (byte b : hash) {
-                sb.append(String.format("%02x", b));
-            }
+            for (byte b : hash) sb.append(String.format("%02x", b));
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             System.err.println("Error al generar hash: " + e.getMessage());
@@ -184,7 +228,6 @@ public class Registrarse extends JFrame {
         try {
             File dir = new File("LOGS");
             if (!dir.exists()) dir.mkdir();
-
             File logFile = new File(dir, "registro.log");
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(logFile, true))) {
                 String fechaHora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -194,5 +237,15 @@ public class Registrarse extends JFrame {
         } catch (IOException e) {
             System.err.println("Error al escribir log: " + e.getMessage());
         }
+    }
+
+    // ✅ Método para impresión profesional en consola
+    private void imprimirConsola(String mensaje) {
+        final String ANSI_RESET = "\u001B[0m";
+        final String ANSI_GREEN = "\u001B[32m";
+        final String ANSI_CYAN = "\u001B[36m";
+        final String ANSI_BOLD = "\u001B[1m";
+
+        System.out.println(ANSI_CYAN + ANSI_BOLD + "[INFO] " + ANSI_GREEN + mensaje + ANSI_RESET);
     }
 }

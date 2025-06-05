@@ -54,27 +54,45 @@ public class LoginAdministrador extends JFrame {  // Clase que extiende JFrame (
         panel.add(campo, gbc);  // Añade campo al panel con constraints
     }
 
-    private void validarLogin() {  // Método que valida usuario y contraseña
-        String usuario = campoUsuario.getText().trim();  // Obtiene texto usuario y elimina espacios
-        String contrasena = new String(campoContrasena.getPassword());  // Obtiene contraseña como String
-        RegistroDeEventos.registrarInfo("Intento de inicio de sesión con usuario: " + usuario);  // Registra intento login
+    private void validarLogin() {
+        String usuario = campoUsuario.getText().trim().toLowerCase();
+        String contrasena = new String(campoContrasena.getPassword()).trim().toLowerCase();
 
-        if (usuario.equals("administrador")) {  // Verifica que usuario sea "administrador"
-            switch (contrasena) {  // Evalúa contraseña
-                case "administrador1":  // Si contraseña es "administrador1"
-                    abrirVentanaAdministrador(1);  // Abre ventana con nivel 1
-                    return;  // Sale del método
-                case "administrador2":  // Si contraseña es "administrador2"
-                    abrirVentanaAdministrador(2);  // Abre ventana con nivel 2
-                    return;  // Sale del método
-                case "administrador3":  // Si contraseña es "administrador3"
-                    abrirVentanaAdministrador(3);  // Abre ventana con nivel 3
-                    return;  // Sale del método
+        RegistroDeEventos.registrarInfo("Intento de inicio de sesión con usuario: " + usuario);
+
+        String[] usuariosValidos = {
+                "administrador1", "administrador1@gmail.com",
+                "administrador2", "administrador2@gmail.com",
+                "administrador3", "administrador3@gmail.com"
+        };
+
+        boolean usuarioValido = false;
+        for (String u : usuariosValidos) {
+            if (usuario.equals(u)) {
+                usuarioValido = true;
+                break;
             }
         }
 
-        RegistroDeEventos.registrarError("Fallo de inicio de sesión para usuario: " + usuario);  // Registra error de login
-        JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);  // Muestra diálogo error
+        if (!usuarioValido) {
+            RegistroDeEventos.registrarError("Usuario no autorizado: " + usuario);
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // La contraseña debe ser igual al usuario
+        if (!contrasena.equals(usuario)) {
+            RegistroDeEventos.registrarError("Contraseña incorrecta para usuario: " + usuario);
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int nivel = 0;
+        if (usuario.contains("1")) nivel = 1;
+        else if (usuario.contains("2")) nivel = 2;
+        else if (usuario.contains("3")) nivel = 3;
+
+        abrirVentanaAdministrador(nivel);
     }
 
     private void abrirVentanaAdministrador(int nivel) {  // Método para abrir ventana principal admin con nivel
