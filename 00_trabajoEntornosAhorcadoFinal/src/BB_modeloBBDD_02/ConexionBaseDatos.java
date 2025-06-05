@@ -1,169 +1,99 @@
-// ======= Paquete e imports =======
 package BB_modeloBBDD_02;
 
-import java.io.File;                       // Importa para manejar archivos
-import java.io.IOException;                // Importa para manejo de excepciones IO
-import java.sql.Connection;                // Importa para conexiones a base de datos
-import java.sql.DriverManager;             // Importa para gestionar drivers JDBC
-import java.sql.PreparedStatement;         // Para consultas preparadas
-import java.sql.SQLException;              // Importa para manejo de excepciones SQL
-import java.util.logging.*;                // Importa para logging de eventos y errores
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.*;
 
-// ======= Declaración de la clase =======
-public class ConexionBaseDatos {          // Clase para gestionar la conexión a la BBDD
+public class ConexionBaseDatos {
 
-    // ======= Variables estáticas y Logger =======
-    private static final Logger LOGGER = Logger.getLogger(ConexionBaseDatos.class.getName());  // Logger para esta clase
+    private static final Logger LOGGER = Logger.getLogger(ConexionBaseDatos.class.getName());
 
-    private static final String URL_BASE_DATOS =                                         // URL para conexión JDBC a MySQL
+    private static final String URL_BASE_DATOS =
             "jdbc:mysql://localhost:3306/AhorcadoAndres?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
-    private static final String USUARIO_BASE_DATOS;        // Usuario base de datos (inicializado en bloque estático)
-    private static final String CLAVE_BASE_DATOS;          // Contraseña base de datos (inicializado en bloque estático)
+    private static final String USUARIO_BASE_DATOS;
+    private static final String CLAVE_BASE_DATOS;
 
-    // ======= Bloque estático: Inicialización de variables y configuración del logging =======
-    static {                                               // Bloque estático para inicializar constantes y logging
-
-        String usuarioBD = System.getenv("DB_USUARIO");  // Intenta obtener usuario desde variable entorno
-        if (usuarioBD == null) usuarioBD = "root";       // Si no existe, usa "root" por defecto
-        USUARIO_BASE_DATOS = usuarioBD;                   // Asigna usuario obtenido o por defecto
-
-        String claveBD = System.getenv("DB_CLAVE");      // Intenta obtener clave desde variable entorno
-        if (claveBD == null) claveBD = "abcd1234";       // Si no existe, usa clave por defecto
-        CLAVE_BASE_DATOS = claveBD;                       // Asigna clave obtenida o por defecto
+    static {
+        USUARIO_BASE_DATOS = System.getenv().getOrDefault("DB_USUARIO", "root");
+        CLAVE_BASE_DATOS = System.getenv().getOrDefault("DB_CLAVE", "abcd1234");
 
         try {
-            LogManager.getLogManager().reset();          // Limpia configuración previa de LogManager
+            LOGGER.setLevel(Level.ALL);
 
-            LOGGER.setLevel(Level.ALL);                    // Configura logger para capturar todos los niveles
+            String os = System.getProperty("os.name").toLowerCase();
+            String rutaLog = os.contains("win")
+                    ? "D:\\ruta\\a\\tu\\LOGS\\ConexionBaseDatos.log"
+                    : "/ruta/a/tu/LOGS/ConexionBaseDatos.log";
 
-            String os = System.getProperty("os.name").toLowerCase();   // Detecta sistema operativo
+            File archivoLog = new File(rutaLog);
+            if (!archivoLog.getParentFile().exists()) archivoLog.getParentFile().mkdirs();
 
-            String rutaLog;                                // Variable para ruta archivo log
+            FileHandler fh = new FileHandler(rutaLog, 1024 * 1024, 3, true);
+            fh.setEncoding("UTF-8");
+            fh.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(fh);
 
-            if (os.contains("win")) {                      // Si sistema operativo es Windows
-                rutaLog = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\LOGS\\ConexionBaseDatos.log";   // Ruta Windows
-            } else {                                       // Si no es Windows
-                rutaLog = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/LOGS/ConexionBaseDatos.log"; // Ruta Linux/Unix
-            }
+            ConsoleHandler ch = new ConsoleHandler();
+            ch.setLevel(Level.INFO);
+            ch.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(ch);
 
-            File archivoLog = new File(rutaLog);           // Crea archivo log en la ruta asignada
-            File carpetaLogs = archivoLog.getParentFile(); // Obtiene carpeta padre (directorio)
-
-            if (!carpetaLogs.exists()) {                    // Si carpeta no existe
-                if (!carpetaLogs.mkdirs()) {                 // Intenta crear carpeta y padres
-                    System.err.println("No se pudo crear la carpeta LOGS.");  // Muestra error si falla creación
-                }
-            }
-
-            FileHandler fh = new FileHandler(rutaLog, 1024 * 1024, 3, true);  // FileHandler con rotación 1MB, 3 archivos, append
-            fh.setEncoding("UTF-8");                     // Define codificación UTF-8 para logs
-            fh.setFormatter(new SimpleFormatter());      // Formato simple para logs
-            LOGGER.addHandler(fh);                        // Añade handler para archivo al logger
-
-            ConsoleHandler ch = new ConsoleHandler();    // Crea handler para consola
-            ch.setLevel(Level.INFO);                      // Muestra solo logs nivel INFO o superior en consola
-            ch.setFormatter(new SimpleFormatter());      // Formato simple para consola
-            LOGGER.addHandler(ch);                        // Añade handler consola al logger
-
-        } catch (IOException e) {                         // Captura errores al configurar logging
-            System.err.println("No se pudo inicializar el archivo de logs de conexión: " + e.getMessage());  // Muestra error por consola
+        } catch (IOException e) {
+            System.err.println("No se pudo inicializar el archivo de logs: " + e.getMessage());
         }
     }
 
-    // ======= Método público: Obtiene la conexión a la base de datos =======
-
-    /**
-     * Obtiene una conexión activa a la base de datos MySQL
-     *
-     * @return Connection activa a la base de datos
-     * @throws SQLException si ocurre error en conexión
-     */
     public static Connection getConexion() throws SQLException {
-
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");  // Carga driver JDBC MySQL
-            LOGGER.info("Driver JDBC MySQL cargado correctamente.");  // Log éxito carga driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            LOGGER.fine("Driver JDBC MySQL cargado.");
         } catch (ClassNotFoundException e) {
-            LOGGER.severe("Driver JDBC MySQL no encontrado: " + e.getMessage());  // Log error driver no encontrado
-            throw new SQLException("No se pudo cargar el driver JDBC de MySQL", e); // Lanza SQLException
+            LOGGER.severe("Driver JDBC MySQL no encontrado: " + e.getMessage());
+            throw new SQLException("No se pudo cargar el driver JDBC de MySQL", e);
         }
 
-        try {
-            LOGGER.info("Intentando conectar a la base de datos...");   // Log intento conexión
-            Connection conn = DriverManager.getConnection(URL_BASE_DATOS, USUARIO_BASE_DATOS, CLAVE_BASE_DATOS);  // Establece conexión
-            LOGGER.info("Conexión establecida con éxito.");              // Log éxito conexión
-            return conn;                                                 // Retorna conexión establecida
-        } catch (SQLException e) {
-            LOGGER.severe("Error al conectar a la base de datos: " + e.getMessage());  // Log error conexión
-            throw e;                                                     // Propaga SQLException
-        }
+        LOGGER.info("Intentando conectar a la base de datos...");
+        return DriverManager.getConnection(URL_BASE_DATOS, USUARIO_BASE_DATOS, CLAVE_BASE_DATOS);
     }
 
-    // ======= Métodos para manejar usuarios =======
+    // --- MÉTODOS CRUD USUARIO ---
     public static boolean agregarUsuario(String nombreUsuario) {
-        String sql = "INSERT INTO Usuario (nombre) VALUES (?)";
-        try (Connection conn = getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, nombreUsuario);
-            ps.executeUpdate();
-            LOGGER.info("Usuario agregado: " + nombreUsuario);
-            return true;
-        } catch (SQLException e) {
-            LOGGER.severe("Error al agregar usuario: " + e.getMessage());
-            return false;
-        }
+        return ejecutarUpdate("INSERT INTO Usuario (nombre) VALUES (?)", nombreUsuario);
     }
 
     public static boolean eliminarUsuario(String nombreUsuario) {
-        String sql = "DELETE FROM Usuario WHERE nombre = ?";
-        try (Connection conn = getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, nombreUsuario);
-            int filas = ps.executeUpdate();
-            if (filas > 0) {
-                LOGGER.info("Usuario eliminado: " + nombreUsuario);
-                return true;
-            } else {
-                LOGGER.warning("No se encontró usuario para eliminar: " + nombreUsuario);
-                return false;
-            }
-        } catch (SQLException e) {
-            LOGGER.severe("Error al eliminar usuario: " + e.getMessage());
-            return false;
-        }
+        return ejecutarUpdate("DELETE FROM Usuario WHERE nombre = ?", nombreUsuario);
     }
 
-    // ======= Métodos para manejar palabrasFrases =======
+    // --- MÉTODOS CRUD PALABRA ---
     public static boolean agregarPalabra(String palabra) {
-        String sql = "INSERT INTO palabrasFrases (palabra) VALUES (?)";
-        try (Connection conn = getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, palabra);
-            ps.executeUpdate();
-            LOGGER.info("Palabra agregada: " + palabra);
-            return true;
-        } catch (SQLException e) {
-            LOGGER.severe("Error al agregar palabra: " + e.getMessage());
-            return false;
-        }
+        return ejecutarUpdate("INSERT INTO PalabrasFrases (palabra) VALUES (?)", palabra);
     }
 
     public static boolean eliminarPalabra(String palabra) {
-        String sql = "DELETE FROM palabrasFrases WHERE palabra = ?";
+        return ejecutarUpdate("DELETE FROM PalabrasFrases WHERE palabra = ?", palabra);
+    }
+
+    // --- MÉTODO COMÚN PARA INSERT/DELETE ---
+    private static boolean ejecutarUpdate(String sql, String valor) {
         try (Connection conn = getConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, palabra);
-            int filas = ps.executeUpdate();
-            if (filas > 0) {
-                LOGGER.info("Palabra eliminada: " + palabra);
+            ps.setString(1, valor);
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                LOGGER.info("Operación realizada correctamente con valor: " + valor);
                 return true;
             } else {
-                LOGGER.warning("No se encontró palabra para eliminar: " + palabra);
+                LOGGER.warning("No se realizó ninguna operación para: " + valor);
                 return false;
             }
         } catch (SQLException e) {
-            LOGGER.severe("Error al eliminar palabra: " + e.getMessage());
+            LOGGER.severe("Error en la operación con valor \"" + valor + "\": " + e.getMessage());
             return false;
         }
     }

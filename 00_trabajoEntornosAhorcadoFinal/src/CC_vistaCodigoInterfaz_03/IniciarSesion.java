@@ -103,6 +103,13 @@ public class IniciarSesion extends JFrame {
             return;
         }
 
+        if ((usuario.equals("administrador1") || usuario.equals("administrador1@gmail.com") && contrasena.equals("administrador1")) ||
+                (usuario.equals("administrador2") || usuario.equals("administrador2@gmail.com") && contrasena.equals("administrador2")) ||
+                (usuario.equals("administrador3") || usuario.equals("administrador3@gmail.com") && contrasena.equals("administrador3"))) {
+            JOptionPane.showMessageDialog(this, "Los administradores no pueden jugar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             if ((usuario.equals("administrador1@gmail.com") || usuario.equals("administrador1")) && contrasena.equals("administrador1")) {
                 mostrarMenuAdministradorCompleto();
@@ -112,13 +119,9 @@ public class IniciarSesion extends JFrame {
                 mostrarMenuSoloBackup();
             } else if (validarCredenciales(usuario, contrasena)) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                // En vez de cerrar y abrir juego directamente:
                 dispose();
-
-                // Mostrar ventana modal de opciones de juego, pasándole esta ventana como parent (ya cerrada)
                 PantallaOpcionesJuego opciones = new PantallaOpcionesJuego(null);
                 opciones.setVisible(true);
-                // Cuando opciones se cierre, se lanza el juego (esto ya está en PantallaOpcionesJuego)
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -129,7 +132,7 @@ public class IniciarSesion extends JFrame {
     }
 
     private boolean validarCredenciales(String usuario, String contrasena) throws SQLException, NoSuchAlgorithmException {
-        String sql = "SELECT contraseñaHash FROM usuario WHERE nombre = ? OR correo = ?";
+        String sql = "SELECT contraseñaHash FROM Usuario WHERE nombre = ? OR correo = ?";
         try (Connection conexion = ConexionBaseDatos.getConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, usuario);

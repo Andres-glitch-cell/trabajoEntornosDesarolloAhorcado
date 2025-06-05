@@ -190,7 +190,7 @@ public class Registrarse extends JFrame {
     }
 
     private boolean registrarUsuarioEnBBDD(String nombreCompleto, String usuario, String correo, String contraseñaHash) {
-        String sql = "INSERT INTO usuario (nombreCompleto, nombre, correo, contraseñaHash, fechaCreacion, activo) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuario (nombreCompleto, nombre, correo, contraseñaHash, fechaCreacion, activo) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection c = ConexionBaseDatos.getConexion();
              PreparedStatement s = c.prepareStatement(sql)) {
             s.setString(1, nombreCompleto);

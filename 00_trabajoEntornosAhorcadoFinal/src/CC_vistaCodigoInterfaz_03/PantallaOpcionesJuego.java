@@ -1,16 +1,19 @@
 package CC_vistaCodigoInterfaz_03;
 
-import DD_controladorCodigoIntermediario_04.PalabrasFrasesBBDD;
+import DD_controladorCodigoIntermediario_04.GestorPalabras;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 /**
  * Ventana modal que permite seleccionar opciones antes de iniciar el juego.
  */
 public class PantallaOpcionesJuego extends JDialog {
+
+    private static final Logger LOGGER = Logger.getLogger(PantallaOpcionesJuego.class.getName());
 
     private JComboBox<String> comboDificultad;
     private JComboBox<String> comboIdioma;
@@ -63,20 +66,29 @@ public class PantallaOpcionesJuego extends JDialog {
     }
 
     private void comenzarJuego() {
-        // Podrías usar dificultad/idioma para filtrar palabras si implementas eso
+        // Obtener dificultad e idioma seleccionados
+        String dificultad = (String) comboDificultad.getSelectedItem();
+        String idioma = (String) comboIdioma.getSelectedItem();
 
-        PalabrasFrasesBBDD.PalabraFrase pf = PalabrasFrasesBBDD.obtenerPalabraAleatoria();
+        LOGGER.info("Intentando obtener palabra para dificultad: " + dificultad + ", idioma: " + idioma);
 
-        if (pf == null || pf.contenido == null || pf.contenido.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "No se pudo obtener una palabra de la base de datos.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        // Usar el método corregido que filtra por dificultad e idioma
+        GestorPalabras.PalabraFrase pf = GestorPalabras.obtenerPalabraPorDificultadEIdioma(dificultad, idioma);
+
+        if (pf == null) {
+            LOGGER.warning("No se encontró palabra para la combinación dificultad='" + dificultad + "', idioma='" + idioma + "'");
+            JOptionPane.showMessageDialog(this, "No se pudo obtener una palabra para la dificultad e idioma seleccionados.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (pf.palabra() == null || pf.palabra().trim().isEmpty()) {
+            LOGGER.severe("Palabra obtenida está vacía o nula.");
+            JOptionPane.showMessageDialog(this, "La palabra obtenida está vacía.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         dispose(); // Cierra esta ventana
 
         // Llama al método que muestra la ventana del juego con palabra y significado
-        PantallaAhorcado.mostrarVentanaConPalabra(pf.contenido.toUpperCase(), pf.significado);
+        PantallaAhorcado.mostrarVentanaConPalabra(pf.palabra().toUpperCase(), pf.significado());
     }
 }

@@ -11,47 +11,44 @@ public class RespaldoAutomatico extends Thread {
     private static final Logger LOGGER = Logger.getLogger(RespaldoAutomatico.class.getName());
 
     private static final String DB_NAME = "AhorcadoAndres";
-    private static final long INTERVAL = 30 * 60 * 1000;
+    private static final long INTERVAL = 30 * 60 * 1000; // 30 minutos
 
     private static final String MY_CNF_PATH;
     private static final String BACKUP_FOLDER;
     private static final String LOG_FOLDER;
+    private static final String CMD_MYSQLDUMP;
 
     static {
         String os = System.getProperty("os.name").toLowerCase();
 
         if (os.contains("win")) {
-            MY_CNF_PATH = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\00_trabajoEntornosAhorcadoFinal\\src\\.my.cnf";
-            BACKUP_FOLDER = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\Backups\\";
-            LOG_FOLDER = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\LOGS\\";
+            MY_CNF_PATH = "D:\\ruta\\a\\tu\\.my.cnf";
+            BACKUP_FOLDER = "D:\\ruta\\a\\tu\\Backups\\";
+            LOG_FOLDER = "D:\\ruta\\a\\tu\\LOGS\\";
+            CMD_MYSQLDUMP = "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe";
         } else {
-            MY_CNF_PATH = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/00_trabajoEntornosAhorcadoFinal/src/.my.cnf";
-            BACKUP_FOLDER = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/Backups/";
-            LOG_FOLDER = "/media/andfersal/EXTERNAL_USB/00ADAW ordenador clase (he hecho cosas en casa)/trabajoEntornosDesarolloAhorcado/LOGS/";
+            MY_CNF_PATH = "/ruta/a/tu/.my.cnf";
+            BACKUP_FOLDER = "/ruta/a/tu/Backups/";
+            LOG_FOLDER = "/ruta/a/tu/LOGS/";
+            CMD_MYSQLDUMP = "mysqldump";
         }
 
         try {
-            LogManager.getLogManager().reset();
-            LOGGER.setLevel(Level.ALL);
+            File logDir = new File(LOG_FOLDER);
+            if (!logDir.exists()) logDir.mkdirs();
 
-            File carpetaLogs = new File(LOG_FOLDER);
-            if (!carpetaLogs.exists() && !carpetaLogs.mkdirs()) {
-                System.err.println("No se pudo crear la carpeta LOGS en la ruta: " + LOG_FOLDER);
-            }
+            FileHandler fileHandler = new FileHandler(new File(logDir, "RespaldoAutomatico.log").getAbsolutePath(), 1024 * 1024, 3, true);
+            fileHandler.setEncoding("UTF-8");
+            fileHandler.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(fileHandler);
 
-            File archivoLog = new File(carpetaLogs, "RespaldoAutomatico.log");
-            FileHandler fh = new FileHandler(archivoLog.getAbsolutePath(), 1024 * 1024, 3, true);
-            fh.setEncoding("UTF-8");
-            fh.setFormatter(new SimpleFormatter());
-            LOGGER.addHandler(fh);
-
-            ConsoleHandler ch = new ConsoleHandler();
-            ch.setLevel(Level.INFO);
-            ch.setFormatter(new ColorFormatter());  // <-- Aquí el formatter coloreado
-            LOGGER.addHandler(ch);
+            ConsoleHandler consoleHandler = new ConsoleHandler();
+            consoleHandler.setLevel(Level.INFO);
+            consoleHandler.setFormatter(new ColorFormatter());
+            LOGGER.addHandler(consoleHandler);
 
         } catch (IOException e) {
-            System.err.println("No se pudo inicializar el archivo de log: " + e.getMessage());
+            System.err.println("Error configurando logs de respaldo: " + e.getMessage());
         }
     }
 
@@ -69,15 +66,13 @@ public class RespaldoAutomatico extends Thread {
 
     @Override
     public void run() {
-        LOGGER.info("Hilo de respaldo automático iniciado.");
-
         while (!isInterrupted()) {
             realizarRespaldo();
             try {
                 Thread.sleep(INTERVAL);
             } catch (InterruptedException e) {
-                LOGGER.warning("Hilo interrumpido: " + e.getMessage());
-                Thread.currentThread().interrupt();
+                LOGGER.warning("Hilo interrumpido durante espera.");
+                Thread.currentThread().interrupt(); // restaurar la interrupción
             }
         }
         LOGGER.info("Hilo de respaldo finalizado.");
@@ -93,67 +88,58 @@ public class RespaldoAutomatico extends Thread {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String backupFile = BACKUP_FOLDER + "backup_" + timeStamp + ".sql";
 
-        String cmdComando = "mysqldump";
-
-        String mysqldump = System.getProperty("os.name").toLowerCase().contains("win")
-                ? "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe"
-                : "mysqldump";
-
         try {
-            if (!comandoDisponible(cmdComando)) {
+            if (!comandoDisponible(CMD_MYSQLDUMP)) {
                 LOGGER.severe("El comando mysqldump no está disponible en el sistema.");
                 return;
             }
         } catch (IOException | InterruptedException e) {
-            LOGGER.severe("Error al verificar mysqldump: " + e.getMessage());
+            LOGGER.severe("Error verificando mysqldump: " + e.getMessage());
             return;
         }
 
-        String[] command = {mysqldump, "--defaults-extra-file=" + MY_CNF_PATH, DB_NAME};
+        String[] command = {CMD_MYSQLDUMP, "--defaults-extra-file=" + MY_CNF_PATH, DB_NAME};
 
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectOutput(new File(backupFile));
             pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             Process process = pb.start();
-            int exitCode = process.waitFor();
 
+            int exitCode = process.waitFor();
             if (exitCode == 0) {
                 LOGGER.info("Respaldo exitoso: " + backupFile);
             } else {
                 LOGGER.severe("Error en respaldo (código " + exitCode + ").");
             }
 
-        } catch (IOException e) {
-            LOGGER.severe("IOException al ejecutar mysqldump: " + e.getMessage());
-        } catch (InterruptedException e) {
-            LOGGER.warning("Respaldo interrumpido: " + e.getMessage());
-            Thread.currentThread().interrupt();
+        } catch (IOException | InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "Error al ejecutar respaldo", e);
+            Thread.currentThread().interrupt(); // por si es interrupción
         }
     }
 
     private boolean comandoDisponible(String cmd) throws IOException, InterruptedException {
+        String cmdName = new File(cmd).getName();
         ProcessBuilder pb = new ProcessBuilder(
-                System.getProperty("os.name").toLowerCase().contains("win") ? "where" : "which",
-                cmd
+                System.getProperty("os.name").toLowerCase().contains("win") ? "where" : "which", cmdName
         );
         Process p = pb.start();
         return p.waitFor() == 0;
     }
 
-    // Clase interna para dar color verde y ticks a mensajes INFO en consola
     private static class ColorFormatter extends Formatter {
         private static final String ANSI_RESET = "\u001B[0m";
         private static final String ANSI_GREEN = "\u001B[32m";
+        private static final String ANSI_RED = "\u001B[31m";
 
         @Override
         public String format(LogRecord record) {
             String msg = formatMessage(record);
             if (record.getLevel() == Level.INFO) {
-                return ANSI_GREEN + "✔ " + msg + " ✔" + ANSI_RESET + "\n";
+                return ANSI_GREEN + "✔ " + msg + ANSI_RESET + "\n";
             } else if (record.getLevel() == Level.SEVERE) {
-                // Opcional: rojo para errores
-                return "\u001B[31m" + msg + ANSI_RESET + "\n";
+                return ANSI_RED + "✖ " + msg + ANSI_RESET + "\n";
             }
             return msg + "\n";
         }

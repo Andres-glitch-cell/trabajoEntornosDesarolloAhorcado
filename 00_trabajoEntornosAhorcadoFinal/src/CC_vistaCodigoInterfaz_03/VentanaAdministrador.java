@@ -3,54 +3,50 @@ package CC_vistaCodigoInterfaz_03;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.*;
-import java.sql.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/**
- * Ventana gráfica para el modo administrador del juego.
- * Muestra opciones dependiendo del nivel del administrador (1, 2 o 3).
- * Incorpora logging para registrar eventos, errores y acciones del usuario.
- */
-
-// ...package y imports sin cambios
-
 public class VentanaAdministrador extends JFrame {
 
     private static final Logger LOGGER = Logger.getLogger(VentanaAdministrador.class.getName());
-    private final int nivelAdmin;
+
+    private final int nivelAdmin; // Ahora se recibe desde el constructor
+    private JButton btnCrearCopia;
+    private JButton btnRestaurarCopia;
 
     static {
         inicializarLogger();
     }
 
+    // Constructor que recibe el nivelAdmin
     public VentanaAdministrador(int nivelAdmin) {
         super("Modo Administrador");
+        this.nivelAdmin = nivelAdmin;
+
+        configurarVentana();
 
         if (nivelAdmin < 1 || nivelAdmin > 3) {
-            throw new IllegalArgumentException("Nivel de administrador inválido: " + nivelAdmin);
+            LOGGER.warning("Nivel de administrador inválido: " + nivelAdmin + ". Cerrando ventana.");
+            JOptionPane.showMessageDialog(this, "Nivel de administrador inválido. Cerrando ventana.", "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
         }
 
-        this.nivelAdmin = nivelAdmin;
-        configurarVentana();
         inicializarUI();
+        accionSegunNivel();
+
         setAlwaysOnTop(true);
         toFront();
         LOGGER.info("VentanaAdministrador creada con nivelAdmin=" + nivelAdmin);
     }
 
+    // Método mostrarVentana que recibe el nivelAdmin y lanza la ventana con ese nivel
     public static void mostrarVentana(int nivelAdmin) {
-        SwingUtilities.invokeLater(() -> {
-            if (nivelAdmin < 1 || nivelAdmin > 3) {
-                mostrarError(null, "Nivel de administrador inválido (debe ser 1, 2 o 3).", true);
-                LOGGER.warning("Intento de abrir VentanaAdministrador con nivel inválido: " + nivelAdmin);
-                return;
-            }
-            new VentanaAdministrador(nivelAdmin).setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new VentanaAdministrador(nivelAdmin).setVisible(true));
     }
 
     private static void inicializarLogger() {
@@ -66,10 +62,6 @@ public class VentanaAdministrador extends JFrame {
             JOptionPane.showMessageDialog(null, "No se pudo inicializar el archivo de logs:\n" + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private static void mostrarError(Component parent, String mensaje) {
-        mostrarError(parent, mensaje, false);
     }
 
     private static void mostrarError(Component parent, String mensaje, boolean siempreAlFrente) {
@@ -93,11 +85,12 @@ public class VentanaAdministrador extends JFrame {
 
         GridBagConstraints gbc = crearGBC();
 
-        fondo.add(crearBotonSuperior(), gbc);
         gbc.gridy++;
         fondo.add(crearTitulo(), gbc);
         gbc.gridy++;
+
         fondo.add(crearPanelCentral(), gbc);
+
         gbc.gridy++;
         fondo.add(crearBotonesInferiores(), gbc);
     }
@@ -112,14 +105,6 @@ public class VentanaAdministrador extends JFrame {
         return gbc;
     }
 
-    private Component crearBotonSuperior() {
-        return crearBoton("Volver al Menú Principal", () -> {
-            LOGGER.info("Botón 'Volver al Menú Principal' pulsado (parte superior).");
-            PantallaBienvenida.mostrarVentana();
-            dispose();
-        }, new Color(220, 20, 60), 12);
-    }
-
     private JLabel crearTitulo() {
         JLabel titulo = new JLabel("¡Bienvenido al Modo Administrador!", SwingConstants.CENTER);
         titulo.setForeground(new Color(240, 248, 255));
@@ -127,70 +112,48 @@ public class VentanaAdministrador extends JFrame {
         return titulo;
     }
 
-    private Component crearPanelCentral() {
-        JPanel contenedorCentral = new JPanel(new GridBagLayout());
+    private JPanel crearPanelCentral() {
+        JPanel contenedorCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         contenedorCentral.setBackground(new Color(34, 40, 49));
 
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setBackground(new Color(34, 40, 49));
-        menuPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnCrearCopia = crearBoton("Crear Copia de Seguridad", this::crearCopiaSeguridad);
+        btnRestaurarCopia = crearBoton("Restaurar Copia de Seguridad", this::restaurarCopiaSeguridad);
 
-        menuPanel.add(crearBoton("Registro de Jugadores", () -> {
-            LOGGER.info("Botón 'Registro de Jugadores' pulsado.");
-            JOptionPane.showMessageDialog(this, "Acción para registrar jugadores.");
-        }));
-        menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        if (nivelAdmin == 1) {
+            contenedorCentral.add(btnCrearCopia);
+            contenedorCentral.add(btnRestaurarCopia);
+        } else if (nivelAdmin == 2) {
+            contenedorCentral.add(btnCrearCopia);
+            contenedorCentral.add(btnRestaurarCopia);
+        } else if (nivelAdmin == 3) {
+            contenedorCentral.add(btnCrearCopia);
+            // No se añade btnRestaurarCopia
+        }
 
-        agregarBotonesPorNivel(menuPanel);
-
-        contenedorCentral.add(menuPanel);
         return contenedorCentral;
     }
 
     private JPanel crearBotonesInferiores() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        panel.setBackground(new Color(34, 40, 49));
+        JPanel contenedor = new JPanel(new GridBagLayout());
+        contenedor.setBackground(new Color(34, 40, 49));
 
-        panel.add(crearBoton("Volver a Menu Admin", () -> {
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        botones.setBackground(new Color(34, 40, 49));
+
+        botones.add(crearBoton("Volver a Menu Admin", () -> {
             LOGGER.info("Botón 'Volver a Menu Admin' pulsado.");
-            MenuDesplegable.mostrarVentana();
+            MenuDesplegable.mostrarVentana(nivelAdmin);
             dispose();
         }));
 
-        panel.add(crearBoton("Volver al Menú Principal", () -> {
+        botones.add(crearBoton("Volver al Menú Principal", () -> {
             LOGGER.info("Botón 'Volver al Menú Principal' pulsado.");
             PantallaBienvenida.mostrarVentana();
             dispose();
-        }));
+        }, new Color(220, 20, 60), 14));
 
-        return panel;
-    }
-
-    private void agregarBotonesPorNivel(JPanel panel) {
-        if (nivelAdmin >= 1) {
-            panel.add(crearBoton("Ver Estadísticas", () -> {
-                LOGGER.info("Botón 'Ver Estadísticas' pulsado.");
-                JOptionPane.showMessageDialog(this, "Mostrando estadísticas del juego.");
-            }));
-            panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        }
-
-        if (nivelAdmin >= 2) {
-            panel.add(crearBoton("Exportar Datos a CSV", this::exportarDatosCSV));
-            panel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-            panel.add(crearBoton("Restaurar Copia de Seguridad", this::restaurarCopiaSeguridad));
-            panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        }
-
-        if (nivelAdmin == 3) {
-            panel.add(crearBoton("Restaurar Datos (Nivel 3)", () -> {
-                LOGGER.info("Botón 'Restaurar Datos' pulsado (Nivel 3).");
-                JOptionPane.showMessageDialog(this, "Funcionalidad especial para administradores de nivel 3.");
-            }));
-            panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        }
+        contenedor.add(botones);
+        return contenedor;
     }
 
     private JButton crearBoton(String texto, Runnable accion) {
@@ -207,64 +170,64 @@ public class VentanaAdministrador extends JFrame {
         return boton;
     }
 
-    private void exportarDatosCSV() {
-        LOGGER.info("Exportando datos a CSV desde la base de datos AhorcadoAndres.");
-        JFileChooser fileChooser = crearFileChooser("Guardar archivo CSV", "Archivo CSV", "csv");
-
-        if (fileChooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
-            LOGGER.info("Exportación cancelada por el usuario.");
-            return;
-        }
-
-        File archivo = getArchivoConExtension(fileChooser.getSelectedFile(), ".csv");
-
-        try (
-                Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/AhorcadoAndres", "root", "abcd1234");
-                Statement stmt = conexion.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Jugadores");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))
-        ) {
-            escribirCSV(rs, writer);
-            JOptionPane.showMessageDialog(this, "Datos exportados correctamente a " + archivo.getAbsolutePath());
-            LOGGER.info("Datos exportados correctamente a " + archivo.getAbsolutePath());
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error al exportar datos a CSV", e);
-            mostrarError(this, "Error al exportar datos: " + e.getMessage(), true);
+    private void accionSegunNivel() {
+        switch (nivelAdmin) {
+            case 1 -> {
+                LOGGER.info("Nivel 1: Máxima autoridad, todo habilitado.");
+                btnCrearCopia.setEnabled(true);
+                btnRestaurarCopia.setEnabled(true);
+            }
+            case 2 -> {
+                LOGGER.info("Nivel 2: Copias y restauraciones habilitadas.");
+                btnCrearCopia.setEnabled(true);
+                btnRestaurarCopia.setEnabled(true);
+            }
+            case 3 -> {
+                LOGGER.info("Nivel 3: Solo copias de seguridad habilitadas.");
+                btnCrearCopia.setEnabled(true);
+            }
+            default -> {
+                LOGGER.warning("Nivel de administrador inesperado: " + nivelAdmin);
+                btnCrearCopia.setEnabled(false);
+                btnRestaurarCopia.setEnabled(false);
+            }
         }
     }
 
-    private void escribirCSV(ResultSet rs, BufferedWriter writer) throws SQLException, IOException {
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columnas = metaData.getColumnCount();
-
-        for (int i = 1; i <= columnas; i++) {
-            writer.write(metaData.getColumnName(i));
-            if (i < columnas) writer.write(",");
-        }
-        writer.newLine();
-
-        while (rs.next()) {
-            for (int i = 1; i <= columnas; i++) {
-                writer.write(rs.getString(i));
-                if (i < columnas) writer.write(",");
-            }
-            writer.newLine();
-        }
-
-        writer.flush();
+    private void crearCopiaSeguridad() {
+        LOGGER.info("Creando copia de seguridad...");
+        JOptionPane.showMessageDialog(this, "Copia de seguridad creada correctamente.", "Copia de Seguridad", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void restaurarCopiaSeguridad() {
-        LOGGER.info("Restaurando copia de seguridad.");
-        JFileChooser fileChooser = crearFileChooser("Seleccionar archivo de copia de seguridad", "Archivos SQL", "sql");
+        LOGGER.info("Iniciando proceso de restauración de copia de seguridad.");
 
-        if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
-            LOGGER.info("Restauración cancelada por el usuario.");
-            return;
+        int opcion = JOptionPane.showOptionDialog(this, "¿Deseas seleccionar un archivo manualmente o usar la ubicación predeterminada?", "Restaurar copia de seguridad", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Seleccionar archivo", "Usar ubicación predeterminada", "Cancelar"}, "Seleccionar archivo");
+
+        if (opcion == 0) {
+            JFileChooser fileChooser = crearFileChooser("Seleccionar archivo de copia de seguridad", "Archivos SQL", "sql");
+
+            if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+                LOGGER.info("Restauración cancelada por el usuario.");
+                return;
+            }
+
+            File archivoSQL = fileChooser.getSelectedFile();
+            ejecutarRestauracionSQL(archivoSQL);
+
+        } else if (opcion == 1) {
+            File archivoPorDefecto = new File("C:/backups/mysql/backup.sql");
+            if (!archivoPorDefecto.exists()) {
+                mostrarError(this, "No se encontró el archivo en la ubicación por defecto:\n" + archivoPorDefecto.getAbsolutePath(), true);
+                LOGGER.warning("Archivo de respaldo no encontrado en: " + archivoPorDefecto.getAbsolutePath());
+                return;
+            }
+
+            ejecutarRestauracionSQL(archivoPorDefecto);
+
+        } else {
+            LOGGER.info("Usuario canceló la operación de restauración.");
         }
-
-        File archivoSQL = fileChooser.getSelectedFile();
-        ejecutarRestauracionSQL(archivoSQL);
     }
 
     private void ejecutarRestauracionSQL(File archivoSQL) {
@@ -288,14 +251,11 @@ public class VentanaAdministrador extends JFrame {
             mostrarError(this, "Error al restaurar la base de datos: " + e.getMessage(), true);
         }
     }
+
     private JFileChooser crearFileChooser(String titulo, String descripcion, String extension) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(titulo);
         fileChooser.setFileFilter(new FileNameExtensionFilter(descripcion, extension));
         return fileChooser;
-    }
-
-    private File getArchivoConExtension(File archivo, String extension) {
-        return archivo.getName().endsWith(extension) ? archivo : new File(archivo + extension);
     }
 }

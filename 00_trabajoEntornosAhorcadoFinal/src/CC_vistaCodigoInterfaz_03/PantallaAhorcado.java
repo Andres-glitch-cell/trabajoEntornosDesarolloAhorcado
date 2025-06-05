@@ -128,24 +128,6 @@ public class PantallaAhorcado extends JFrame {
         etiquetaDefinicion.setText("Definición: " + (definicion == null || definicion.trim().isEmpty() ? "---" : definicion));
     }
 
-    /**
-     * Muestra la palabra oculta en la etiqueta con guiones bajos
-     */
-    private void mostrarPalabraOculta() {
-        StringBuilder sb = new StringBuilder("Palabra: ");
-        for (int i = 0; i < palabraAdivinar.length(); i++) {
-            char c = palabraAdivinar.charAt(i);
-            if (c == ' ') {
-                sb.append("  "); // Espacio doble para separar palabras
-            } else if (letrasUsadas.contains(c)) {
-                sb.append(c).append(' ');
-            } else {
-                sb.append("_ ");
-            }
-        }
-        etiquetaPalabra.setText(sb.toString());
-    }
-
     private JPanel crearPanelPrincipal() {
         JPanel panel = new JPanel(new BorderLayout()) {
             @Override
@@ -164,30 +146,23 @@ public class PantallaAhorcado extends JFrame {
         return panel;
     }
 
-    private JPanel crearPanelSuperior() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
-        JLabel titulo = crearEtiqueta("JUEGO DEL AHORCADO", 44, Font.BOLD, COLOR_ACENTO, JLabel.CENTER);
-        panel.add(titulo, BorderLayout.NORTH);
-
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
-        panelBotones.setOpaque(false);
-
-        panelBotones.add(crearBotonIcono("Idioma", "🌐"));
-        panelBotones.add(crearBotonIcono("Partida", "🎮"));
-
-        JButton botonSalir = crearBotonIcono("Salir", "⏻");
-        botonSalir.addActionListener(e -> {
-            REGISTRADOR.info("Saliendo al menú principal.");
-            dispose();
-            // PantallaBienvenida.mostrarVentana(); // Si tienes esta clase, descomenta
-        });
-        panelBotones.add(botonSalir);
-        panel.add(panelBotones, BorderLayout.CENTER);
-        panel.add(new JSeparator(), BorderLayout.SOUTH);
-
-        return panel;
+    /**
+     * Muestra la palabra oculta en la etiqueta con guiones bajos
+     */
+    private void mostrarPalabraOculta() {
+        boolean esFrase = palabraAdivinar.contains(" ");
+        StringBuilder sb = new StringBuilder((esFrase ? "Frase: " : "Palabra: "));
+        for (int i = 0; i < palabraAdivinar.length(); i++) {
+            char c = palabraAdivinar.charAt(i);
+            if (c == ' ') {
+                sb.append("  "); // Espacio doble para separar palabras
+            } else if (letrasUsadas.contains(c)) {
+                sb.append(c).append(' ');
+            } else {
+                sb.append("_ ");
+            }
+        }
+        etiquetaPalabra.setText(sb.toString());
     }
 
     private JPanel crearPanelCentral() {
@@ -329,32 +304,77 @@ public class PantallaAhorcado extends JFrame {
         return etiqueta;
     }
 
+    private JPanel crearPanelSuperior() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+        JLabel titulo = crearEtiqueta("JUEGO DEL AHORCADO", 44, Font.BOLD, COLOR_ACENTO, JLabel.CENTER);
+        panel.add(titulo, BorderLayout.NORTH);
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
+        panelBotones.setOpaque(false);
+
+        // Botones "Idioma" y "Partida" eliminados según tu solicitud
+
+        JButton botonSalir = crearBotonIcono("Salir", "⏻");
+        botonSalir.addActionListener(e -> {
+            REGISTRADOR.info("Saliendo al menú principal.");
+            dispose();
+            // PantallaBienvenida.mostrarVentana(); // Si tienes esta clase, descomenta
+        });
+        panelBotones.add(botonSalir);
+        panel.add(panelBotones, BorderLayout.CENTER);
+        panel.add(new JSeparator(), BorderLayout.SOUTH);
+
+        return panel;
+    }
+
     private JButton crearBotonIcono(String texto, String icono) {
         JButton boton = new JButton(icono + " " + texto);
         boton.setFont(new Font("Arial", Font.BOLD, 18));
         boton.setForeground(COLOR_TEXTO);
         boton.setBackground(COLOR_BOTON);
         boton.setFocusPainted(false);
-        boton.setBorderPainted(false);
-        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton.setPreferredSize(TAMAÑO_BOTON_GRANDE);
+        boton.setOpaque(true);
+        boton.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton.setBackground(COLOR_BOTON_HOVER);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton.setBackground(COLOR_BOTON);
+            }
+        });
         return boton;
     }
 
     private JButton crearBotonEstilizado(String texto, Dimension tamaño) {
         JButton boton = new JButton(texto);
         boton.setPreferredSize(tamaño);
-        boton.setFont(new Font("Arial", Font.BOLD, 18));
+        boton.setFont(new Font("Arial", Font.BOLD, 22));
         boton.setBackground(COLOR_BOTON);
         boton.setForeground(COLOR_TEXTO);
         boton.setFocusPainted(false);
-        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton.setOpaque(true);
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton.setBackground(COLOR_BOTON_HOVER);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton.setBackground(COLOR_BOTON);
+            }
+        });
         return boton;
     }
 
-    // Clase interna para el muñeco del ahorcado (puedes personalizarla)
+    // Clase interna para dibujar el muñeco
     private static class MunecoAhorcado extends JPanel {
 
-        private int errores;
+        private int errores = 0;
 
         public void setErrores(int errores) {
             this.errores = errores;
@@ -364,40 +384,37 @@ public class PantallaAhorcado extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            // Dibuja el muñeco según errores (puedes mejorar con dibujos más complejos)
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(3));
-            g2d.setColor(Color.BLACK);
+            Graphics2D g2 = (Graphics2D) g;
 
-            // Horca
-            g2d.drawLine(50, 550, 250, 550);  // Base
-            g2d.drawLine(150, 550, 150, 150); // Poste vertical
-            g2d.drawLine(150, 150, 350, 150); // Poste horizontal
-            g2d.drawLine(350, 150, 350, 200); // Cuerda
+            // Fondo
+            g2.setColor(COLOR_PANEL);
+            g2.fillRect(0, 0, getWidth(), getHeight());
 
-            if (errores >= 1) {
-                // Cabeza
-                g2d.drawOval(320, 200, 60, 60);
+            // Palo base
+            g2.setStroke(new BasicStroke(5));
+            g2.setColor(COLOR_TEXTO);
+            g2.drawLine(50, getHeight() - 50, 200, getHeight() - 50); // base
+            g2.drawLine(125, getHeight() - 50, 125, 50); // palo vertical
+            g2.drawLine(125, 50, 350, 50); // palo horizontal
+            g2.drawLine(350, 50, 350, 100); // cuerda
+
+            if (errores > 0) { // Cabeza
+                g2.drawOval(320, 100, 60, 60);
             }
-            if (errores >= 2) {
-                // Cuerpo
-                g2d.drawLine(350, 260, 350, 370);
+            if (errores > 1) { // Cuerpo
+                g2.drawLine(350, 160, 350, 300);
             }
-            if (errores >= 3) {
-                // Brazo izquierdo
-                g2d.drawLine(350, 290, 300, 330);
+            if (errores > 2) { // Brazo izquierdo
+                g2.drawLine(350, 180, 300, 240);
             }
-            if (errores >= 4) {
-                // Brazo derecho
-                g2d.drawLine(350, 290, 400, 330);
+            if (errores > 3) { // Brazo derecho
+                g2.drawLine(350, 180, 400, 240);
             }
-            if (errores >= 5) {
-                // Pierna izquierda
-                g2d.drawLine(350, 370, 300, 430);
+            if (errores > 4) { // Pierna izquierda
+                g2.drawLine(350, 300, 300, 370);
             }
-            if (errores >= 6) {
-                // Pierna derecha
-                g2d.drawLine(350, 370, 400, 430);
+            if (errores > 5) { // Pierna derecha
+                g2.drawLine(350, 300, 400, 370);
             }
         }
     }

@@ -1,8 +1,8 @@
 package AA_mainCodigo;
 
 import BB_modeloBBDD_02.RespaldoAutomatico;
-import CC_vistaCodigoInterfaz_03.PantallaBienvenida;
 import CC_vistaCodigoInterfaz_03.LoginAdministrador;
+import CC_vistaCodigoInterfaz_03.PantallaBienvenida;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -20,11 +20,9 @@ public class Principal {
             mostrarBannerInicio();
 
             LOGGER.info("Iniciando juego...");
-            Thread.sleep(1000);
+            Thread.sleep(1000); // Puedes quitar este tipo de pausas si no son esenciales.
 
             LOGGER.info("Cargando base de datos...");
-            Thread.sleep(1000);
-
             LOGGER.info("Iniciando respaldo automático...");
             RespaldoAutomatico.iniciarRespaldo();
 
@@ -59,7 +57,7 @@ public class Principal {
         }
     }
 
-    private static void mostrarBannerInicio() throws InterruptedException {
+    private static void mostrarBannerInicio() {
         String[] banner = {
                 "\n",
                 "  AAA    H   H   OOO   RRRR    CCCC   AAA    DDDD    OOO  ",
@@ -76,8 +74,6 @@ public class Principal {
         for (String line : banner) {
             System.out.println(ANSI_GREEN + line + ANSI_RESET);
         }
-
-        Thread.sleep(1000);
     }
 
     private static void iniciarModoSegunEleccion() {
@@ -88,14 +84,10 @@ public class Principal {
 
         if (opcion == JOptionPane.YES_OPTION) {
             LOGGER.info("Abriendo ventana de login para administrador.");
-            SwingUtilities.invokeLater(() -> {
-                new LoginAdministrador().setVisible(true);
-            });
+            SwingUtilities.invokeLater(() -> new LoginAdministrador().setVisible(true));
         } else {
             LOGGER.info("Iniciando en modo usuario.");
-            SwingUtilities.invokeLater(() -> {
-                PantallaBienvenida.mostrarVentana();
-            });
+            SwingUtilities.invokeLater(PantallaBienvenida::mostrarVentana);
         }
     }
 
@@ -123,7 +115,6 @@ public class Principal {
             if (record.getLevel() == Level.INFO) {
                 color = ANSI_GREEN;
                 prefijo = "✔ ";
-                mensaje += " ✔";
             } else if (record.getLevel() == Level.SEVERE) {
                 color = ANSI_RED;
                 prefijo = "✖ ";
