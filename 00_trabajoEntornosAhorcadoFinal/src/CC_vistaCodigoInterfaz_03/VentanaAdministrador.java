@@ -288,7 +288,6 @@ public class VentanaAdministrador extends JFrame {
             mostrarError(this, "Error al restaurar la base de datos: " + e.getMessage(), true);
         }
     }
-
     private JFileChooser crearFileChooser(String titulo, String descripcion, String extension) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(titulo);
