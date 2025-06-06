@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class IniciarSesion extends JFrame {
-
     private JTextField campoUsuario;
     private JPasswordField campoContrasena;
 
@@ -22,14 +21,15 @@ public class IniciarSesion extends JFrame {
         setSize(400, 300);
         setResizable(false);
         setLocationRelativeTo(null);
-        inicializarInterfaz();
+        inicializarInicioSesion();
     }
 
+    // Método estático público que se llama por reflexión (sin "Inicio" para coincidir con la llamada)
     public static void mostrarVentana() {
         SwingUtilities.invokeLater(() -> new IniciarSesion().setVisible(true));
     }
 
-    private void inicializarInterfaz() {
+    private void inicializarInicioSesion() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(new Color(34, 40, 49));
         add(panel);
@@ -37,13 +37,13 @@ public class IniciarSesion extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JLabel etiquetaUsuario = new JLabel("Nombre de Usuario o Correo:");
+        JLabel etiquetaUsuario = new JLabel("Nombre de Usuarios o Correo Electrónico:");
         etiquetaUsuario.setForeground(Color.WHITE);
         etiquetaUsuario.setFont(new Font("SansSerif", Font.BOLD, 14));
         campoUsuario = new JTextField(20);
         campoUsuario.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
-        JLabel etiquetaContrasena = new JLabel("Contraseña:");
+        JLabel etiquetaContrasena = new JLabel("contraseña:");
         etiquetaContrasena.setForeground(Color.WHITE);
         etiquetaContrasena.setFont(new Font("SansSerif", Font.BOLD, 14));
         campoContrasena = new JPasswordField(20);
@@ -120,8 +120,9 @@ public class IniciarSesion extends JFrame {
             } else if (validarCredenciales(usuario, contrasena)) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
-                PantallaOpcionesJuego opciones = new PantallaOpcionesJuego(null);
-                opciones.setVisible(true);
+                // PantallaOpcionesJuego opciones = new PantallaOpcionesJuego(null);
+                // opciones.setVisible(true);
+                PantallaAhorcado.mostrarVentana("TEST");
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -153,8 +154,9 @@ public class IniciarSesion extends JFrame {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = md.digest(contrasena.getBytes());
         StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes)
-            sb.append(String.format("%02x", b));
+        for (int i = 0; i < hashBytes.length; i++) {
+            sb.append(String.format("%02x", hashBytes[i]));
+        }
         return sb.toString();
     }
 
@@ -201,6 +203,7 @@ public class IniciarSesion extends JFrame {
             boton.setBackground(new Color(100, 149, 237));
             boton.setForeground(Color.WHITE);
             boton.setFont(new Font("SansSerif", Font.BOLD, 14));
+            // Aquí puedes añadir ActionListener según botón si quieres
             gbc.gridy = i;
             panel.add(boton, gbc);
         }

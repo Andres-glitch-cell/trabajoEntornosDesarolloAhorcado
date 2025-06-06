@@ -41,6 +41,7 @@ public class VentanaAdministrador extends JFrame {
 
         setAlwaysOnTop(true);
         toFront();
+
         LOGGER.info("VentanaAdministrador creada con nivelAdmin=" + nivelAdmin);
     }
 
@@ -59,8 +60,7 @@ public class VentanaAdministrador extends JFrame {
             LOGGER.setUseParentHandlers(false);
         } catch (IOException e) {
             System.err.println("No se pudo inicializar el archivo de logs: " + e.getMessage());
-            JOptionPane.showMessageDialog(null, "No se pudo inicializar el archivo de logs:\n" + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se pudo inicializar el archivo de logs:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -217,6 +217,7 @@ public class VentanaAdministrador extends JFrame {
 
         } else if (opcion == 1) {
             File archivoPorDefecto = new File("C:/backups/mysql/backup.sql");
+
             if (!archivoPorDefecto.exists()) {
                 mostrarError(this, "No se encontró el archivo en la ubicación por defecto:\n" + archivoPorDefecto.getAbsolutePath(), true);
                 LOGGER.warning("Archivo de respaldo no encontrado en: " + archivoPorDefecto.getAbsolutePath());
@@ -236,6 +237,7 @@ public class VentanaAdministrador extends JFrame {
                     "mysql", "-u", "root", "-pabcd1234", "AhorcadoAndres", "-e", "source " + archivoSQL.getAbsolutePath()
             );
             pb.redirectErrorStream(true);
+
             Process proceso = pb.start();
             int resultado = proceso.waitFor();
 
@@ -246,6 +248,7 @@ public class VentanaAdministrador extends JFrame {
                 mostrarError(this, "Error al restaurar la base de datos. Código de salida: " + resultado, true);
                 LOGGER.severe("Fallo en la restauración. Código de salida: " + resultado);
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error al restaurar la base de datos", e);
             mostrarError(this, "Error al restaurar la base de datos: " + e.getMessage(), true);

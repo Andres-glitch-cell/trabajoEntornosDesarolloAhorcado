@@ -24,38 +24,42 @@ public class MenuDesplegable extends JFrame {
     }
 
     private void inicializarInterfaz(int nivelAdmin) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
         panel.setBackground(new Color(34, 40, 49));
         add(panel);
 
+        // Botón "Abrir Juego" solo para nivel 0
         if (nivelAdmin == 0) {
-            JButton botonJuego = new JButton("Abrir Juego");
-            botonJuego.setBackground(new Color(0, 100, 100));
-            botonJuego.setForeground(Color.WHITE);
-            botonJuego.setFont(new Font("Arial", Font.BOLD, 14));
-            botonJuego.setPreferredSize(new Dimension(150, 40));
-            botonJuego.addActionListener(e -> {
-                RegistroDeEventos.registrarInfo("Seleccionado 'Abrir Juego'");
-                String palabraRandom = GestorPalabras.obtenerPalabraRandom();
-                if (palabraRandom == null) {
-                    palabraRandom = "PalabraPorDefecto";
-                }
-                PantallaAhorcado.mostrarVentana(palabraRandom);
-                dispose();
-                RegistroDeEventos.registrarInfo("Ventana Menú Desplegable cerrada tras abrir juego");
-            });
+            JButton botonJuego = configurarBoton("Abrir Juego");
+            botonJuego.addActionListener(e -> abrirJuego());
             panel.add(botonJuego);
             panel.add(Box.createVerticalStrut(20));
         }
 
-        JButton botonAdmin = new JButton("Modo Administrador");
-        botonAdmin.setBackground(new Color(0, 100, 100));
-        botonAdmin.setForeground(Color.WHITE);
-        botonAdmin.setFont(new Font("Arial", Font.BOLD, 14));
-        botonAdmin.setPreferredSize(new Dimension(150, 40));
+        // Botón "Modo Administrador" para todos
+        JButton botonAdmin = configurarBoton("Modo Administrador");
         botonAdmin.addActionListener(e -> manejarModoAdministrador());
         panel.add(botonAdmin);
+    }
+
+    private JButton configurarBoton(String texto) {
+        JButton boton = new JButton(texto);
+        boton.setBackground(new Color(0, 100, 100));
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 14));
+        boton.setPreferredSize(new Dimension(150, 40));
+        return boton;
+    }
+
+    private void abrirJuego() {
+        RegistroDeEventos.registrarInfo("Seleccionado 'Abrir Juego'");
+        String palabraRandom = GestorPalabras.obtenerPalabraRandom();
+        if (palabraRandom == null) {
+            palabraRandom = "PalabraPorDefecto";
+        }
+        PantallaAhorcado.mostrarVentana(palabraRandom);
+        dispose();
+        RegistroDeEventos.registrarInfo("Ventana Menú Desplegable cerrada tras abrir juego");
     }
 
     private void manejarModoAdministrador() {

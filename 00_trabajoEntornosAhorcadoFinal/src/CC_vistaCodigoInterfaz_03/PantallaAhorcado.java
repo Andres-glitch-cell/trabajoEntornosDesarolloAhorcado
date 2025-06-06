@@ -1,4 +1,5 @@
-package CC_vistaCodigoInterfaz_03;
+// === BLOQUE 1: DECLARACIÓN DEL PAQUETE E IMPORTACIONES ===
+package CC_vistaCodigoInterfaz_03;                             // Define el paquete donde reside la clase PantallaAhorcado
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,411 +11,401 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.*;
 
-public class PantallaAhorcado extends JFrame {
+// === BLOQUE 2: DEFINICIÓN DE LA CLASE Y CONSTANTES ===
+public class PantallaAhorcado extends JFrame {                  // Declara la clase PantallaAhorcado que hereda de JFrame
+    private static final Logger REGISTRADOR = Logger.getLogger(PantallaAhorcado.class.getName()); // Crea un Logger para la clase
 
-    private static final Logger REGISTRADOR = Logger.getLogger(PantallaAhorcado.class.getName());
+    private static final Color COLOR_FONDO = new Color(34, 40, 49); // Color de fondo principal
+    private static final Color COLOR_PANEL = new Color(40, 45, 55); // Color de paneles secundarios
+    private static final Color COLOR_TEXTO = new Color(240, 248, 255); // Color de texto
+    private static final Color COLOR_ACENTO = new Color(100, 149, 237); // Color de acento
+    private static final Color COLOR_BOTON = new Color(50, 60, 70); // Color de botones
+    private static final Color COLOR_BOTON_HOVER = new Color(70, 80, 90); // Color de botones al pasar el ratón
+    private static final Color COLOR_LETRA_USADA_FONDO = new Color(60, 65, 80); // Color de fondo para letras usadas
 
-    private static final Color COLOR_FONDO = new Color(34, 40, 49);
-    private static final Color COLOR_PANEL = new Color(40, 45, 55);
-    private static final Color COLOR_TEXTO = new Color(240, 248, 255);
-    private static final Color COLOR_ACENTO = new Color(100, 149, 237);
-    private static final Color COLOR_BOTON = new Color(50, 60, 70);
-    private static final Color COLOR_BOTON_HOVER = new Color(70, 80, 90);
-    private static final Color COLOR_LETRA_USADA_FONDO = new Color(60, 65, 80);
+    private static final Dimension TAMAÑO_VENTANA = new Dimension(1100, 900); // Tamaño de la ventana
+    private static final Dimension TAMAÑO_BOTON_GRANDE = new Dimension(130, 48); // Tamaño de botones grandes
+    private static final Dimension TAMAÑO_BOTON_LETRA = new Dimension(60, 60); // Tamaño de botones de letras
+    private static final Dimension TAMAÑO_PANEL_IZQUIERDO = new Dimension(280, 0); // Tamaño del panel izquierdo
+    private static final Dimension TAMAÑO_PANEL_AHORCADO = new Dimension(600, 600); // Tamaño del panel del muñeco
 
-    private static final Dimension TAMAÑO_VENTANA = new Dimension(1100, 900);
-    private static final Dimension TAMAÑO_BOTON_GRANDE = new Dimension(130, 48);
-    private static final Dimension TAMAÑO_BOTON_LETRA = new Dimension(60, 60);
-    private static final Dimension TAMAÑO_PANEL_IZQUIERDO = new Dimension(280, 0);
-    private static final Dimension TAMAÑO_PANEL_AHORCADO = new Dimension(600, 600);
-
-    static {
-        try {
-            Files.createDirectories(Paths.get("LOGS"));
-            LogManager.getLogManager().reset();
-            REGISTRADOR.setLevel(Level.ALL);
-            FileHandler manejadorArchivo = new FileHandler("LOGS/PantallaAhorcado.log", true);
-            manejadorArchivo.setEncoding("UTF-8");
-            manejadorArchivo.setFormatter(new SimpleFormatter());
-            REGISTRADOR.addHandler(manejadorArchivo);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
+    // === BLOQUE 3: BLOQUE ESTÁTICO PARA CONFIGURACIÓN DEL LOGGER ===
+    static {                                                   // Bloque estático que se ejecuta al cargar la clase
+        try {                                                  // Inicia un bloque try para configurar el logging
+            Files.createDirectories(Paths.get("LOGS"));        // Crea el directorio LOGS si no existe
+            LogManager.getLogManager().reset();                // Resetea el administrador de logs
+            REGISTRADOR.setLevel(Level.ALL);                   // Establece el nivel de logging para capturar todos los eventos
+            FileHandler manejadorArchivo = new FileHandler("LOGS/PantallaAhorcado.log", true); // Crea manejador para logs en archivo
+            manejadorArchivo.setEncoding("UTF-8");             // Establece codificación UTF-8
+            manejadorArchivo.setFormatter(new SimpleFormatter()); // Aplica formato simple al archivo de log
+            REGISTRADOR.addHandler(manejadorArchivo);          // Agrega el manejador de archivo al Logger
+        } catch (IOException e) {                              // Captura excepciones de entrada/salida
+            JOptionPane.showMessageDialog(null,                // Muestra mensaje de error
                     "No se pudo inicializar el archivo de logs: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // -------------------------
-    // COMPONENTES PRINCIPALES
-    // -------------------------
+    private final Set<Character> letrasUsadas = new HashSet<>(); // Conjunto para almacenar letras usadas
+    // === BLOQUE 4: CAMPOS DE LA CLASE ===
+    private JLabel etiquetaLetrasUsadas;                       // Etiqueta para mostrar letras usadas
+    private JLabel etiquetaPuntos;                             // Etiqueta para mostrar puntos
+    private JLabel etiquetaTurno;                              // Etiqueta para mostrar turno
+    private JLabel etiquetaPalabra;                            // Etiqueta para mostrar palabra oculta
+    private JLabel etiquetaDefinicion;                         // Etiqueta para mostrar definición
+    private String palabraAdivinar;                            // Palabra real a adivinar
+    private int errores = 0;                                   // Contador de errores
+    private MunecoAhorcado panelMuneco;                        // Panel para dibujar el muñeco
 
-    private JLabel etiquetaLetrasUsadas;
-    private JLabel etiquetaPuntos;
-    private JLabel etiquetaTurno;
-    private JLabel etiquetaPalabra;
-    private JLabel etiquetaDefinicion;
-
-    // Conjunto para almacenar letras usadas
-    private final Set<Character> letrasUsadas = new HashSet<>();
-
-    // Nueva variable para la palabra real a adivinar
-    private String palabraAdivinar;
-
-    // Controla los errores para el muñeco
-    private int errores = 0;
-
-    // Panel del muñeco
-    private MunecoAhorcado panelMuneco;
-
-    // -------------------------
-    // CONSTRUCTOR
-    // -------------------------
-
-    public PantallaAhorcado() {
-        super("Juego del Ahorcado - Andrés");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(TAMAÑO_VENTANA);
-        setResizable(true);
-        setLocationRelativeTo(null);
-        add(crearPanelPrincipal());
-
-        // No iniciar juego ni definir palabra aquí.
-        // Palabra y definición se setean cuando se llama iniciarJuego() y setDefinicion()
-
-        REGISTRADOR.info("PantallaAhorcado inicializada.");
+    // === BLOQUE 5: CONSTRUCTOR ===
+    public PantallaAhorcado() {                                // Constructor de la clase PantallaAhorcado
+        super("Juego del Ahorcado - Andrés");                  // Establece el título de la ventana
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        // Cierra la aplicación al cerrar la ventana
+        setSize(TAMAÑO_VENTANA);                               // Establece el tamaño de la ventana
+        setResizable(true);                                    // Permite redimensionar la ventana
+        setLocationRelativeTo(null);                           // Centra la ventana en la pantalla
+        add(crearPanelPrincipal());                            // Añade el panel principal a la ventana
+        REGISTRADOR.info("PantallaAhorcado inicializada.");    // Registra mensaje de inicialización
     }
 
-    /**
-     * Método estático para mostrar la ventana con la palabra indicada (sin definición)
-     */
-    public static void mostrarVentana(String palabra) {
-        SwingUtilities.invokeLater(() -> {
-            PantallaAhorcado ventana = new PantallaAhorcado();
-            ventana.iniciarJuego(palabra);
-            ventana.setVisible(true);
+    // === BLOQUE 6: MÉTODOS ESTÁTICOS PARA MOSTRAR LA VENTANA ===
+    public static void mostrarVentana(String palabra) {        // Método para mostrar la ventana con una palabra
+        SwingUtilities.invokeLater(() -> {                     // Ejecuta en el EDT
+            PantallaAhorcado ventana = new PantallaAhorcado(); // Crea una nueva ventana
+            ventana.iniciarJuego(palabra);                     // Inicia el juego con la palabra
+            ventana.setVisible(true);                          // Muestra la ventana
         });
     }
 
-    /**
-     * Método estático para mostrar la ventana con palabra y definición
-     */
-    public static void mostrarVentanaConPalabra(String palabra, String definicion) {
-        SwingUtilities.invokeLater(() -> {
-            PantallaAhorcado ventana = new PantallaAhorcado();
-            ventana.iniciarJuego(palabra);
-            ventana.setDefinicion(definicion);
-            ventana.setVisible(true);
+    public static void mostrarVentanaConPalabra(String palabra, String definicion) { // Método para mostrar con palabra y definición
+        SwingUtilities.invokeLater(() -> {                     // Ejecuta en el EDT
+            PantallaAhorcado ventana = new PantallaAhorcado(); // Crea una nueva ventana
+            ventana.iniciarJuego(palabra);                     // Inicia el juego con la palabra
+            ventana.setDefinicion(definicion);                 // Establece la definición
+            ventana.setVisible(true);                          // Muestra la ventana
         });
     }
 
-    /**
-     * Método para iniciar el juego con la palabra que se quiere adivinar
-     */
-    public void iniciarJuego(String palabra) {
-        this.palabraAdivinar = palabra.toUpperCase();
-        mostrarPalabraOculta();
-        errores = 0;
-        panelMuneco.setErrores(errores);
-        letrasUsadas.clear();
-        actualizarEtiquetaLetrasUsadas();
-        etiquetaTurno.setText("Turno: Jugador 1");
-        etiquetaPuntos.setText("Jugador 1: 0");
+    // === BLOQUE 7: INICIALIZACIÓN DEL JUEGO ===
+    public void iniciarJuego(String palabra) {                 // Método para iniciar el juego con una palabra
+        if (palabra == null || palabra.trim().isEmpty()) {     // Verifica si la palabra es válida
+            palabra = "DEFAULT";                               // Usa una palabra por defecto si es inválida
+            REGISTRADOR.warning("Palabra inválida proporcionada. Usando 'DEFAULT'."); // Registra advertencia
+        }
+        this.palabraAdivinar = palabra.toUpperCase();          // Convierte la palabra a mayúsculas
+        mostrarPalabraOculta();                                // Muestra la palabra oculta
+        errores = 0;                                           // Reinicia los errores
+        panelMuneco.setErrores(errores);                       // Actualiza el panel del muñeco
+        letrasUsadas.clear();                                  // Limpia las letras usadas
+        actualizarEtiquetaLetrasUsadas();                      // Actualiza la etiqueta de letras usadas
+        etiquetaTurno.setText("Turno: Jugador 1");             // Establece el turno inicial
+        etiquetaPuntos.setText("Jugador 1: 0");                // Establece los puntos iniciales
     }
 
-    /**
-     * Método para actualizar la etiqueta de definición
-     */
-    public void setDefinicion(String definicion) {
-        etiquetaDefinicion.setText("Definición: " + (definicion == null || definicion.trim().isEmpty() ? "---" : definicion));
+    // === BLOQUE 8: ACTUALIZAR DEFINICIÓN ===
+    public void setDefinicion(String definicion) {             // Método para establecer la definición
+        etiquetaDefinicion.setText("Definición: " + (definicion == null || definicion.trim().isEmpty() ? "---" : definicion)); // Actualiza la etiqueta
     }
 
-    private JPanel crearPanelPrincipal() {
-        JPanel panel = new JPanel(new BorderLayout()) {
+    // === BLOQUE 9: CREACIÓN DEL PANEL PRINCIPAL ===
+    private JPanel crearPanelPrincipal() {                     // Método para crear el panel principal
+        JPanel panel = new JPanel(new BorderLayout()) {        // Crea un panel con diseño de borde
             @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setPaint(new GradientPaint(0, 0, COLOR_FONDO, 0, getHeight(), new Color(20, 25, 30)));
-                g2d.fillRect(0, 0, getWidth(), getHeight());
+            protected void paintComponent(Graphics g) {        // Sobrescribe el método de pintado
+                super.paintComponent(g);                       // Llama al método padre
+                Graphics2D g2d = (Graphics2D) g;               // Obtiene contexto gráfico 2D
+                g2d.setPaint(new GradientPaint(0, 0, COLOR_FONDO, 0, getHeight(), new Color(20, 25, 30))); // Aplica gradiente
+                g2d.fillRect(0, 0, getWidth(), getHeight());   // Rellena el fondo
             }
         };
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(30, 40, 30, 40));
-        panel.add(crearPanelSuperior(), BorderLayout.NORTH);
-        panel.add(crearPanelCentral(), BorderLayout.CENTER);
-        panel.add(crearPanelBotonesLetras(), BorderLayout.SOUTH);
-        return panel;
+        panel.setOpaque(false);                                // Hace el panel transparente
+        panel.setBorder(new EmptyBorder(30, 40, 30, 40));      // Añade un borde vacío
+        panel.add(crearPanelSuperior(), BorderLayout.NORTH);   // Añade el panel superior
+        panel.add(crearPanelCentral(), BorderLayout.CENTER);   // Añade el panel central
+        panel.add(crearPanelBotonesLetras(), BorderLayout.SOUTH); // Añade el panel de botones de letras
+        return panel;                                          // Retorna el panel configurado
     }
 
-    /**
-     * Muestra la palabra oculta en la etiqueta con guiones bajos
-     */
-    private void mostrarPalabraOculta() {
-        boolean esFrase = palabraAdivinar.contains(" ");
-        StringBuilder sb = new StringBuilder((esFrase ? "Frase: " : "Palabra: "));
-        for (int i = 0; i < palabraAdivinar.length(); i++) {
-            char c = palabraAdivinar.charAt(i);
-            if (c == ' ') {
-                sb.append("  "); // Espacio doble para separar palabras
-            } else if (letrasUsadas.contains(c)) {
-                sb.append(c).append(' ');
-            } else {
-                sb.append("_ ");
+    // === BLOQUE 10: MOSTRAR PALABRA OCULTA ===
+    private void mostrarPalabraOculta() {                      // Método para mostrar la palabra oculta
+        boolean esFrase = palabraAdivinar.contains(" ");       // Verifica si es una frase
+        StringBuilder sb = new StringBuilder((esFrase ? "Frase: " : "Palabra: ")); // Inicia el texto
+        for (int i = 0; i < palabraAdivinar.length(); i++) {   // Itera sobre la palabra
+            char c = palabraAdivinar.charAt(i);                // Obtiene el carácter
+            if (c == ' ') {                                    // Si es un espacio
+                sb.append("  ");                               // Añade dos espacios
+            } else if (letrasUsadas.contains(c)) {             // Si la letra ya fue usada
+                sb.append(c).append(' ');                      // Muestra la letra
+            } else {                                           // Si no ha sido adivinada
+                sb.append("_ ");                               // Muestra un guion bajo
             }
         }
-        etiquetaPalabra.setText(sb.toString());
+        etiquetaPalabra.setText(sb.toString());                // Actualiza la etiqueta
     }
 
-    private JPanel crearPanelCentral() {
-        JPanel panel = new JPanel(new BorderLayout(40, 20));
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(20, 40, 20, 40));
-        panel.add(crearPanelIzquierdo(), BorderLayout.WEST);
-        panel.add(crearPanelJuego(), BorderLayout.CENTER);
-        return panel;
-    }
-
-    private JPanel crearPanelIzquierdo() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(COLOR_PANEL);
-        panel.setPreferredSize(TAMAÑO_PANEL_IZQUIERDO);
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        panel.add(crearEtiqueta("Letras Usadas", 24, Font.BOLD, COLOR_TEXTO, JLabel.CENTER));
-        etiquetaLetrasUsadas = crearEtiqueta("Ninguna", 20, Font.PLAIN, COLOR_TEXTO, JLabel.CENTER);
-        etiquetaLetrasUsadas.setOpaque(true);
-        etiquetaLetrasUsadas.setBackground(COLOR_LETRA_USADA_FONDO);
-        panel.add(etiquetaLetrasUsadas);
-
-        panel.add(Box.createVerticalStrut(50));
-        panel.add(crearEtiqueta("Puntos", 24, Font.BOLD, COLOR_TEXTO, JLabel.CENTER));
-        etiquetaPuntos = crearEtiqueta("Jugador 1: 0", 20, Font.PLAIN, COLOR_TEXTO, JLabel.CENTER);
-        panel.add(etiquetaPuntos);
-
-        panel.add(Box.createVerticalGlue());
-        JButton botonVolver = crearBotonEstilizado("Volver al Menú", TAMAÑO_BOTON_GRANDE);
-        botonVolver.addActionListener(e -> {
-            dispose();
-            // PantallaBienvenida.mostrarVentana(); // Si tienes esta clase, descomenta
+    // === BLOQUE 11: CREACIÓN DEL PANEL SUPERIOR ===
+    private JPanel crearPanelSuperior() {                      // Método para crear el panel superior
+        JPanel panel = new JPanel(new BorderLayout());         // Crea un panel con diseño de borde
+        panel.setOpaque(false);                                // Hace el panel transparente
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));      // Añade un borde vacío
+        JLabel titulo = crearEtiqueta("JUEGO DEL AHORCADO", 44, Font.BOLD, COLOR_ACENTO, JLabel.CENTER); // Crea el título
+        panel.add(titulo, BorderLayout.NORTH);                 // Añade el título
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0)); // Crea panel para botones
+        panelBotones.setOpaque(false);                         // Hace el panel transparente
+        JButton botonSalir = crearBoton("Salir", "⏻");         // Crea el botón de salir
+        botonSalir.addActionListener(e -> {                    // Añade acción al botón
+            REGISTRADOR.info("Saliendo al menú principal.");   // Registra mensaje de salida
+            dispose();                                         // Cierra la ventana
+            PantallaBienvenida.mostrarVentana();               // Muestra la ventana de bienvenida
         });
-        panel.add(Box.createVerticalStrut(20));
-        panel.add(botonVolver);
-
-        return panel;
+        panelBotones.add(botonSalir);                          // Añade el botón de salir
+        panel.add(panelBotones, BorderLayout.CENTER);          // Añade el panel de botones
+        panel.add(new JSeparator(), BorderLayout.SOUTH);       // Añade un separador
+        return panel;                                          // Retorna el panel configurado
     }
 
-    private JPanel crearPanelJuego() {
-        JPanel panel = new JPanel(new BorderLayout(0, 20));
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-        etiquetaTurno = crearEtiqueta("Turno: Jugador 1", 28, Font.BOLD, COLOR_ACENTO, JLabel.CENTER);
-        panel.add(etiquetaTurno, BorderLayout.NORTH);
-
-        panelMuneco = new MunecoAhorcado();
-        panelMuneco.setPreferredSize(TAMAÑO_PANEL_AHORCADO);
-        panel.add(panelMuneco, BorderLayout.CENTER);
-
-        etiquetaPalabra = crearEtiqueta("Palabra: ", 34, Font.BOLD, COLOR_TEXTO, JLabel.CENTER);
-        panel.add(etiquetaPalabra, BorderLayout.SOUTH);
-
-        etiquetaDefinicion = crearEtiqueta("Definición: ---", 22, Font.PLAIN, COLOR_TEXTO, JLabel.CENTER);
-        panel.add(etiquetaDefinicion, BorderLayout.EAST);
-
-        return panel;
+    // === BLOQUE 12: CREACIÓN DEL PANEL CENTRAL ===
+    private JPanel crearPanelCentral() {                       // Método para crear el panel central
+        JPanel panel = new JPanel(new BorderLayout(40, 20));   // Crea un panel con diseño de borde
+        panel.setOpaque(false);                                // Hace el panel transparente
+        panel.setBorder(new EmptyBorder(20, 40, 20, 40));      // Añade un borde vacío
+        panel.add(crearPanelIzquierdo(), BorderLayout.WEST);   // Añade el panel izquierdo
+        panel.add(crearPanelJuego(), BorderLayout.CENTER);     // Añade el panel del juego
+        return panel;                                          // Retorna el panel configurado
     }
 
-    private JPanel crearPanelBotonesLetras() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 6));
-        panel.setOpaque(false);
+    // === BLOQUE 13: CREACIÓN DEL PANEL IZQUIERDO ===
+    private JPanel crearPanelIzquierdo() {                     // Método para crear el panel izquierdo
+        JPanel panel = new JPanel();                           // Crea un panel
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Establece un diseño vertical
+        panel.setBackground(COLOR_PANEL);                      // Configura el color de fondo
+        panel.setPreferredSize(TAMAÑO_PANEL_IZQUIERDO);        // Establece el tamaño preferido
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Añade un borde vacío
 
-        String letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-        for (char letra : letras.toCharArray()) {
-            JButton botonLetra = new JButton(String.valueOf(letra));
-            botonLetra.setPreferredSize(TAMAÑO_BOTON_LETRA);
-            botonLetra.setBackground(COLOR_BOTON);
-            botonLetra.setForeground(COLOR_TEXTO);
-            botonLetra.setFont(new Font("Arial", Font.BOLD, 26));
-            botonLetra.setFocusPainted(false);
+        panel.add(crearEtiqueta("Letras Usadas", 24, Font.BOLD, COLOR_TEXTO, JLabel.CENTER)); // Añade el título de letras usadas
+        etiquetaLetrasUsadas = crearEtiqueta("Ninguna", 20, Font.PLAIN, COLOR_TEXTO, JLabel.CENTER); // Crea la etiqueta de letras usadas
+        etiquetaLetrasUsadas.setOpaque(true);                  // Hace la etiqueta opaca
+        etiquetaLetrasUsadas.setBackground(COLOR_LETRA_USADA_FONDO); // Configura el color de fondo
+        panel.add(etiquetaLetrasUsadas);                       // Añade la etiqueta al panel
 
-            botonLetra.addActionListener(e -> {
-                botonLetra.setEnabled(false);
-                procesarLetra(letra);
-            });
+        panel.add(Box.createVerticalStrut(50));                // Añade un espacio vertical
+        panel.add(crearEtiqueta("Puntos", 24, Font.BOLD, COLOR_TEXTO, JLabel.CENTER)); // Añade el título de puntos
+        etiquetaPuntos = crearEtiqueta("Jugador 1: 0", 20, Font.PLAIN, COLOR_TEXTO, JLabel.CENTER); // Crea la etiqueta de puntos
+        panel.add(etiquetaPuntos);                             // Añade la etiqueta al panel
 
-            panel.add(botonLetra);
-        }
-        return panel;
-    }
-
-    private void procesarLetra(char letra) {
-        letra = Character.toUpperCase(letra);
-        if (letrasUsadas.contains(letra)) {
-            return;
-        }
-        letrasUsadas.add(letra);
-        actualizarEtiquetaLetrasUsadas();
-
-        if (palabraAdivinar.indexOf(letra) >= 0) {
-            REGISTRADOR.info("Letra correcta: " + letra);
-            mostrarPalabraOculta();
-            if (palabraCompletaAdivinada()) {
-                JOptionPane.showMessageDialog(this, "¡Has ganado! La palabra era: " + palabraAdivinar);
-                REGISTRADOR.info("Juego ganado.");
-            }
-        } else {
-            REGISTRADOR.info("Letra incorrecta: " + letra);
-            errores++;
-            panelMuneco.setErrores(errores);
-            if (errores >= 6) {
-                JOptionPane.showMessageDialog(this, "¡Has perdido! La palabra era: " + palabraAdivinar);
-                REGISTRADOR.info("Juego perdido.");
-            }
-        }
-    }
-
-    private boolean palabraCompletaAdivinada() {
-        for (int i = 0; i < palabraAdivinar.length(); i++) {
-            char c = palabraAdivinar.charAt(i);
-            if (c != ' ' && !letrasUsadas.contains(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void actualizarEtiquetaLetrasUsadas() {
-        if (letrasUsadas.isEmpty()) {
-            etiquetaLetrasUsadas.setText("Ninguna");
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (char c : letrasUsadas) {
-                sb.append(c).append(' ');
-            }
-            etiquetaLetrasUsadas.setText(sb.toString());
-        }
-    }
-
-    private JLabel crearEtiqueta(String texto, int tamañoFuente, int estilo, Color color, int alineacion) {
-        JLabel etiqueta = new JLabel(texto);
-        etiqueta.setFont(new Font("Arial", estilo, tamañoFuente));
-        etiqueta.setForeground(color);
-        etiqueta.setHorizontalAlignment(alineacion);
-        return etiqueta;
-    }
-
-    private JPanel crearPanelSuperior() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
-        JLabel titulo = crearEtiqueta("JUEGO DEL AHORCADO", 44, Font.BOLD, COLOR_ACENTO, JLabel.CENTER);
-        panel.add(titulo, BorderLayout.NORTH);
-
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
-        panelBotones.setOpaque(false);
-
-        // Botones "Idioma" y "Partida" eliminados según tu solicitud
-
-        JButton botonSalir = crearBotonIcono("Salir", "⏻");
-        botonSalir.addActionListener(e -> {
-            REGISTRADOR.info("Saliendo al menú principal.");
-            dispose();
-            // PantallaBienvenida.mostrarVentana(); // Si tienes esta clase, descomenta
+        panel.add(Box.createVerticalGlue());                   // Añade espacio expansible
+        JButton botonVolver = crearBotonEstilizado("Volver al Menú", TAMAÑO_BOTON_GRANDE); // Crea el botón de volver
+        botonVolver.addActionListener(e -> {                   // Añade acción al botón
+            dispose();                                         // Cierra la ventana
+            PantallaBienvenida.mostrarVentana();               // Muestra la ventana de bienvenida
         });
-        panelBotones.add(botonSalir);
-        panel.add(panelBotones, BorderLayout.CENTER);
-        panel.add(new JSeparator(), BorderLayout.SOUTH);
+        panel.add(Box.createVerticalStrut(20));                // Añade un espacio vertical
+        panel.add(botonVolver);                                // Añade el botón al panel
 
-        return panel;
+        return panel;                                          // Retorna el panel configurado
     }
 
-    private JButton crearBotonIcono(String texto, String icono) {
-        JButton boton = new JButton(icono + " " + texto);
-        boton.setFont(new Font("Arial", Font.BOLD, 18));
-        boton.setForeground(COLOR_TEXTO);
-        boton.setBackground(COLOR_BOTON);
-        boton.setFocusPainted(false);
-        boton.setPreferredSize(TAMAÑO_BOTON_GRANDE);
-        boton.setOpaque(true);
-        boton.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(COLOR_BOTON_HOVER);
-            }
+    // === BLOQUE 14: CREACIÓN DEL PANEL DE JUEGO ===
+    private JPanel crearPanelJuego() {                         // Método para crear el panel del juego
+        JPanel panel = new JPanel(new BorderLayout(0, 20));    // Crea un panel con diseño de borde
+        panel.setOpaque(false);                                // Hace el panel transparente
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));      // Añade un borde vacío
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(COLOR_BOTON);
-            }
+        etiquetaTurno = crearEtiqueta("Turno: Jugador 1", 28, Font.BOLD, COLOR_ACENTO, JLabel.CENTER); // Crea la etiqueta de turno
+        panel.add(etiquetaTurno, BorderLayout.NORTH);          // Añade la etiqueta al panel
+
+        panelMuneco = new MunecoAhorcado();                    // Crea el panel del muñeco
+        panelMuneco.setPreferredSize(TAMAÑO_PANEL_AHORCADO);   // Establece el tamaño del panel
+        panel.add(panelMuneco, BorderLayout.CENTER);           // Añade el panel del muñeco
+
+        etiquetaPalabra = crearEtiqueta("Palabra: ", 34, Font.BOLD, COLOR_TEXTO, JLabel.CENTER); // Crea la etiqueta de la palabra
+        panel.add(etiquetaPalabra, BorderLayout.SOUTH);        // Añade la etiqueta al panel
+
+        etiquetaDefinicion = crearEtiqueta("Definición: ---", 22, Font.PLAIN, COLOR_TEXTO, JLabel.CENTER); // Crea la etiqueta de definición
+        panel.add(etiquetaDefinicion, BorderLayout.EAST);      // Añade la etiqueta al panel
+
+        return panel;                                          // Retorna el panel configurado
+    }
+
+    // === BLOQUE 15: CREACIÓN DEL PANEL DE BOTONES DE LETRAS ===
+    private JPanel crearPanelBotonesLetras() {                 // Método para crear el panel de botones de letras
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 6)); // Crea un panel con diseño de flujo
+        panel.setOpaque(false);                                // Hace el panel transparente
+
+        String letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";        // Define las letras disponibles
+        for (int i = 0; i < letras.length(); i++) {            // Itera sobre las letras
+            char letra = letras.charAt(i);                     // Obtiene la letra
+            JButton boton = crearBotonLetra(letra);            // Crea el botón de la letra
+            panel.add(boton);                                  // Añade el botón al panel
+        }
+        return panel;                                          // Retorna el panel configurado
+    }
+
+    // === BLOQUE 16: CREACIÓN DE BOTÓN DE LETRA ===
+    private JButton crearBotonLetra(char letra) {              // Método para crear un botón de letra
+        JButton botonLetra = new JButton(String.valueOf(letra)); // Crea el botón con la letra
+        botonLetra.setPreferredSize(TAMAÑO_BOTON_LETRA);       // Establece el tamaño preferido
+        botonLetra.setBackground(COLOR_BOTON);                 // Configura el color de fondo
+        botonLetra.setForeground(COLOR_TEXTO);                 // Configura el color del texto
+        botonLetra.setFont(new Font("Arial", Font.BOLD, 26));  // Configura la fuente
+        botonLetra.setFocusPainted(false);                     // Desactiva el borde de foco
+        botonLetra.addActionListener(e -> {                    // Añade acción al botón
+            botonLetra.setEnabled(false);                      // Desactiva el botón
+            procesarLetra(letra);                              // Procesa la letra seleccionada
         });
-        return boton;
+        return botonLetra;                                     // Retorna el botón configurado
     }
 
-    private JButton crearBotonEstilizado(String texto, Dimension tamaño) {
-        JButton boton = new JButton(texto);
-        boton.setPreferredSize(tamaño);
-        boton.setFont(new Font("Arial", Font.BOLD, 22));
-        boton.setBackground(COLOR_BOTON);
-        boton.setForeground(COLOR_TEXTO);
-        boton.setFocusPainted(false);
-        boton.setOpaque(true);
-        boton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(COLOR_BOTON_HOVER);
+    // === BLOQUE 17: PROCESAR LETRA ===
+    private void procesarLetra(char letra) {                   // Método para procesar una letra seleccionada
+        letra = Character.toUpperCase(letra);                  // Convierte la letra a mayúscula
+        if (letrasUsadas.contains(letra)) {                    // Verifica si la letra ya fue usada
+            return;                                            // Sale si ya fue usada
+        }
+        letrasUsadas.add(letra);                               // Añade la letra al conjunto
+        actualizarEtiquetaLetrasUsadas();                       // Actualiza la etiqueta de letras usadas
+
+        if (palabraAdivinar.indexOf(letra) >= 0) {             // Verifica si la letra está en la palabra
+            REGISTRADOR.info("Letra correcta: " + letra);      // Registra letra correcta
+            mostrarPalabraOculta();                            // Actualiza la palabra mostrada
+            if (palabraCompletaAdivinada()) {                // Verifica si se adivinó la palabra
+                JOptionPane.showMessageDialog(this, "¡Has ganado! La palabra era: " + palabraAdivinar); // Muestra mensaje de victoria
+                REGISTRADOR.info("Juego ganado.");             // Registra victoria
+            }
+        } else {                                               // Si la letra no está en la palabra
+            REGISTRADOR.info("Letra incorrecta: " + letra);    // Registra letra incorrecta
+            errores++;                                         // Incrementa los errores
+            panelMuneco.setErrores(errores);                   // Actualiza el muñeco
+            if (errores >= 6) {                               // Verifica si se alcanzó el límite de errores
+                JOptionPane.showMessageDialog(this, "¡Has perdido! La palabra era: " + palabraAdivinar); // Muestra mensaje de derrota
+                REGISTRADOR.info("Juego perdido.");            // Registra derrota
+            }
+        }
+    }
+
+    // === BLOQUE 18: VERIFICAR SI LA PALABRA FUE ADIVINADA ===
+    private boolean palabraCompletaAdivinada() {               // Método para verificar si se adivinó la palabra
+        for (int i = 0; i < palabraAdivinar.length(); i++) {   // Itera sobre la palabra
+            char c = palabraAdivinar.charAt(i);                // Obtiene el carácter
+            if (c != ' ' && !letrasUsadas.contains(c)) {       // Verifica si hay letras no adivinadas
+                return false;                                  // Retorna falso si falta alguna letra
+            }
+        }
+        return true;                                           // Retorna verdadero si se adivinó todo
+    }
+
+    // === BLOQUE 19: ACTUALIZAR ETIQUETA DE LETRAS USADAS ===
+    private void actualizarEtiquetaLetrasUsadas() {            // Método para actualizar la etiqueta de letras usadas
+        StringBuilder sb = new StringBuilder();                // Crea un StringBuilder
+        if (letrasUsadas.isEmpty()) {                          // Verifica si no hay letras usadas
+            sb.append("Ninguna");                              // Establece texto por defecto
+        } else {                                               // Si hay letras usadas
+            char[] letras = new char[letrasUsadas.size()];     // Crea un arreglo para las letras
+            int index = 0;                                     // Índice para el arreglo
+            for (Character c : letrasUsadas) {                 // Itera sobre las letras usadas
+                letras[index++] = c;                           // Añade la letra al arreglo
+            }
+            for (int i = 0; i < letras.length; i++) {          // Itera sobre el arreglo
+                sb.append(letras[i]).append(' ');              // Añade la letra y un espacio
+            }
+        }
+        etiquetaLetrasUsadas.setText(sb.toString());           // Actualiza la etiqueta
+    }
+
+    // === BLOQUE 20: CREAR ETIQUETA ===
+    private JLabel crearEtiqueta(String texto, int tamañoFuente, int estilo, Color color, int alineacion) { // Método para crear una etiqueta
+        JLabel etiqueta = new JLabel(texto);                   // Crea la etiqueta
+        etiqueta.setFont(new Font("Arial", estilo, tamañoFuente)); // Configura la fuente
+        etiqueta.setForeground(color);                         // Configura el color del texto
+        etiqueta.setHorizontalAlignment(alineacion);           // Configura la alineación
+        return etiqueta;                                       // Retorna la etiqueta configurada
+    }
+
+    // === BLOQUE 21: CREAR BOTÓN ESTILIZADO ===
+    private JButton crearBotonEstilizado(String texto, Dimension tamaño) { // Método para crear un botón estilizado
+        JButton boton = new JButton(texto);                    // Crea el botón
+        boton.setPreferredSize(tamaño);                        // Establece el tamaño preferido
+        boton.setFont(new Font("Arial", Font.BOLD, 22));       // Configura la fuente
+        boton.setBackground(COLOR_BOTON);                      // Configura el color de fondo
+        boton.setForeground(COLOR_TEXTO);                      // Configura el color del texto
+        boton.setFocusPainted(false);                          // Desactiva el borde de foco
+        boton.setOpaque(true);                                 // Hace el botón opaco
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Añade un borde vacío
+        boton.addMouseListener(new java.awt.event.MouseAdapter() { // Añade listener para efectos de ratón
+            public void mouseEntered(java.awt.event.MouseEvent evt) { // Al entrar el ratón
+                boton.setBackground(COLOR_BOTON_HOVER);            // Cambia el color de fondo
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(COLOR_BOTON);
+            public void mouseExited(java.awt.event.MouseEvent evt) { // Al salir el ratón
+                boton.setBackground(COLOR_BOTON);                  // Restaura el color de fondo
             }
         });
-        return boton;
+        return boton;                                          // Retorna el botón configurado
     }
 
-    // Clase interna para dibujar el muñeco
-    private static class MunecoAhorcado extends JPanel {
+    // === BLOQUE 22: CREAR BOTÓN ===
+    private JButton crearBoton(String texto, String icono) {   // Método para crear un botón con icono
+        JButton boton = new JButton(icono + " " + texto);      // Crea el botón con icono y texto
+        boton.setFont(new Font("Arial", Font.BOLD, 18));       // Configura la fuente
+        boton.setForeground(COLOR_TEXTO);                      // Configura el color del texto
+        boton.setBackground(COLOR_BOTON);                      // Configura el color de fondo
+        boton.setFocusPainted(false);                          // Desactiva el borde de foco
+        boton.setPreferredSize(TAMAÑO_BOTON_GRANDE);           // Establece el tamaño preferido
+        boton.setOpaque(true);                                 // Hace el botón opaco
+        boton.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12)); // Añade un borde vacío
+        boton.addMouseListener(new java.awt.event.MouseAdapter() { // Añade listener para efectos de ratón
+            public void mouseEntered(java.awt.event.MouseEvent evt) { // Al entrar el ratón
+                boton.setBackground(COLOR_BOTON_HOVER);            // Cambia el color de fondo
+            }
 
-        private int errores = 0;
+            public void mouseExited(java.awt.event.MouseEvent evt) { // Al salir el ratón
+                boton.setBackground(COLOR_BOTON);                  // Restaura el color de fondo
+            }
+        });
+        return boton;                                          // Retorna el botón configurado
+    }
 
-        public void setErrores(int errores) {
-            this.errores = errores;
-            repaint();
+    // === BLOQUE 23: CLASE INTERNA PARA EL MUÑECO ===
+    private static class MunecoAhorcado extends JPanel {       // Clase interna para dibujar el muñeco
+        private int errores = 0;                               // Contador de errores
+
+        public void setErrores(int errores) {                  // Método para establecer los errores
+            this.errores = errores;                            // Actualiza los errores
+            repaint();                                         // Redibuja el panel
         }
 
         @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
+        protected void paintComponent(Graphics g) {            // Sobrescribe el método de pintado
+            super.paintComponent(g);                           // Llama al método padre
+            Graphics2D g2 = (Graphics2D) g;                    // Obtiene contexto gráfico 2D
 
-            // Fondo
-            g2.setColor(COLOR_PANEL);
-            g2.fillRect(0, 0, getWidth(), getHeight());
+            g2.setColor(COLOR_PANEL);                          // Configura el color de fondo
+            g2.fillRect(0, 0, getWidth(), getHeight());        // Rellena el fondo
 
-            // Palo base
-            g2.setStroke(new BasicStroke(5));
-            g2.setColor(COLOR_TEXTO);
-            g2.drawLine(50, getHeight() - 50, 200, getHeight() - 50); // base
-            g2.drawLine(125, getHeight() - 50, 125, 50); // palo vertical
-            g2.drawLine(125, 50, 350, 50); // palo horizontal
-            g2.drawLine(350, 50, 350, 100); // cuerda
+            g2.setStroke(new BasicStroke(5));                  // Configura el grosor de la línea
+            g2.setColor(COLOR_TEXTO);                          // Configura el color de las líneas
+            g2.drawLine(50, getHeight() - 50, 200, getHeight() - 50); // Dibuja la base
+            g2.drawLine(125, getHeight() - 50, 125, 50);       // Dibuja el palo vertical
+            g2.drawLine(125, 50, 350, 50);                    // Dibuja el palo horizontal
+            g2.drawLine(350, 50, 350, 100);                   // Dibuja la cuerda
 
-            if (errores > 0) { // Cabeza
-                g2.drawOval(320, 100, 60, 60);
+            if (errores > 0) {                                 // Dibuja la cabeza
+                g2.drawOval(320, 100, 60, 60);                // Cabeza
             }
-            if (errores > 1) { // Cuerpo
-                g2.drawLine(350, 160, 350, 300);
+            if (errores > 1) {                                 // Dibuja el cuerpo
+                g2.drawLine(350, 160, 350, 300);              // Cuerpo
             }
-            if (errores > 2) { // Brazo izquierdo
-                g2.drawLine(350, 180, 300, 240);
+            if (errores > 2) {                                 // Dibuja el brazo izquierdo
+                g2.drawLine(350, 180, 300, 240);              // Brazo izquierdo
             }
-            if (errores > 3) { // Brazo derecho
-                g2.drawLine(350, 180, 400, 240);
+            if (errores > 3) {                                 // Dibuja el brazo derecho
+                g2.drawLine(350, 180, 400, 240);              // Brazo derecho
             }
-            if (errores > 4) { // Pierna izquierda
-                g2.drawLine(350, 300, 300, 370);
+            if (errores > 4) {                                 // Dibuja la pierna izquierda
+                g2.drawLine(350, 300, 300, 370);              // Pierna izquierda
             }
-            if (errores > 5) { // Pierna derecha
-                g2.drawLine(350, 300, 400, 370);
+            if (errores > 5) {                                 // Dibuja la pierna derecha
+                g2.drawLine(350, 300, 400, 370);              // Pierna derecha
             }
         }
     }
