@@ -25,11 +25,8 @@ public class Principal {
             LOGGER.info("Cargando base de datos...");
             LOGGER.info("Iniciando respaldo automático...");
             RespaldoAutomatico.iniciarRespaldo();
-
             iniciarModoSegunEleccion();
-
             LOGGER.info("Aplicación iniciada correctamente.");
-
         } catch (Exception e) {
             manejarErrorFatal(e);
         }

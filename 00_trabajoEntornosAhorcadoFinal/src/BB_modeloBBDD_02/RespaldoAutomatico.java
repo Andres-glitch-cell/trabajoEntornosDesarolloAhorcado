@@ -22,9 +22,9 @@ public class RespaldoAutomatico extends Thread {
         String os = System.getProperty("os.name").toLowerCase();
 
         if (os.contains("win")) {
-            MY_CNF_PATH = "D:\\ruta\\a\\tu\\.my.cnf";
-            BACKUP_FOLDER = "D:\\ruta\\a\\tu\\Backups\\";
-            LOG_FOLDER = "D:\\ruta\\a\\tu\\LOGS\\";
+            MY_CNF_PATH = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\00_trabajoEntornosAhorcadoFinal\\src\\.my.cnf";
+            BACKUP_FOLDER = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\Backups";
+            LOG_FOLDER = "D:\\00ADAW ordenador clase (he hecho cosas en casa)\\trabajoEntornosDesarolloAhorcado\\LOGS";
             CMD_MYSQLDUMP = "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe";
         } else {
             MY_CNF_PATH = "/ruta/a/tu/.my.cnf";

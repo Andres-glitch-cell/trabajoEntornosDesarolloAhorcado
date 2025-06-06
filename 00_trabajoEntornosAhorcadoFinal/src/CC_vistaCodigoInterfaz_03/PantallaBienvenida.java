@@ -1,7 +1,5 @@
 package CC_vistaCodigoInterfaz_03;
 
-import BB_modeloBBDD_02.ExportadorBaseDeDatos;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -52,8 +50,6 @@ public class PantallaBienvenida extends JFrame {
         panel.add(Box.createVerticalStrut(20));
         panel.add(crearPanelBotonesPrincipales());
         panel.add(Box.createVerticalStrut(15));
-        panel.add(crearBotonExportar());
-        panel.add(Box.createVerticalStrut(10));
         panel.add(crearBotonOpciones());
         panel.add(Box.createVerticalStrut(20));
         panel.add(crearBotonSalir());
@@ -84,10 +80,6 @@ public class PantallaBienvenida extends JFrame {
         return panel;
     }
 
-    private JButton crearBotonExportar() {
-        return crearBoton("Exportar Base de Datos", new Color(50, 168, 82), this::accionBoton);
-    }
-
     private JButton crearBotonOpciones() {
         return crearBoton("Opciones del Juego", new Color(255, 165, 0), this::accionBoton);
     }
@@ -115,19 +107,13 @@ public class PantallaBienvenida extends JFrame {
                 confirmarSalida();
                 break;
             case "Iniciar Juego":
-                mostrarOpcionesJuego(); // CAMBIO: Muestra ventana modal
+                mostrarOpcionesJuego();
                 break;
             case "Iniciar Sesión":
                 abrirPantalla("IniciarSesion");
                 break;
             case "Registrarse":
                 abrirPantalla("Registrarse");
-                break;
-            case "Exportar Base de Datos":
-                ExportadorBaseDeDatos.exportar(this);
-                break;
-            case "Opciones del Juego":
-                mostrarOpciones();
                 break;
             default:
                 LOGGER.warning("Acción no reconocida: " + comando);
@@ -137,13 +123,7 @@ public class PantallaBienvenida extends JFrame {
 
     private void mostrarOpcionesJuego() {
         PantallaOpcionesJuego opciones = new PantallaOpcionesJuego(this);
-        opciones.setVisible(true); // modal: pausa ejecución hasta cerrar
-    }
-
-    private void mostrarOpciones() {
-        JOptionPane.showMessageDialog(this,
-                "Aquí puedes implementar las opciones generales del juego (idioma, dificultad, etc.).",
-                "Opciones del Juego", JOptionPane.INFORMATION_MESSAGE);
+        opciones.setVisible(true);
     }
 
     private void confirmarSalida() {
