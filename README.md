@@ -1,4 +1,3 @@
-<!-- Badges tipo pestañitas arriba del todo -->
 <p align="left">
   <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Stars&color=6C78AF&logo=github" />
   <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Forks&color=43e97b&logo=github" />
