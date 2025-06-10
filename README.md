@@ -1,35 +1,35 @@
 <a href="#">
-  <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Stars&color=6C78AF&logo=github" alt="Stars"/>
+  <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Stars&color=6C78AF&logo=github" alt="Stars"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Forks&color=43e97b&logo=github" alt="Forks"/>
+  <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Forks&color=43e97b&logo=github" alt="Forks"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Issues&color=fc466b&logo=github" alt="Issues"/>
+  <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Issues&color=fc466b&logo=github" alt="Issues"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=License&color=3f5efb" alt="License"/>
+  <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=License&color=3f5efb" alt="License"/>
 </a>
 <a href="#">
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=for-the-badge&color=38f9d7" alt="Visitors"/>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=plastic&color=38f9d7" alt="Visitors"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java"/>
+  <img src="https://img.shields.io/badge/Java-17-007396?style=plastic&logo=java&logoColor=white" alt="Java"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=plastic&logo=mysql&logoColor=white" alt="MySQL"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=for-the-badge" alt="Swing"/>
+  <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=plastic" alt="Swing"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/badge/Estado-Production%20Ready-brightgreen?style=for-the-badge" alt="Estado"/>
+  <img src="https://img.shields.io/badge/Estado-Production%20Ready-brightgreen?style=plastic" alt="Estado"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge" alt="Version"/>
+  <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=plastic" alt="Version"/>
 </a>
 <a href="#">
-  <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"/>
+  <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=plastic&logo=discord&logoColor=white" alt="Discord"/>
 </a>
 
 # 🎮 Juego del Ahorcado - Proyecto de Entornos de Desarrollo
