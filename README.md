@@ -1,24 +1,43 @@
-<!-- Badges profesionales agrupados y redondeados -->
+<!-- Badges profesionales tipo enlace, alineados y redondeados -->
 <p align="center">
-  <!-- Estadísticas del repositorio -->
-  <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Stars&color=6C78AF&logo=github" />
-  <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Forks&color=43e97b&logo=github" />
-  <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Issues&color=fc466b&logo=github" />
-  <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=License&color=3f5efb" />
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=for-the-badge&color=38f9d7" />
-  <!-- Tecnologías utilizadas -->
-  <img src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=java&logoColor=white" />
-  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=for-the-badge" />
-  <!-- Estado del proyecto -->
-  <img src="https://img.shields.io/badge/Estado-Production%20Ready-brightgreen?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" />
+  <a href="https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado/stargazers">
+    <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Stars&color=6C78AF&logo=github" alt="Stars"/>
+  </a>
+  <a href="https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado/network/members">
+    <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Forks&color=43e97b&logo=github" alt="Forks"/>
+  </a>
+  <a href="https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado/issues">
+    <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Issues&color=fc466b&logo=github" alt="Issues"/>
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=License&color=3f5efb" alt="License"/>
+  </a>
+  <a href="#">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=for-the-badge&color=38f9d7" alt="Visitors"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=for-the-badge" alt="Swing"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Estado-Production%20Ready-brightgreen?style=for-the-badge" alt="Estado"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge" alt="Version"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"/>
+  </a>
 </p>
 
 # 🎮 Juego del Ahorcado - Proyecto de Entornos de Desarrollo
 
-[![Presentación Interactiva](https://img.shields.io/badge/Ver-Presentación%20Interactiva-FF6B6B?style=for-the-badge")](https://ejemplo.com/presentacion)
+[![Presentación Interactiva](https://img.shields.io/badge/Ver-Presentación%20Interactiva-FF6B6B?style=for-the-badge)](https://ejemplo.com/presentacion)
 
 > Un clásico reinventado con arquitectura moderna  
 > Implementación profesional con Java, MySQL y patrones de diseño  
