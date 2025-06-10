@@ -1,8 +1,25 @@
-🎮 Juego del Ahorcado - Proyecto de Entornos de Desarrollo
-Ver Presentación Interactiva
+<!-- Badges tipo pestañitas arriba del todo -->
+<p align="left">
+  <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Stars&color=6C78AF&logo=github" />
+  <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Forks&color=43e97b&logo=github" />
+  <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=Issues&color=fc466b&logo=github" />
+  <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=for-the-badge&label=License&color=3f5efb" />
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=for-the-badge&color=38f9d7" />
+  <img src="https://img.shields.io/badge/Java-Backend-007396?style=for-the-badge&logo=java&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-Base%20de%20Datos-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Estado-Activo-brightgreen?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" />
+</p>
 
+# 🎮 Juego del Ahorcado - Proyecto de Entornos de Desarrollo
 
-Un clásico reinventado con tecnología modernaAdivina palabras y frases en este entretenido juego del ahorcado, desarrollado con Java y un diseño futurista.Construido con ❤️ por Andrés.
+[Ver Presentación Interactiva](#)
+
+Un clásico reinventado con tecnología moderna  
+Adivina palabras y frases en este entretenido juego del ahorcado, desarrollado con Java y un diseño futurista.  
+Construido con ❤️ por Andrés.
+
 
 
 
