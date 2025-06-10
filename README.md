@@ -1,37 +1,37 @@
-<!-- Badges agrupados y limpios alineados a la izquierda, tamaño medio -->
+<!-- Badges agrupados y limpios alineados a la izquierda, tamaño compacto -->
 <div align="left">
   <a href="https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado/stargazers">
-    <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Stars&color=6C78AF&logo=github" alt="Stars" height="28"/>
+    <img src="https://img.shields.io/github/stars/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Stars&color=6C78AF&logo=github" alt="Stars" height="20"/>
   </a>
   <a href="https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado/network/members">
-    <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Forks&color=43e97b&logo=github" alt="Forks" height="28"/>
+    <img src="https://img.shields.io/github/forks/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Forks&color=43e97b&logo=github" alt="Forks" height="20"/>
   </a>
   <a href="https://github.com/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado/issues">
-    <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Issues&color=fc466b&logo=github" alt="Issues" height="28"/>
+    <img src="https://img.shields.io/github/issues/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=Issues&color=fc466b&logo=github" alt="Issues" height="20"/>
   </a>
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=License&color=3f5efb" alt="License" height="28"/>
+    <img src="https://img.shields.io/github/license/Andres-glitch-cell/trabajoEntornosDesarolloAhorcado?style=plastic&label=License&color=3f5efb" alt="License" height="20"/>
   </a>
   <a href="#">
-    <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=plastic&color=38f9d7" alt="Visitors" height="28"/>
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=Andres-glitch-cell.trabajoEntornosDesarolloAhorcado&style=plastic&color=38f9d7" alt="Visitors" height="20"/>
   </a>
   <a href="#">
-    <img src="https://img.shields.io/badge/Java-17-007396?style=plastic&logo=java&logoColor=white" alt="Java" height="28"/>
+    <img src="https://img.shields.io/badge/Java-17-007396?style=plastic&logo=java&logoColor=white" alt="Java" height="20"/>
   </a>
   <a href="#">
-    <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=plastic&logo=mysql&logoColor=white" alt="MySQL" height="28"/>
+    <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=plastic&logo=mysql&logoColor=white" alt="MySQL" height="20"/>
   </a>
   <a href="#">
-    <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=plastic" alt="Swing" height="28"/>
+    <img src="https://img.shields.io/badge/Swing-GUI-6C78AF?style=plastic" alt="Swing" height="20"/>
   </a>
   <a href="#">
-    <img src="https://img.shields.io/badge/Estado-Production%20Ready-brightgreen?style=plastic" alt="Estado" height="28"/>
+    <img src="https://img.shields.io/badge/Estado-Production%20Ready-brightgreen?style=plastic" alt="Estado" height="20"/>
   </a>
   <a href="#">
-    <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=plastic" alt="Version" height="28"/>
+    <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=plastic" alt="Version" height="20"/>
   </a>
   <a href="#">
-    <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=plastic&logo=discord&logoColor=white" alt="Discord" height="28"/>
+    <img src="https://img.shields.io/badge/Soporte-Discord-7289DA?style=plastic&logo=discord&logoColor=white" alt="Discord" height="20"/>
   </a>
 </div>
 
